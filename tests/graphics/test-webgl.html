@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genshi Studio - WebGL Graphics Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+        }
+        
+        #canvas {
+            border: 2px solid #333;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            display: block;
+            margin: 20px auto;
+            background: white;
+        }
+        
+        .controls {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .control-group {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        button {
+            padding: 8px 16px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background: #0056b3;
+        }
+        
+        #stats {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 12px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">Genshi Studio - WebGL Graphics Test</h1>
+    
+    <canvas id="canvas" width="800" height="600"></canvas>
+    
+    <div class="controls">
+        <h3>Drawing Tests</h3>
+        
+        <div class="control-group">
+            <button onclick="testBasicShapes()">Test Basic Shapes</button>
+            <button onclick="testBrushStrokes()">Test Brush Strokes</button>
+            <button onclick="testPatterns()">Test Patterns</button>
+            <button onclick="clearCanvas()">Clear Canvas</button>
+        </div>
+        
+        <div class="control-group">
+            <label>Pattern Type:</label>
+            <select id="patternType">
+                <option value="0">Ichimatsu (市松)</option>
+                <option value="1">Seigaiha (青海波)</option>
+                <option value="2">Asanoha (麻の葉)</option>
+            </select>
+            <button onclick="drawSelectedPattern()">Draw Pattern</button>
+        </div>
+        
+        <div class="control-group">
+            <label>Performance Test:</label>
+            <button onclick="performanceTest()">Run 1000 Objects Test</button>
+        </div>
+    </div>
+    
+    <div id="stats">
+        <div>FPS: <span id="fps">0</span></div>
+        <div>Draw Calls: <span id="drawCalls">0</span></div>
+        <div>Memory: <span id="memory">0</span> MB</div>
+    </div>
+
+    <script type="module">
+        // Mock implementation for testing WebGL directly
+        class SimpleRenderer {
+            constructor(canvas) {
+                this.canvas = canvas;
+                this.gl = canvas.getContext('webgl2', {
+                    alpha: true,
+                    antialias: false,
+                    preserveDrawingBuffer: true
+                });
+                
+                if (!this.gl) {
+                    alert('WebGL 2.0 not supported!');
+                    return;
+                }
+                
+                this.setupWebGL();
+                this.createShaders();
+                this.fps = 0;
+                this.frameCount = 0;
+                this.lastTime = performance.now();
+            }
+            
+            setupWebGL() {
+                const gl = this.gl;
+                gl.enable(gl.BLEND);
+                gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+                gl.clearColor(1, 1, 1, 1);
+                gl.viewport(0, 0, this.canvas.width, this.canvas.height);
+            }
+            
+            createShaders() {
+                // Basic vertex shader
+                const vsSource = `#version 300 es
+                    in vec2 a_position;
+                    in vec4 a_color;
+                    uniform vec2 u_resolution;
+                    out vec4 v_color;
+                    
+                    void main() {
+                        vec2 clipSpace = ((a_position / u_resolution) * 2.0) - 1.0;
+                        gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
+                        v_color = a_color;
+                    }
+                `;
+                
+                // Basic fragment shader
+                const fsSource = `#version 300 es
+                    precision highp float;
+                    in vec4 v_color;
+                    out vec4 fragColor;
+                    
+                    void main() {
+                        fragColor = v_color;
+                    }
+                `;
+                
+                this.program = this.createShaderProgram(vsSource, fsSource);
+                this.positionLocation = this.gl.getAttribLocation(this.program, 'a_position');
+                this.colorLocation = this.gl.getAttribLocation(this.program, 'a_color');
+                this.resolutionLocation = this.gl.getUniformLocation(this.program, 'u_resolution');
+                
+                // Create buffers
+                this.positionBuffer = this.gl.createBuffer();
+                this.colorBuffer = this.gl.createBuffer();
+            }
+            
+            createShaderProgram(vsSource, fsSource) {
+                const gl = this.gl;
+                
+                const vertexShader = this.loadShader(gl.VERTEX_SHADER, vsSource);
+                const fragmentShader = this.loadShader(gl.FRAGMENT_SHADER, fsSource);
+                
+                const program = gl.createProgram();
+                gl.attachShader(program, vertexShader);
+                gl.attachShader(program, fragmentShader);
+                gl.linkProgram(program);
+                
+                if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+                    console.error('Shader link failed:', gl.getProgramInfoLog(program));
+                    return null;
+                }
+                
+                return program;
+            }
+            
+            loadShader(type, source) {
+                const gl = this.gl;
+                const shader = gl.createShader(type);
+                
+                gl.shaderSource(shader, source);
+                gl.compileShader(shader);
+                
+                if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                    console.error('Shader compile failed:', gl.getShaderInfoLog(shader));
+                    gl.deleteShader(shader);
+                    return null;
+                }
+                
+                return shader;
+            }
+            
+            clear() {
+                this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+            }
+            
+            drawRect(x, y, width, height, color) {
+                const gl = this.gl;
+                
+                // Rectangle vertices
+                const positions = new Float32Array([
+                    x, y,
+                    x + width, y,
+                    x, y + height,
+                    x, y + height,
+                    x + width, y,
+                    x + width, y + height
+                ]);
+                
+                // Colors for each vertex
+                const colors = new Float32Array([
+                    color.r, color.g, color.b, color.a,
+                    color.r, color.g, color.b, color.a,
+                    color.r, color.g, color.b, color.a,
+                    color.r, color.g, color.b, color.a,
+                    color.r, color.g, color.b, color.a,
+                    color.r, color.g, color.b, color.a
+                ]);
+                
+                gl.useProgram(this.program);
+                
+                // Set resolution
+                gl.uniform2f(this.resolutionLocation, this.canvas.width, this.canvas.height);
+                
+                // Bind position buffer
+                gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
+                gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
+                gl.enableVertexAttribArray(this.positionLocation);
+                gl.vertexAttribPointer(this.positionLocation, 2, gl.FLOAT, false, 0, 0);
+                
+                // Bind color buffer
+                gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
+                gl.bufferData(gl.ARRAY_BUFFER, colors, gl.STATIC_DRAW);
+                gl.enableVertexAttribArray(this.colorLocation);
+                gl.vertexAttribPointer(this.colorLocation, 4, gl.FLOAT, false, 0, 0);
+                
+                // Draw
+                gl.drawArrays(gl.TRIANGLES, 0, 6);
+                
+                this.frameCount++;
+            }
+            
+            drawCircle(x, y, radius, color, segments = 32) {
+                const gl = this.gl;
+                
+                // Generate circle vertices
+                const positions = [x, y]; // Center
+                const colors = [color.r, color.g, color.b, color.a];
+                
+                for (let i = 0; i <= segments; i++) {
+                    const angle = (i / segments) * Math.PI * 2;
+                    positions.push(x + Math.cos(angle) * radius, y + Math.sin(angle) * radius);
+                    colors.push(color.r, color.g, color.b, color.a);
+                }
+                
+                gl.useProgram(this.program);
+                gl.uniform2f(this.resolutionLocation, this.canvas.width, this.canvas.height);
+                
+                // Bind buffers
+                gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
+                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+                gl.enableVertexAttribArray(this.positionLocation);
+                gl.vertexAttribPointer(this.positionLocation, 2, gl.FLOAT, false, 0, 0);
+                
+                gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
+                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+                gl.enableVertexAttribArray(this.colorLocation);
+                gl.vertexAttribPointer(this.colorLocation, 4, gl.FLOAT, false, 0, 0);
+                
+                // Draw
+                gl.drawArrays(gl.TRIANGLE_FAN, 0, positions.length / 2);
+                
+                this.frameCount++;
+            }
+            
+            updateStats() {
+                const now = performance.now();
+                const delta = now - this.lastTime;
+                
+                if (delta >= 1000) {
+                    this.fps = Math.round((this.frameCount * 1000) / delta);
+                    this.frameCount = 0;
+                    this.lastTime = now;
+                    
+                    document.getElementById('fps').textContent = this.fps;
+                    document.getElementById('drawCalls').textContent = this.frameCount;
+                }
+            }
+        }
+        
+        // Initialize renderer
+        const canvas = document.getElementById('canvas');
+        const renderer = new SimpleRenderer(canvas);
+        
+        // Test functions
+        window.testBasicShapes = function() {
+            renderer.clear();
+            
+            // Draw rectangles
+            renderer.drawRect(50, 50, 100, 100, { r: 1, g: 0, b: 0, a: 1 });
+            renderer.drawRect(200, 50, 150, 75, { r: 0, g: 1, b: 0, a: 0.7 });
+            renderer.drawRect(400, 50, 80, 120, { r: 0, g: 0, b: 1, a: 0.5 });
+            
+            // Draw circles
+            renderer.drawCircle(100, 250, 50, { r: 1, g: 0.5, b: 0, a: 1 });
+            renderer.drawCircle(250, 250, 75, { r: 0.5, g: 0, b: 1, a: 0.8 });
+            renderer.drawCircle(400, 250, 40, { r: 1, g: 0, b: 1, a: 0.6 });
+        };
+        
+        window.testBrushStrokes = function() {
+            renderer.clear();
+            
+            // Simulate brush strokes
+            for (let i = 0; i < 50; i++) {
+                const t = i / 50;
+                const x = 100 + t * 600;
+                const y = 300 + Math.sin(t * Math.PI * 4) * 100;
+                const size = 10 + Math.sin(t * Math.PI * 2) * 5;
+                const opacity = 0.3 + t * 0.5;
+                
+                renderer.drawCircle(x, y, size, { r: 0, g: 0, b: 0, a: opacity });
+            }
+        };
+        
+        window.testPatterns = function() {
+            renderer.clear();
+            
+            // Ichimatsu pattern
+            const tileSize = 20;
+            for (let row = 0; row < 10; row++) {
+                for (let col = 0; col < 10; col++) {
+                    const isBlack = (row + col) % 2 === 0;
+                    const color = isBlack ? { r: 0, g: 0, b: 0, a: 1 } : { r: 1, g: 1, b: 1, a: 1 };
+                    renderer.drawRect(50 + col * tileSize, 200 + row * tileSize, tileSize, tileSize, color);
+                }
+            }
+        };
+        
+        window.drawSelectedPattern = function() {
+            const patternType = parseInt(document.getElementById('patternType').value);
+            renderer.clear();
+            
+            switch (patternType) {
+                case 0: // Ichimatsu
+                    testPatterns();
+                    break;
+                case 1: // Seigaiha (waves)
+                    for (let row = 0; row < 5; row++) {
+                        for (let col = 0; col < 8; col++) {
+                            const x = 100 + col * 60 + (row % 2) * 30;
+                            const y = 200 + row * 50;
+                            
+                            // Draw concentric arcs
+                            for (let i = 0; i < 3; i++) {
+                                const radius = 30 - i * 10;
+                                renderer.drawCircle(x, y, radius, { r: 0, g: 0, b: 0.8, a: 0.3 });
+                            }
+                        }
+                    }
+                    break;
+                case 2: // Asanoha (simplified)
+                    for (let i = 0; i < 5; i++) {
+                        for (let j = 0; j < 5; j++) {
+                            const x = 150 + i * 100;
+                            const y = 150 + j * 100;
+                            
+                            // Draw star pattern
+                            for (let angle = 0; angle < Math.PI * 2; angle += Math.PI / 3) {
+                                const x2 = x + Math.cos(angle) * 40;
+                                const y2 = y + Math.sin(angle) * 40;
+                                renderer.drawRect(x - 1, y - 1, 2, 2, { r: 0, g: 0, b: 0, a: 1 });
+                                renderer.drawRect(x2 - 1, y2 - 1, 2, 2, { r: 0, g: 0, b: 0, a: 1 });
+                            }
+                        }
+                    }
+                    break;
+            }
+        };
+        
+        window.clearCanvas = function() {
+            renderer.clear();
+        };
+        
+        window.performanceTest = function() {
+            renderer.clear();
+            
+            const startTime = performance.now();
+            
+            // Draw 1000 random shapes
+            for (let i = 0; i < 1000; i++) {
+                const x = Math.random() * 800;
+                const y = Math.random() * 600;
+                const size = 5 + Math.random() * 20;
+                const color = {
+                    r: Math.random(),
+                    g: Math.random(),
+                    b: Math.random(),
+                    a: 0.5 + Math.random() * 0.5
+                };
+                
+                if (Math.random() > 0.5) {
+                    renderer.drawRect(x, y, size, size, color);
+                } else {
+                    renderer.drawCircle(x, y, size / 2, color);
+                }
+            }
+            
+            const endTime = performance.now();
+            console.log(`Performance test completed in ${(endTime - startTime).toFixed(2)}ms`);
+        };
+        
+        // Update stats
+        setInterval(() => {
+            renderer.updateStats();
+            
+            // Estimate memory usage
+            if (performance.memory) {
+                const mb = (performance.memory.usedJSHeapSize / 1024 / 1024).toFixed(1);
+                document.getElementById('memory').textContent = mb;
+            }
+        }, 100);
+        
+        // Initial test
+        testBasicShapes();
+    </script>
+</body>
+</html>

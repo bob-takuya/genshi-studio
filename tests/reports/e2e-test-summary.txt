@@ -1,0 +1,7 @@
+E2E Test Summary - Wed Jul  9 10:46:17 JST 2025
+========================
+Exit Code: 1
+Total Tests: 0
+Passed: 0
+Failed: 0
+Pass Rate: 0%
