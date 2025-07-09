@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genshi Studio - Geometric Pattern Library Demo</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            margin: 10px 0 0;
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .category-section {
+            margin-bottom: 50px;
+        }
+
+        .category-title {
+            font-size: 1.8em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #4f46e5;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 10px;
+        }
+
+        .pattern-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .pattern-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .pattern-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-color: #4f46e5;
+        }
+
+        .pattern-preview {
+            width: 100%;
+            height: 200px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pattern-canvas {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+        }
+
+        .pattern-info h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .pattern-info p {
+            margin: 0 0 15px 0;
+            color: #6b7280;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .pattern-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .tag {
+            background: #e0e7ff;
+            color: #4f46e5;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+
+        .pattern-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            min-width: 100px;
+        }
+
+        .control-group label {
+            font-size: 0.8em;
+            font-weight: 500;
+            color: #4b5563;
+        }
+
+        .control-group input {
+            padding: 6px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 0.9em;
+        }
+
+        .control-group input:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
+        }
+
+        .regenerate-btn {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .regenerate-btn:hover {
+            background: #4338ca;
+        }
+
+        .preset-selector {
+            margin-bottom: 15px;
+        }
+
+        .preset-selector select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 0.9em;
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #6b7280;
+            font-size: 0.9em;
+        }
+
+        .difficulty-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 4px 8px;
+            border-radius: 10px;
+            font-size: 0.7em;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .difficulty-beginner {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .difficulty-intermediate {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .difficulty-advanced {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .performance-indicator {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .performance-fast {
+            background: #10b981;
+        }
+
+        .performance-medium {
+            background: #f59e0b;
+        }
+
+        .performance-slow {
+            background: #ef4444;
+        }
+
+        .mobile-indicator {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 0.7em;
+            color: #6b7280;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: 700;
+            color: #4f46e5;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .search-section {
+            margin-bottom: 40px;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.2s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #4f46e5;
+        }
+
+        .search-btn {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .search-btn:hover {
+            background: #4338ca;
+        }
+
+        .tag-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tag-filter {
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            color: #4b5563;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tag-filter:hover,
+        .tag-filter.active {
+            background: #4f46e5;
+            color: white;
+            border-color: #4f46e5;
+        }
+
+        @media (max-width: 768px) {
+            .pattern-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .pattern-controls {
+                flex-direction: column;
+            }
+            
+            .control-group {
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Geometric Pattern Library</h1>
+            <p>Comprehensive collection of mathematical, cultural, and natural patterns</p>
+        </div>
+
+        <div class="content">
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="total-patterns">0</div>
+                    <div class="stat-label">Total Patterns</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="total-categories">0</div>
+                    <div class="stat-label">Categories</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="mobile-optimized">0</div>
+                    <div class="stat-label">Mobile Optimized</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="total-presets">0</div>
+                    <div class="stat-label">Presets</div>
+                </div>
+            </div>
+
+            <div class="search-section">
+                <div class="search-bar">
+                    <input type="text" class="search-input" placeholder="Search patterns..." id="search-input">
+                    <button class="search-btn" onclick="searchPatterns()">Search</button>
+                </div>
+                <div class="tag-filters" id="tag-filters">
+                    <!-- Tag filters will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <div id="pattern-categories">
+                <!-- Pattern categories will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Mock implementation of the pattern library
+        // In a real application, this would import from the actual library
+        
+        const mockPatternLibrary = {
+            getCategories() {
+                return [
+                    {
+                        id: 'islamic',
+                        name: 'Islamic Geometric',
+                        description: 'Traditional Islamic geometric patterns with mathematical precision',
+                        patterns: [
+                            {
+                                id: 'eight-fold-star',
+                                name: 'Eight-Fold Star',
+                                description: 'Classic Islamic eight-pointed star with interlacing geometry',
+                                tags: ['islamic', 'geometric', 'star', 'traditional'],
+                                difficulty: 'intermediate',
+                                performance: 'medium',
+                                mobileOptimized: true,
+                                presets: [
+                                    { id: 'classic', name: 'Classic' },
+                                    { id: 'ornate', name: 'Ornate' }
+                                ]
+                            },
+                            {
+                                id: 'twelve-fold-star',
+                                name: 'Twelve-Fold Star',
+                                description: 'Complex twelve-pointed star with dodecagonal symmetry',
+                                tags: ['islamic', 'geometric', 'star', 'complex'],
+                                difficulty: 'advanced',
+                                performance: 'medium',
+                                mobileOptimized: true,
+                                presets: [
+                                    { id: 'standard', name: 'Standard' }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        id: 'mathematical',
+                        name: 'Mathematical Tilings',
+                        description: 'Precise mathematical tiling systems and aperiodic patterns',
+                        patterns: [
+                            {
+                                id: 'penrose-p2',
+                                name: 'Penrose P2 Tiling',
+                                description: 'Aperiodic tiling with kites and darts',
+                                tags: ['mathematical', 'penrose', 'aperiodic', 'tiling'],
+                                difficulty: 'advanced',
+                                performance: 'slow',
+                                mobileOptimized: false,
+                                presets: [
+                                    { id: 'standard', name: 'Standard' }
+                                ]
+                            },
+                            {
+                                id: 'truchet-tiles',
+                                name: 'Truchet Tiles',
+                                description: 'Classic Truchet tile patterns',
+                                tags: ['mathematical', 'truchet', 'tiling', 'classic'],
+                                difficulty: 'beginner',
+                                performance: 'fast',
+                                mobileOptimized: true,
+                                presets: [
+                                    { id: 'classic', name: 'Classic' }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        id: 'celtic',
+                        name: 'Celtic Knots',
+                        description: 'Interlaced Celtic knot patterns and border designs',
+                        patterns: [
+                            {
+                                id: 'trinity-knot',
+                                name: 'Trinity Knot',
+                                description: 'Classic Celtic trinity knot (triquetra)',
+                                tags: ['celtic', 'knot', 'trinity', 'traditional'],
+                                difficulty: 'intermediate',
+                                performance: 'medium',
+                                mobileOptimized: true,
+                                presets: [
+                                    { id: 'traditional', name: 'Traditional' }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        id: 'fractal',
+                        name: 'Fractals & Recursive',
+                        description: 'Self-similar fractal patterns and recursive structures',
+                        patterns: [
+                            {
+                                id: 'sierpinski-triangle',
+                                name: 'Sierpinski Triangle',
+                                description: 'Classic Sierpinski triangle fractal',
+                                tags: ['fractal', 'sierpinski', 'triangle', 'recursive'],
+                                difficulty: 'intermediate',
+                                performance: 'medium',
+                                mobileOptimized: true,
+                                presets: [
+                                    { id: 'classic', name: 'Classic' }
+                                ]
+                            },
+                            {
+                                id: 'mandelbrot-set',
+                                name: 'Mandelbrot Set',
+                                description: 'The famous Mandelbrot set fractal',
+                                tags: ['fractal', 'mandelbrot', 'complex', 'mathematical'],
+                                difficulty: 'advanced',
+                                performance: 'slow',
+                                mobileOptimized: false,
+                                presets: [
+                                    { id: 'standard', name: 'Standard' }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        id: 'organic',
+                        name: 'Organic & Natural',
+                        description: 'Natural and organic patterns inspired by biology and nature',
+                        patterns: [
+                            {
+                                id: 'voronoi-diagram',
+                                name: 'Voronoi Diagram',
+                                description: 'Natural cell-like Voronoi patterns',
+                                tags: ['organic', 'voronoi', 'cellular', 'natural'],
+                                difficulty: 'intermediate',
+                                performance: 'medium',
+                                mobileOptimized: true,
+                                presets: [
+                                    { id: 'cellular', name: 'Cellular' }
+                                ]
+                            },
+                            {
+                                id: 'perlin-noise',
+                                name: 'Perlin Noise',
+                                description: 'Smooth organic noise patterns',
+                                tags: ['organic', 'noise', 'perlin', 'smooth'],
+                                difficulty: 'beginner',
+                                performance: 'medium',
+                                mobileOptimized: true,
+                                presets: [
+                                    { id: 'clouds', name: 'Clouds' }
+                                ]
+                            }
+                        ]
+                    }
+                ];
+            },
+
+            generatePattern(patternId, canvas, options = {}) {
+                const ctx = canvas.getContext('2d');
+                const { width, height } = canvas;
+                
+                // Clear canvas
+                ctx.clearRect(0, 0, width, height);
+                
+                // Generate different patterns based on ID
+                switch (patternId) {
+                    case 'eight-fold-star':
+                        this.generateEightFoldStar(ctx, width, height, options);
+                        break;
+                    case 'twelve-fold-star':
+                        this.generateTwelveFoldStar(ctx, width, height, options);
+                        break;
+                    case 'penrose-p2':
+                        this.generatePenrosePattern(ctx, width, height, options);
+                        break;
+                    case 'truchet-tiles':
+                        this.generateTruchetTiles(ctx, width, height, options);
+                        break;
+                    case 'trinity-knot':
+                        this.generateTrinityKnot(ctx, width, height, options);
+                        break;
+                    case 'sierpinski-triangle':
+                        this.generateSierpinskiTriangle(ctx, width, height, options);
+                        break;
+                    case 'mandelbrot-set':
+                        this.generateMandelbrotSet(ctx, width, height, options);
+                        break;
+                    case 'voronoi-diagram':
+                        this.generateVoronoiDiagram(ctx, width, height, options);
+                        break;
+                    case 'perlin-noise':
+                        this.generatePerlinNoise(ctx, width, height, options);
+                        break;
+                    default:
+                        this.generateDefaultPattern(ctx, width, height, options);
+                }
+            },
+
+            generateEightFoldStar(ctx, width, height, options) {
+                const centerX = width / 2;
+                const centerY = height / 2;
+                const outerRadius = Math.min(width, height) / 4;
+                const innerRadius = outerRadius * 0.6;
+                
+                ctx.strokeStyle = options.color || '#4f46e5';
+                ctx.lineWidth = 2;
+                
+                // Draw eight-pointed star
+                ctx.beginPath();
+                for (let i = 0; i < 8; i++) {
+                    const angle = (i * Math.PI) / 4;
+                    const nextAngle = ((i + 1) * Math.PI) / 4;
+                    
+                    const x1 = centerX + Math.cos(angle) * outerRadius;
+                    const y1 = centerY + Math.sin(angle) * outerRadius;
+                    const x2 = centerX + Math.cos(nextAngle) * outerRadius;
+                    const y2 = centerY + Math.sin(nextAngle) * outerRadius;
+                    
+                    const innerAngle = angle + Math.PI / 8;
+                    const ix = centerX + Math.cos(innerAngle) * innerRadius;
+                    const iy = centerY + Math.sin(innerAngle) * innerRadius;
+                    
+                    if (i === 0) ctx.moveTo(x1, y1);
+                    ctx.lineTo(ix, iy);
+                    ctx.lineTo(x2, y2);
+                }
+                ctx.closePath();
+                ctx.stroke();
+                
+                // Draw inner circle
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, innerRadius * 0.5, 0, Math.PI * 2);
+                ctx.stroke();
+            },
+
+            generateTwelveFoldStar(ctx, width, height, options) {
+                const centerX = width / 2;
+                const centerY = height / 2;
+                const outerRadius = Math.min(width, height) / 4;
+                const innerRadius = outerRadius * 0.6;
+                
+                ctx.strokeStyle = options.color || '#7c3aed';
+                ctx.lineWidth = 2;
+                
+                // Draw twelve-pointed star
+                ctx.beginPath();
+                for (let i = 0; i < 12; i++) {
+                    const angle = (i * Math.PI) / 6;
+                    const nextAngle = ((i + 1) * Math.PI) / 6;
+                    
+                    const x1 = centerX + Math.cos(angle) * outerRadius;
+                    const y1 = centerY + Math.sin(angle) * outerRadius;
+                    const x2 = centerX + Math.cos(nextAngle) * outerRadius;
+                    const y2 = centerY + Math.sin(nextAngle) * outerRadius;
+                    
+                    const innerAngle = angle + Math.PI / 12;
+                    const ix = centerX + Math.cos(innerAngle) * innerRadius;
+                    const iy = centerY + Math.sin(innerAngle) * innerRadius;
+                    
+                    if (i === 0) ctx.moveTo(x1, y1);
+                    ctx.lineTo(ix, iy);
+                    ctx.lineTo(x2, y2);
+                }
+                ctx.closePath();
+                ctx.stroke();
+            },
+
+            generatePenrosePattern(ctx, width, height, options) {
+                const centerX = width / 2;
+                const centerY = height / 2;
+                const size = Math.min(width, height) / 6;
+                
+                ctx.strokeStyle = options.color || '#059669';
+                ctx.lineWidth = 1;
+                
+                // Draw simplified Penrose-like pattern
+                for (let i = 0; i < 10; i++) {
+                    const angle = (i * Math.PI * 2) / 10;
+                    const radius = size * (1 + Math.sin(angle * 5) * 0.3);
+                    
+                    const x = centerX + Math.cos(angle) * radius;
+                    const y = centerY + Math.sin(angle) * radius;
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(centerX, centerY);
+                    ctx.lineTo(x, y);
+                    ctx.stroke();
+                }
+            },
+
+            generateTruchetTiles(ctx, width, height, options) {
+                const tileSize = 40;
+                const cols = Math.ceil(width / tileSize);
+                const rows = Math.ceil(height / tileSize);
+                
+                ctx.strokeStyle = options.color || '#dc2626';
+                ctx.lineWidth = 3;
+                
+                for (let row = 0; row < rows; row++) {
+                    for (let col = 0; col < cols; col++) {
+                        const x = col * tileSize;
+                        const y = row * tileSize;
+                        
+                        ctx.beginPath();
+                        if (Math.random() > 0.5) {
+                            ctx.moveTo(x, y);
+                            ctx.lineTo(x + tileSize, y + tileSize);
+                        } else {
+                            ctx.moveTo(x + tileSize, y);
+                            ctx.lineTo(x, y + tileSize);
+                        }
+                        ctx.stroke();
+                    }
+                }
+            },
+
+            generateTrinityKnot(ctx, width, height, options) {
+                const centerX = width / 2;
+                const centerY = height / 2;
+                const radius = Math.min(width, height) / 4;
+                
+                ctx.strokeStyle = options.color || '#16a34a';
+                ctx.lineWidth = 4;
+                ctx.lineCap = 'round';
+                
+                // Draw three interlocking circles
+                for (let i = 0; i < 3; i++) {
+                    const angle = (i * Math.PI * 2) / 3;
+                    const x = centerX + Math.cos(angle) * radius / 2;
+                    const y = centerY + Math.sin(angle) * radius / 2;
+                    
+                    ctx.beginPath();
+                    ctx.arc(x, y, radius / 2, 0, Math.PI * 2);
+                    ctx.stroke();
+                }
+            },
+
+            generateSierpinskiTriangle(ctx, width, height, options) {
+                const centerX = width / 2;
+                const centerY = height / 2;
+                const size = Math.min(width, height) / 3;
+                
+                ctx.strokeStyle = options.color || '#7c2d12';
+                ctx.lineWidth = 1;
+                
+                // Draw Sierpinski triangle approximation
+                const drawTriangle = (x, y, size, depth) => {
+                    if (depth === 0) {
+                        ctx.beginPath();
+                        ctx.moveTo(x, y - size);
+                        ctx.lineTo(x - size, y + size);
+                        ctx.lineTo(x + size, y + size);
+                        ctx.closePath();
+                        ctx.stroke();
+                        return;
+                    }
+                    
+                    const newSize = size / 2;
+                    drawTriangle(x, y - newSize, newSize, depth - 1);
+                    drawTriangle(x - newSize, y + newSize, newSize, depth - 1);
+                    drawTriangle(x + newSize, y + newSize, newSize, depth - 1);
+                };
+                
+                drawTriangle(centerX, centerY, size, 4);
+            },
+
+            generateMandelbrotSet(ctx, width, height, options) {
+                const imageData = ctx.createImageData(width, height);
+                const data = imageData.data;
+                
+                for (let py = 0; py < height; py++) {
+                    for (let px = 0; px < width; px++) {
+                        const x0 = (px / width) * 3.5 - 2.5;
+                        const y0 = (py / height) * 2.0 - 1.0;
+                        
+                        let x = 0;
+                        let y = 0;
+                        let iteration = 0;
+                        const maxIteration = 100;
+                        
+                        while (x * x + y * y < 4 && iteration < maxIteration) {
+                            const xtemp = x * x - y * y + x0;
+                            y = 2 * x * y + y0;
+                            x = xtemp;
+                            iteration++;
+                        }
+                        
+                        const pixelIndex = (py * width + px) * 4;
+                        if (iteration === maxIteration) {
+                            data[pixelIndex] = 0;
+                            data[pixelIndex + 1] = 0;
+                            data[pixelIndex + 2] = 0;
+                        } else {
+                            const intensity = iteration / maxIteration;
+                            data[pixelIndex] = intensity * 255;
+                            data[pixelIndex + 1] = intensity * 100;
+                            data[pixelIndex + 2] = intensity * 200;
+                        }
+                        data[pixelIndex + 3] = 255;
+                    }
+                }
+                
+                ctx.putImageData(imageData, 0, 0);
+            },
+
+            generateVoronoiDiagram(ctx, width, height, options) {
+                const points = [];
+                const numPoints = 20;
+                
+                // Generate random points
+                for (let i = 0; i < numPoints; i++) {
+                    points.push({
+                        x: Math.random() * width,
+                        y: Math.random() * height,
+                        color: `hsl(${Math.random() * 360}, 70%, 80%)`
+                    });
+                }
+                
+                const imageData = ctx.createImageData(width, height);
+                const data = imageData.data;
+                
+                // For each pixel, find closest point
+                for (let y = 0; y < height; y++) {
+                    for (let x = 0; x < width; x++) {
+                        let minDistance = Infinity;
+                        let closestPoint = points[0];
+                        
+                        for (const point of points) {
+                            const distance = Math.sqrt((x - point.x) ** 2 + (y - point.y) ** 2);
+                            if (distance < minDistance) {
+                                minDistance = distance;
+                                closestPoint = point;
+                            }
+                        }
+                        
+                        const pixelIndex = (y * width + x) * 4;
+                        const hue = parseInt(closestPoint.color.match(/\d+/)[0]);
+                        const rgb = this.hslToRgb(hue / 360, 0.7, 0.8);
+                        
+                        data[pixelIndex] = rgb[0];
+                        data[pixelIndex + 1] = rgb[1];
+                        data[pixelIndex + 2] = rgb[2];
+                        data[pixelIndex + 3] = 255;
+                    }
+                }
+                
+                ctx.putImageData(imageData, 0, 0);
+            },
+
+            generatePerlinNoise(ctx, width, height, options) {
+                const imageData = ctx.createImageData(width, height);
+                const data = imageData.data;
+                
+                for (let y = 0; y < height; y++) {
+                    for (let x = 0; x < width; x++) {
+                        // Simple noise approximation
+                        const noise = Math.sin(x * 0.01) * Math.cos(y * 0.01) * 
+                                     Math.sin(x * 0.02) * Math.cos(y * 0.02);
+                        const intensity = (noise + 1) / 2;
+                        
+                        const pixelIndex = (y * width + x) * 4;
+                        data[pixelIndex] = intensity * 255;
+                        data[pixelIndex + 1] = intensity * 200;
+                        data[pixelIndex + 2] = intensity * 150;
+                        data[pixelIndex + 3] = 255;
+                    }
+                }
+                
+                ctx.putImageData(imageData, 0, 0);
+            },
+
+            generateDefaultPattern(ctx, width, height, options) {
+                ctx.strokeStyle = options.color || '#6b7280';
+                ctx.lineWidth = 2;
+                
+                // Draw a simple grid pattern
+                const gridSize = 20;
+                for (let x = 0; x < width; x += gridSize) {
+                    ctx.beginPath();
+                    ctx.moveTo(x, 0);
+                    ctx.lineTo(x, height);
+                    ctx.stroke();
+                }
+                for (let y = 0; y < height; y += gridSize) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(width, y);
+                    ctx.stroke();
+                }
+            },
+
+            hslToRgb(h, s, l) {
+                let r, g, b;
+                
+                if (s === 0) {
+                    r = g = b = l;
+                } else {
+                    const hue2rgb = (p, q, t) => {
+                        if (t < 0) t += 1;
+                        if (t > 1) t -= 1;
+                        if (t < 1/6) return p + (q - p) * 6 * t;
+                        if (t < 1/2) return q;
+                        if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+                        return p;
+                    };
+                    
+                    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+                    const p = 2 * l - q;
+                    r = hue2rgb(p, q, h + 1/3);
+                    g = hue2rgb(p, q, h);
+                    b = hue2rgb(p, q, h - 1/3);
+                }
+                
+                return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+            }
+        };
+
+        // Initialize the demo
+        let allPatterns = [];
+        let filteredPatterns = [];
+        let selectedTags = new Set();
+
+        function initializeDemo() {
+            const categories = mockPatternLibrary.getCategories();
+            
+            // Calculate statistics
+            allPatterns = categories.flatMap(cat => cat.patterns);
+            filteredPatterns = [...allPatterns];
+            
+            const totalPatterns = allPatterns.length;
+            const totalCategories = categories.length;
+            const mobileOptimized = allPatterns.filter(p => p.mobileOptimized).length;
+            const totalPresets = allPatterns.reduce((sum, p) => sum + p.presets.length, 0);
+            
+            // Update stats
+            document.getElementById('total-patterns').textContent = totalPatterns;
+            document.getElementById('total-categories').textContent = totalCategories;
+            document.getElementById('mobile-optimized').textContent = mobileOptimized;
+            document.getElementById('total-presets').textContent = totalPresets;
+            
+            // Generate tag filters
+            const allTags = [...new Set(allPatterns.flatMap(p => p.tags))];
+            const tagFiltersContainer = document.getElementById('tag-filters');
+            tagFiltersContainer.innerHTML = allTags.map(tag => 
+                `<div class="tag-filter" onclick="toggleTag('${tag}')">${tag}</div>`
+            ).join('');
+            
+            // Render categories
+            renderCategories(categories);
+        }
+
+        function renderCategories(categories) {
+            const container = document.getElementById('pattern-categories');
+            container.innerHTML = categories.map(category => {
+                const categoryPatterns = category.patterns.filter(p => 
+                    filteredPatterns.includes(p)
+                );
+                
+                if (categoryPatterns.length === 0) return '';
+                
+                return `
+                    <div class="category-section">
+                        <h2 class="category-title">${category.name}</h2>
+                        <div class="pattern-grid">
+                            ${categoryPatterns.map(pattern => renderPatternCard(pattern)).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            // Generate patterns after rendering
+            setTimeout(generateAllPatterns, 100);
+        }
+
+        function renderPatternCard(pattern) {
+            return `
+                <div class="pattern-card">
+                    <div class="pattern-preview">
+                        <div class="difficulty-badge difficulty-${pattern.difficulty}">
+                            ${pattern.difficulty}
+                        </div>
+                        <div class="performance-indicator performance-${pattern.performance}"></div>
+                        <canvas class="pattern-canvas" width="250" height="200" data-pattern="${pattern.id}"></canvas>
+                        ${pattern.mobileOptimized ? '<div class="mobile-indicator">📱</div>' : ''}
+                    </div>
+                    <div class="pattern-info">
+                        <h3>${pattern.name}</h3>
+                        <p>${pattern.description}</p>
+                        <div class="pattern-tags">
+                            ${pattern.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                        <div class="preset-selector">
+                            <select onchange="regeneratePattern('${pattern.id}', this.value)">
+                                ${pattern.presets.map(preset => 
+                                    `<option value="${preset.id}">${preset.name}</option>`
+                                ).join('')}
+                            </select>
+                        </div>
+                        <div class="pattern-controls">
+                            <button class="regenerate-btn" onclick="regeneratePattern('${pattern.id}')">
+                                Regenerate
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateAllPatterns() {
+            const canvases = document.querySelectorAll('.pattern-canvas');
+            canvases.forEach(canvas => {
+                const patternId = canvas.dataset.pattern;
+                mockPatternLibrary.generatePattern(patternId, canvas);
+            });
+        }
+
+        function regeneratePattern(patternId, presetId) {
+            const canvas = document.querySelector(`canvas[data-pattern="${patternId}"]`);
+            if (canvas) {
+                const options = {};
+                if (presetId) {
+                    // In a real implementation, you would apply preset parameters here
+                    options.preset = presetId;
+                }
+                mockPatternLibrary.generatePattern(patternId, canvas, options);
+            }
+        }
+
+        function searchPatterns() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            
+            filteredPatterns = allPatterns.filter(pattern => {
+                const matchesQuery = !query || 
+                    pattern.name.toLowerCase().includes(query) ||
+                    pattern.description.toLowerCase().includes(query) ||
+                    pattern.tags.some(tag => tag.toLowerCase().includes(query));
+                
+                const matchesTags = selectedTags.size === 0 || 
+                    [...selectedTags].some(tag => pattern.tags.includes(tag));
+                
+                return matchesQuery && matchesTags;
+            });
+            
+            const categories = mockPatternLibrary.getCategories();
+            renderCategories(categories);
+        }
+
+        function toggleTag(tag) {
+            if (selectedTags.has(tag)) {
+                selectedTags.delete(tag);
+            } else {
+                selectedTags.add(tag);
+            }
+            
+            // Update UI
+            const tagElement = document.querySelector(`[onclick="toggleTag('${tag}')"]`);
+            tagElement.classList.toggle('active', selectedTags.has(tag));
+            
+            // Filter patterns
+            searchPatterns();
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', initializeDemo);
+        
+        // Add search on Enter key
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('search-input').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    searchPatterns();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
