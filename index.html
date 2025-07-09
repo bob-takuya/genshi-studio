@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Genshi Studio - Parametric Pattern Editor</title>
+    <title>Genshi Studio - Animated Line Art</title>
     <style>
         * {
             margin: 0;
@@ -17,7 +17,7 @@
             color: white;
             overflow: hidden;
             height: 100vh;
-            touch-action: none; /* Fixed from manipulation */
+            touch-action: none;
             -webkit-touch-callout: none;
             -webkit-user-select: none;
             user-select: none;
@@ -56,7 +56,7 @@
         .pattern-title {
             font-size: 14px;
             opacity: 0.8;
-            max-width: 120px;
+            max-width: 150px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -76,7 +76,7 @@
             font-size: 12px;
             font-weight: 500;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.2s ease;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -85,24 +85,27 @@
             transform: scale(0.95);
         }
 
-        /* Main Canvas Area - Fixed duplicate definition */
+        .header-btn.active {
+            background: rgba(78, 205, 196, 0.3);
+            box-shadow: 0 0 10px rgba(78, 205, 196, 0.5);
+        }
+
+        /* Main Canvas Area */
         .main-canvas-container {
             flex: 1;
             position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: radial-gradient(circle at center, rgba(70, 70, 90, 0.3), rgba(20, 20, 30, 0.8));
+            background: radial-gradient(circle at center, rgba(20, 20, 30, 0.5), rgba(0, 0, 0, 1));
         }
 
         .pattern-canvas {
             max-width: 90%;
             max-height: 90%;
             border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-            touch-action: none; /* Fixed from pan-x pan-y */
-            image-rendering: crisp-edges;
-            image-rendering: -webkit-crisp-edges;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+            touch-action: none;
         }
 
         /* Mobile Parameter Panel */
@@ -170,7 +173,7 @@
             font-size: 10px;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -210,14 +213,16 @@
             font-size: 12px;
         }
 
+        /* Organic Slider with Momentum */
         .param-slider {
             width: 100%;
-            height: 44px; /* Touch-optimized */
+            height: 44px;
             -webkit-appearance: none;
             appearance: none;
             background: transparent;
             outline: none;
             cursor: pointer;
+            position: relative;
         }
 
         .param-slider::-webkit-slider-track {
@@ -225,6 +230,7 @@
             height: 6px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 3px;
+            overflow: hidden;
         }
 
         .param-slider::-webkit-slider-thumb {
@@ -236,6 +242,11 @@
             border-radius: 50%;
             cursor: pointer;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.1s ease;
+        }
+
+        .param-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
         }
 
         .param-slider::-moz-range-track {
@@ -258,19 +269,29 @@
         /* 2D Control */
         .param-2d {
             width: 100%;
-            height: 120px;
+            height: 150px;
             background: rgba(255, 255, 255, 0.05);
             border: 2px solid rgba(255, 255, 255, 0.2);
             border-radius: 12px;
             position: relative;
             cursor: pointer;
             touch-action: none;
+            overflow: hidden;
+        }
+
+        .param-2d-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.3;
         }
 
         .param-2d-handle {
             position: absolute;
-            width: 28px;
-            height: 28px;
+            width: 32px;
+            height: 32px;
             background: #4ECDC4;
             border-radius: 50%;
             top: 50%;
@@ -278,6 +299,11 @@
             transform: translate(-50%, -50%);
             box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
             pointer-events: none;
+            transition: transform 0.1s ease;
+        }
+
+        .param-2d-handle.dragging {
+            transform: translate(-50%, -50%) scale(1.2);
         }
 
         /* Color Controls */
@@ -304,6 +330,11 @@
             -webkit-appearance: none;
             padding: 0;
             background: none;
+            transition: transform 0.2s ease;
+        }
+
+        .color-picker:hover {
+            transform: scale(1.05);
         }
 
         .color-picker::-webkit-color-swatch-wrapper {
@@ -372,19 +403,6 @@
         .fps-medium { color: #FFE66D; }
         .fps-poor { color: #FF6B6B; }
 
-        /* Error State */
-        .error-message {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255, 107, 107, 0.9);
-            padding: 20px 30px;
-            border-radius: 12px;
-            text-align: center;
-            display: none;
-        }
-
         /* Responsive Design */
         @media (max-width: 480px) {
             .header {
@@ -404,7 +422,7 @@
             }
             
             .pattern-selector {
-                grid-template-columns: repeat(4, 1fr);
+                grid-template-columns: repeat(3, 1fr);
             }
         }
 
@@ -440,6 +458,39 @@
             60% { content: '●●●'; }
             80%, 100% { content: '●●●●'; }
         }
+
+        /* Auto-evolve indicator */
+        .auto-evolve-indicator {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .auto-evolve-indicator.active {
+            opacity: 1;
+        }
+
+        .evolve-dot {
+            width: 6px;
+            height: 6px;
+            background: #4ECDC4;
+            border-radius: 50%;
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.5; }
+        }
     </style>
 </head>
 <body>
@@ -447,31 +498,33 @@
         <!-- Header -->
         <header class="header">
             <div class="logo">Genshi Studio</div>
-            <div class="pattern-title" id="patternTitle">Islamic Geometric</div>
+            <div class="pattern-title" id="patternTitle">Flow Fields</div>
             <div class="header-controls">
+                <button class="header-btn" id="playPauseBtn" onclick="toggleAnimation()">⏸️</button>
+                <button class="header-btn" id="autoEvolveBtn" onclick="toggleAutoEvolve()">🧬</button>
                 <button class="header-btn" onclick="randomizePattern()">🎲</button>
                 <button class="header-btn" onclick="exportPattern()">📤</button>
                 <button class="header-btn" onclick="toggleFullscreen()">⛶</button>
             </div>
         </header>
 
-        <!-- Canvas Area - Fixed class name -->
+        <!-- Canvas Area -->
         <main class="main-canvas-container">
             <canvas id="patternCanvas" class="pattern-canvas" width="800" height="800"></canvas>
             <div class="perf-indicator">
                 <span id="fpsCounter" class="fps-good">60 FPS</span>
             </div>
             <div class="loading" id="loadingIndicator">Generating Pattern</div>
-            <div class="error-message" id="errorMessage">
-                <h3>Oops! Something went wrong</h3>
-                <p>Please refresh the page to try again</p>
+            <div class="auto-evolve-indicator" id="autoEvolveIndicator">
+                <div class="evolve-dot"></div>
+                <span>Auto-evolving</span>
             </div>
         </main>
 
         <!-- Parameter Panel -->
         <section class="params-panel" id="paramsPanel">
             <div class="params-header" onclick="togglePanel()">
-                <h2 class="panel-title">Pattern Parameters</h2>
+                <h2 class="panel-title">Animation Parameters</h2>
                 <button class="panel-toggle" id="panelToggle">▲</button>
             </div>
             
@@ -480,73 +533,74 @@
                 <div class="param-group">
                     <div class="param-label">Pattern Type</div>
                     <div class="pattern-selector">
-                        <button class="pattern-btn active" data-pattern="islamic" onclick="selectPattern('islamic')">
-                            Islamic<br>Geometric
+                        <button class="pattern-btn active" data-pattern="flowfield" onclick="selectPattern('flowfield')">
+                            Flow<br>Fields
                         </button>
-                        <button class="pattern-btn" data-pattern="penrose" onclick="selectPattern('penrose')">
-                            Penrose<br>Tiling
+                        <button class="pattern-btn" data-pattern="lissajous" onclick="selectPattern('lissajous')">
+                            Lissajous<br>Curves
                         </button>
-                        <button class="pattern-btn" data-pattern="truchet" onclick="selectPattern('truchet')">
-                            Truchet<br>Tiles
+                        <button class="pattern-btn" data-pattern="lorenz" onclick="selectPattern('lorenz')">
+                            Strange<br>Attractor
                         </button>
-                        <button class="pattern-btn" data-pattern="celtic" onclick="selectPattern('celtic')">
-                            Celtic<br>Knots
+                        <button class="pattern-btn" data-pattern="waves" onclick="selectPattern('waves')">
+                            Wave<br>Interference
                         </button>
-                        <button class="pattern-btn" data-pattern="mandelbrot" onclick="selectPattern('mandelbrot')">
-                            Mandelbrot<br>Fractal
+                        <button class="pattern-btn" data-pattern="growth" onclick="selectPattern('growth')">
+                            Differential<br>Growth
                         </button>
-                        <button class="pattern-btn" data-pattern="voronoi" onclick="selectPattern('voronoi')">
-                            Voronoi<br>Cells
-                        </button>
-                        <button class="pattern-btn" data-pattern="crystallographic" onclick="selectPattern('crystallographic')">
-                            Crystal<br>Lattice
-                        </button>
-                        <button class="pattern-btn" data-pattern="lsystem" onclick="selectPattern('lsystem')">
-                            L-System<br>Fractal
+                        <button class="pattern-btn" data-pattern="particles" onclick="selectPattern('particles')">
+                            Particle<br>Swarm
                         </button>
                     </div>
                 </div>
 
-                <!-- 2D Parameter Control -->
+                <!-- 2D Parameter Control with trail visualization -->
                 <div class="param-group">
                     <div class="param-label">
-                        Scale & Rotation
-                        <span class="param-value" id="scaleRotValue">1.0, 0°</span>
+                        Motion Control
+                        <span class="param-value" id="motionValue">0.0, 0.0</span>
                     </div>
-                    <div class="param-2d" id="scaleRotControl">
-                        <div class="param-2d-handle" id="scaleRotHandle"></div>
+                    <div class="param-2d" id="motionControl">
+                        <canvas class="param-2d-canvas" id="motionCanvas"></canvas>
+                        <div class="param-2d-handle" id="motionHandle"></div>
                     </div>
                 </div>
 
-                <!-- Primary Parameters -->
+                <!-- Primary Parameters with momentum -->
+                <div class="param-group">
+                    <div class="param-label">
+                        Speed
+                        <span class="param-value" id="speedValue">1.0</span>
+                    </div>
+                    <input type="range" class="param-slider" id="speedSlider" 
+                           min="0.1" max="5.0" step="0.1" value="1.0">
+                </div>
+
                 <div class="param-group">
                     <div class="param-label">
                         Complexity
-                        <span class="param-value" id="complexityValue">5</span>
+                        <span class="param-value" id="complexityValue">50</span>
                     </div>
                     <input type="range" class="param-slider" id="complexitySlider" 
-                           min="1" max="20" value="5" 
-                           oninput="updateParameter('complexity', this.value)">
+                           min="10" max="200" value="50">
                 </div>
 
                 <div class="param-group">
                     <div class="param-label">
-                        Density
-                        <span class="param-value" id="densityValue">1.0</span>
+                        Line Weight
+                        <span class="param-value" id="lineWeightValue">1.0</span>
                     </div>
-                    <input type="range" class="param-slider" id="densitySlider" 
-                           min="0.1" max="3.0" step="0.1" value="1.0"
-                           oninput="updateParameter('density', this.value)">
+                    <input type="range" class="param-slider" id="lineWeightSlider" 
+                           min="0.1" max="3.0" step="0.1" value="1.0">
                 </div>
 
                 <div class="param-group">
                     <div class="param-label">
-                        Symmetry
-                        <span class="param-value" id="symmetryValue">8</span>
+                        Fade Trails
+                        <span class="param-value" id="fadeValue">0.95</span>
                     </div>
-                    <input type="range" class="param-slider" id="symmetrySlider" 
-                           min="3" max="24" value="8"
-                           oninput="updateParameter('symmetry', this.value)">
+                    <input type="range" class="param-slider" id="fadeSlider" 
+                           min="0.0" max="1.0" step="0.01" value="0.95">
                 </div>
 
                 <!-- Color Controls -->
@@ -556,28 +610,28 @@
                         <div class="color-control">
                             <input type="color" class="color-picker" id="primaryColor" 
                                    value="#4ECDC4" onchange="updateColor('primary', this.value)">
-                            <span class="color-label">Primary</span>
+                            <span class="color-label">Start</span>
                         </div>
                         <div class="color-control">
                             <input type="color" class="color-picker" id="secondaryColor" 
                                    value="#FF6B6B" onchange="updateColor('secondary', this.value)">
-                            <span class="color-label">Secondary</span>
+                            <span class="color-label">Middle</span>
                         </div>
                         <div class="color-control">
                             <input type="color" class="color-picker" id="accentColor" 
                                    value="#FFE66D" onchange="updateColor('accent', this.value)">
-                            <span class="color-label">Accent</span>
+                            <span class="color-label">End</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Action Buttons -->
                 <div class="action-buttons">
-                    <button class="action-btn btn-primary" onclick="generateVariation()">
-                        Generate Variation
+                    <button class="action-btn btn-primary" onclick="morphToNext()">
+                        Morph Pattern
                     </button>
-                    <button class="action-btn btn-secondary" onclick="resetToDefault()">
-                        Reset Default
+                    <button class="action-btn btn-secondary" onclick="resetPattern()">
+                        Reset Flow
                     </button>
                 </div>
             </div>
@@ -585,671 +639,833 @@
     </div>
 
     <script>
+        // Perlin Noise Implementation
+        class PerlinNoise {
+            constructor() {
+                this.gradients = {};
+                this.memory = {};
+            }
+
+            rand_vect() {
+                const theta = Math.random() * 2 * Math.PI;
+                return { x: Math.cos(theta), y: Math.sin(theta) };
+            }
+
+            dot_prod_grid(x, y, vx, vy) {
+                let g_vect;
+                const d_vect = { x: x - vx, y: y - vy };
+                if (this.gradients[[vx, vy]]) {
+                    g_vect = this.gradients[[vx, vy]];
+                } else {
+                    g_vect = this.rand_vect();
+                    this.gradients[[vx, vy]] = g_vect;
+                }
+                return d_vect.x * g_vect.x + d_vect.y * g_vect.y;
+            }
+
+            smootherstep(x) {
+                return 6 * x ** 5 - 15 * x ** 4 + 10 * x ** 3;
+            }
+
+            interp(x, a, b) {
+                return a + this.smootherstep(x) * (b - a);
+            }
+
+            get(x, y) {
+                if (this.memory.hasOwnProperty([x, y]))
+                    return this.memory[[x, y]];
+                const xf = Math.floor(x);
+                const yf = Math.floor(y);
+                const tl = this.dot_prod_grid(x, y, xf, yf);
+                const tr = this.dot_prod_grid(x, y, xf + 1, yf);
+                const bl = this.dot_prod_grid(x, y, xf, yf + 1);
+                const br = this.dot_prod_grid(x, y, xf + 1, yf + 1);
+                const xt = this.interp(x - xf, tl, tr);
+                const xb = this.interp(x - xf, bl, br);
+                const v = this.interp(y - yf, xt, xb);
+                this.memory[[x, y]] = v;
+                return v;
+            }
+        }
+
         // App State
         let appState = {
-            currentPattern: 'islamic',
+            currentPattern: 'flowfield',
+            isAnimating: true,
+            autoEvolve: false,
+            time: 0,
+            deltaTime: 0,
+            lastTime: 0,
             parameters: {
-                complexity: 5,
-                density: 1.0,
-                symmetry: 8,
-                scale: 1.0,
-                rotation: 0,
+                speed: 1.0,
+                complexity: 50,
+                lineWeight: 1.0,
+                fade: 0.95,
+                motionX: 0.0,
+                motionY: 0.0,
                 colors: {
                     primary: '#4ECDC4',
                     secondary: '#FF6B6B',
-                    accent: '#FFE66D',
-                    background: '#000000'
+                    accent: '#FFE66D'
                 }
+            },
+            momentum: {
+                speed: 0,
+                complexity: 0,
+                lineWeight: 0,
+                fade: 0,
+                motionX: 0,
+                motionY: 0
             },
             performance: {
                 fps: 60,
-                frameTime: 16.67,
-                lastFrameTime: 0,
                 frameCount: 0,
                 lastFpsUpdate: 0
             },
             ui: {
                 panelExpanded: true,
-                isDragging: false
+                isDragging: false,
+                dragTarget: null
             },
-            rendering: {
-                animationId: null,
-                isGenerating: false
+            patterns: {},
+            morphing: {
+                active: false,
+                progress: 0,
+                from: null,
+                to: null
             }
         };
 
-        // Canvas and Context with error handling
-        let canvas, ctx, loadingIndicator, errorMessage;
+        // Canvas and Context
+        let canvas, ctx, motionCanvas, motionCtx;
+        let perlinNoise;
         
-        // Initialize with error handling
+        // Initialize
         function initializeApp() {
-            try {
-                canvas = document.getElementById('patternCanvas');
-                ctx = canvas.getContext('2d', { 
-                    alpha: false,
-                    desynchronized: true 
-                });
-                
-                if (!ctx) {
-                    throw new Error('Canvas context not available');
-                }
-                
-                loadingIndicator = document.getElementById('loadingIndicator');
-                errorMessage = document.getElementById('errorMessage');
-                
-                // Set up canvas with proper DPR
-                setupCanvas();
-                
-                // Initialize pattern
-                generatePattern();
-                
-                // Set up 2D control
-                setup2DControl();
-                
-                // Start performance monitoring (throttled)
-                startPerformanceMonitoring();
-                
-            } catch (error) {
-                showError('Failed to initialize the application. Please refresh the page.');
-                console.error('Initialization error:', error);
-            }
+            canvas = document.getElementById('patternCanvas');
+            ctx = canvas.getContext('2d', { 
+                alpha: false,
+                desynchronized: true 
+            });
+            
+            motionCanvas = document.getElementById('motionCanvas');
+            motionCtx = motionCanvas.getContext('2d');
+            
+            perlinNoise = new PerlinNoise();
+            
+            setupCanvas();
+            initializePatterns();
+            setup2DControl();
+            setupSliderMomentum();
+            
+            // Start animation loop
+            animate();
         }
 
-        // Canvas setup with proper DPR handling
+        // Canvas setup
         function setupCanvas() {
             const dpr = window.devicePixelRatio || 1;
             const rect = canvas.getBoundingClientRect();
             
-            // Set display size
             canvas.style.width = rect.width + 'px';
             canvas.style.height = rect.height + 'px';
             
-            // Set actual size in memory
             canvas.width = rect.width * dpr;
             canvas.height = rect.height * dpr;
             
-            // Scale context to ensure correct drawing operations
             ctx.scale(dpr, dpr);
             
-            // Set drawing defaults
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
+            // Black background
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, rect.width, rect.height);
+            
+            // Motion canvas setup
+            const motionRect = motionCanvas.getBoundingClientRect();
+            motionCanvas.width = motionRect.width;
+            motionCanvas.height = motionRect.height;
         }
 
-        // Pattern Definitions
-        const patterns = {
-            islamic: {
-                title: 'Islamic Geometric',
-                generator: generateIslamicGeometric,
-                defaultParams: { complexity: 5, density: 1.0, symmetry: 8 }
+        // Initialize pattern systems
+        function initializePatterns() {
+            // Flow Field
+            appState.patterns.flowfield = {
+                particles: [],
+                init: function() {
+                    this.particles = [];
+                    const numParticles = appState.parameters.complexity * 2;
+                    for (let i = 0; i < numParticles; i++) {
+                        this.particles.push({
+                            x: Math.random() * canvas.width,
+                            y: Math.random() * canvas.height,
+                            vx: 0,
+                            vy: 0,
+                            age: 0,
+                            maxAge: 200 + Math.random() * 300
+                        });
+                    }
+                }
+            };
+
+            // Lissajous Curves
+            appState.patterns.lissajous = {
+                points: [],
+                init: function() {
+                    this.points = [];
+                    for (let i = 0; i < appState.parameters.complexity; i++) {
+                        this.points.push({
+                            a: 3 + Math.random() * 3,
+                            b: 2 + Math.random() * 4,
+                            delta: Math.random() * Math.PI * 2,
+                            trail: []
+                        });
+                    }
+                }
+            };
+
+            // Lorenz Attractor
+            appState.patterns.lorenz = {
+                points: [],
+                init: function() {
+                    this.points = [];
+                    for (let i = 0; i < appState.parameters.complexity / 2; i++) {
+                        this.points.push({
+                            x: (Math.random() - 0.5) * 20,
+                            y: (Math.random() - 0.5) * 20,
+                            z: Math.random() * 40,
+                            trail: []
+                        });
+                    }
+                }
+            };
+
+            // Wave Interference
+            appState.patterns.waves = {
+                sources: [],
+                init: function() {
+                    this.sources = [];
+                    const numSources = Math.min(5, Math.floor(appState.parameters.complexity / 10));
+                    for (let i = 0; i < numSources; i++) {
+                        this.sources.push({
+                            x: Math.random() * canvas.width,
+                            y: Math.random() * canvas.height,
+                            frequency: 0.01 + Math.random() * 0.02,
+                            amplitude: 50 + Math.random() * 100,
+                            phase: Math.random() * Math.PI * 2
+                        });
+                    }
+                }
+            };
+
+            // Differential Growth
+            appState.patterns.growth = {
+                nodes: [],
+                init: function() {
+                    this.nodes = [];
+                    const radius = 100;
+                    const numNodes = appState.parameters.complexity;
+                    for (let i = 0; i < numNodes; i++) {
+                        const angle = (i / numNodes) * Math.PI * 2;
+                        this.nodes.push({
+                            x: canvas.width / 2 + radius * Math.cos(angle),
+                            y: canvas.height / 2 + radius * Math.sin(angle),
+                            vx: 0,
+                            vy: 0
+                        });
+                    }
+                }
+            };
+
+            // Particle Swarm
+            appState.patterns.particles = {
+                swarm: [],
+                attractors: [],
+                init: function() {
+                    this.swarm = [];
+                    this.attractors = [];
+                    
+                    // Create swarm
+                    for (let i = 0; i < appState.parameters.complexity * 3; i++) {
+                        this.swarm.push({
+                            x: Math.random() * canvas.width,
+                            y: Math.random() * canvas.height,
+                            vx: (Math.random() - 0.5) * 2,
+                            vy: (Math.random() - 0.5) * 2,
+                            trail: []
+                        });
+                    }
+                    
+                    // Create attractors
+                    for (let i = 0; i < 3; i++) {
+                        this.attractors.push({
+                            x: Math.random() * canvas.width,
+                            y: Math.random() * canvas.height,
+                            strength: 50 + Math.random() * 100
+                        });
+                    }
+                }
+            };
+
+            // Initialize current pattern
+            selectPattern(appState.currentPattern);
+        }
+
+        // Pattern Renderers
+        const patternRenderers = {
+            flowfield: function() {
+                const pattern = appState.patterns.flowfield;
+                const { speed, motionX, motionY, lineWeight } = appState.parameters;
+                
+                pattern.particles.forEach((particle, i) => {
+                    // Update position using Perlin noise
+                    const noiseScale = 0.005;
+                    const angle = perlinNoise.get(
+                        particle.x * noiseScale + motionX * 0.1, 
+                        particle.y * noiseScale + motionY * 0.1 + appState.time * 0.0001
+                    ) * Math.PI * 4;
+                    
+                    particle.vx = Math.cos(angle) * speed;
+                    particle.vy = Math.sin(angle) * speed;
+                    
+                    particle.x += particle.vx;
+                    particle.y += particle.vy;
+                    
+                    // Wrap around edges
+                    if (particle.x < 0) particle.x = canvas.width;
+                    if (particle.x > canvas.width) particle.x = 0;
+                    if (particle.y < 0) particle.y = canvas.height;
+                    if (particle.y > canvas.height) particle.y = 0;
+                    
+                    // Draw
+                    const progress = particle.age / particle.maxAge;
+                    const color = interpolateColor(
+                        appState.parameters.colors.primary,
+                        appState.parameters.colors.secondary,
+                        appState.parameters.colors.accent,
+                        progress
+                    );
+                    
+                    ctx.strokeStyle = color;
+                    ctx.lineWidth = lineWeight * (1 - progress * 0.5);
+                    ctx.beginPath();
+                    ctx.moveTo(particle.x - particle.vx, particle.y - particle.vy);
+                    ctx.lineTo(particle.x, particle.y);
+                    ctx.stroke();
+                    
+                    // Age particle
+                    particle.age++;
+                    if (particle.age > particle.maxAge) {
+                        particle.x = Math.random() * canvas.width;
+                        particle.y = Math.random() * canvas.height;
+                        particle.age = 0;
+                    }
+                });
             },
-            penrose: {
-                title: 'Penrose Tiling',
-                generator: generatePenroseTiling,
-                defaultParams: { complexity: 3, density: 1.2, symmetry: 5 }
+
+            lissajous: function() {
+                const pattern = appState.patterns.lissajous;
+                const { speed, motionX, motionY, lineWeight } = appState.parameters;
+                const centerX = canvas.width / 2;
+                const centerY = canvas.height / 2;
+                const scale = Math.min(canvas.width, canvas.height) * 0.3;
+                
+                pattern.points.forEach((point, i) => {
+                    const t = appState.time * 0.001 * speed + i * 0.1;
+                    const x = centerX + scale * Math.sin(point.a * t + point.delta + motionX * 0.1);
+                    const y = centerY + scale * Math.sin(point.b * t + motionY * 0.1);
+                    
+                    point.trail.push({ x, y });
+                    if (point.trail.length > 100) {
+                        point.trail.shift();
+                    }
+                    
+                    // Draw trail with gradient
+                    ctx.beginPath();
+                    point.trail.forEach((p, idx) => {
+                        if (idx === 0) {
+                            ctx.moveTo(p.x, p.y);
+                        } else {
+                            ctx.lineTo(p.x, p.y);
+                        }
+                    });
+                    
+                    const gradient = ctx.createLinearGradient(
+                        point.trail[0]?.x || x, point.trail[0]?.y || y,
+                        x, y
+                    );
+                    gradient.addColorStop(0, appState.parameters.colors.primary + '00');
+                    gradient.addColorStop(0.5, appState.parameters.colors.secondary + '88');
+                    gradient.addColorStop(1, appState.parameters.colors.accent);
+                    
+                    ctx.strokeStyle = gradient;
+                    ctx.lineWidth = lineWeight;
+                    ctx.stroke();
+                });
             },
-            truchet: {
-                title: 'Truchet Tiles',
-                generator: generateTruchetTiles,
-                defaultParams: { complexity: 2, density: 0.8, symmetry: 4 }
+
+            lorenz: function() {
+                const pattern = appState.patterns.lorenz;
+                const { speed, motionX, motionY, lineWeight } = appState.parameters;
+                const sigma = 10;
+                const rho = 28;
+                const beta = 8/3;
+                const dt = 0.01 * speed;
+                const scale = 5;
+                const centerX = canvas.width / 2;
+                const centerY = canvas.height / 2;
+                
+                pattern.points.forEach((point, i) => {
+                    // Lorenz equations
+                    const dx = sigma * (point.y - point.x) * dt;
+                    const dy = (point.x * (rho - point.z) - point.y) * dt;
+                    const dz = (point.x * point.y - beta * point.z) * dt;
+                    
+                    point.x += dx + motionX * 0.01;
+                    point.y += dy + motionY * 0.01;
+                    point.z += dz;
+                    
+                    const screenX = centerX + point.x * scale;
+                    const screenY = centerY + point.y * scale;
+                    
+                    point.trail.push({ x: screenX, y: screenY, z: point.z });
+                    if (point.trail.length > 150) {
+                        point.trail.shift();
+                    }
+                    
+                    // Draw 3D-like trail
+                    ctx.beginPath();
+                    point.trail.forEach((p, idx) => {
+                        if (idx === 0) {
+                            ctx.moveTo(p.x, p.y);
+                        } else {
+                            ctx.lineTo(p.x, p.y);
+                        }
+                    });
+                    
+                    const progress = i / pattern.points.length;
+                    const color = interpolateColor(
+                        appState.parameters.colors.primary,
+                        appState.parameters.colors.secondary,
+                        appState.parameters.colors.accent,
+                        progress
+                    );
+                    
+                    ctx.strokeStyle = color;
+                    ctx.lineWidth = lineWeight * (0.5 + (point.z + 30) / 60);
+                    ctx.stroke();
+                });
             },
-            celtic: {
-                title: 'Celtic Knots',
-                generator: generateCelticKnots,
-                defaultParams: { complexity: 4, density: 1.0, symmetry: 6 }
+
+            waves: function() {
+                const pattern = appState.patterns.waves;
+                const { speed, motionX, motionY, lineWeight, complexity } = appState.parameters;
+                const resolution = Math.max(5, 50 - complexity / 4);
+                
+                for (let x = 0; x < canvas.width; x += resolution) {
+                    ctx.beginPath();
+                    for (let y = 0; y < canvas.height; y += 2) {
+                        let amplitude = 0;
+                        
+                        pattern.sources.forEach(source => {
+                            const distance = Math.sqrt(
+                                Math.pow(x - source.x + motionX * 10, 2) + 
+                                Math.pow(y - source.y + motionY * 10, 2)
+                            );
+                            amplitude += source.amplitude * Math.sin(
+                                distance * source.frequency - appState.time * 0.001 * speed + source.phase
+                            ) / (1 + distance * 0.001);
+                        });
+                        
+                        const offsetX = amplitude * 0.1;
+                        
+                        if (y === 0) {
+                            ctx.moveTo(x + offsetX, y);
+                        } else {
+                            ctx.lineTo(x + offsetX, y);
+                        }
+                    }
+                    
+                    const progress = x / canvas.width;
+                    const color = interpolateColor(
+                        appState.parameters.colors.primary,
+                        appState.parameters.colors.secondary,
+                        appState.parameters.colors.accent,
+                        progress
+                    );
+                    
+                    ctx.strokeStyle = color + '44';
+                    ctx.lineWidth = lineWeight * 0.5;
+                    ctx.stroke();
+                }
             },
-            mandelbrot: {
-                title: 'Mandelbrot Fractal',
-                generator: generateMandelbrot,
-                defaultParams: { complexity: 50, density: 2.0, symmetry: 1 }
+
+            growth: function() {
+                const pattern = appState.patterns.growth;
+                const { speed, motionX, motionY, lineWeight } = appState.parameters;
+                const repelDistance = 15;
+                const attractDistance = 25;
+                const centerX = canvas.width / 2 + motionX * 50;
+                const centerY = canvas.height / 2 + motionY * 50;
+                
+                // Update node positions
+                pattern.nodes.forEach((node, i) => {
+                    let fx = 0, fy = 0;
+                    
+                    // Repel from neighbors
+                    pattern.nodes.forEach((other, j) => {
+                        if (i !== j) {
+                            const dx = node.x - other.x;
+                            const dy = node.y - other.y;
+                            const dist = Math.sqrt(dx * dx + dy * dy);
+                            
+                            if (dist < repelDistance && dist > 0) {
+                                const force = (repelDistance - dist) / dist * 0.5;
+                                fx += dx * force;
+                                fy += dy * force;
+                            }
+                        }
+                    });
+                    
+                    // Attract to center
+                    const dx = centerX - node.x;
+                    const dy = centerY - node.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist > attractDistance) {
+                        fx += dx * 0.01;
+                        fy += dy * 0.01;
+                    }
+                    
+                    // Add some noise
+                    fx += (Math.random() - 0.5) * 0.5;
+                    fy += (Math.random() - 0.5) * 0.5;
+                    
+                    // Update velocity with damping
+                    node.vx = node.vx * 0.9 + fx * speed * 0.1;
+                    node.vy = node.vy * 0.9 + fy * speed * 0.1;
+                    
+                    // Update position
+                    node.x += node.vx;
+                    node.y += node.vy;
+                });
+                
+                // Draw organic shape
+                ctx.beginPath();
+                pattern.nodes.forEach((node, i) => {
+                    const next = pattern.nodes[(i + 1) % pattern.nodes.length];
+                    const cp1x = node.x + (next.x - node.x) * 0.3;
+                    const cp1y = node.y + (next.y - node.y) * 0.3;
+                    const cp2x = next.x - (next.x - node.x) * 0.3;
+                    const cp2y = next.y - (next.y - node.y) * 0.3;
+                    
+                    if (i === 0) {
+                        ctx.moveTo(node.x, node.y);
+                    }
+                    ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, next.x, next.y);
+                });
+                ctx.closePath();
+                
+                // Create gradient along path
+                const gradient = ctx.createRadialGradient(
+                    centerX, centerY, 0,
+                    centerX, centerY, 200
+                );
+                gradient.addColorStop(0, appState.parameters.colors.primary);
+                gradient.addColorStop(0.5, appState.parameters.colors.secondary);
+                gradient.addColorStop(1, appState.parameters.colors.accent);
+                
+                ctx.strokeStyle = gradient;
+                ctx.lineWidth = lineWeight;
+                ctx.stroke();
             },
-            voronoi: {
-                title: 'Voronoi Cells',
-                generator: generateVoronoi,
-                defaultParams: { complexity: 20, density: 1.0, symmetry: 1 }
-            },
-            crystallographic: {
-                title: 'Crystal Lattice',
-                generator: generateCrystallographic,
-                defaultParams: { complexity: 6, density: 1.0, symmetry: 6 }
-            },
-            lsystem: {
-                title: 'L-System Fractal',
-                generator: generateLSystem,
-                defaultParams: { complexity: 5, density: 1.0, symmetry: 1 }
+
+            particles: function() {
+                const pattern = appState.patterns.particles;
+                const { speed, motionX, motionY, lineWeight } = appState.parameters;
+                
+                // Update attractors
+                pattern.attractors.forEach((attractor, i) => {
+                    attractor.x += Math.sin(appState.time * 0.0001 + i) * motionX * 0.5;
+                    attractor.y += Math.cos(appState.time * 0.0001 + i) * motionY * 0.5;
+                });
+                
+                // Update and draw particles
+                pattern.swarm.forEach((particle, i) => {
+                    // Calculate forces from attractors
+                    let fx = 0, fy = 0;
+                    
+                    pattern.attractors.forEach(attractor => {
+                        const dx = attractor.x - particle.x;
+                        const dy = attractor.y - particle.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (dist > 0) {
+                            const force = attractor.strength / (dist * dist);
+                            fx += dx * force;
+                            fy += dy * force;
+                        }
+                    });
+                    
+                    // Update velocity
+                    particle.vx = particle.vx * 0.95 + fx * 0.01 * speed;
+                    particle.vy = particle.vy * 0.95 + fy * 0.01 * speed;
+                    
+                    // Limit velocity
+                    const maxSpeed = 5;
+                    const currentSpeed = Math.sqrt(particle.vx ** 2 + particle.vy ** 2);
+                    if (currentSpeed > maxSpeed) {
+                        particle.vx = (particle.vx / currentSpeed) * maxSpeed;
+                        particle.vy = (particle.vy / currentSpeed) * maxSpeed;
+                    }
+                    
+                    // Update position
+                    particle.x += particle.vx;
+                    particle.y += particle.vy;
+                    
+                    // Bounce off walls
+                    if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -0.9;
+                    if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -0.9;
+                    
+                    particle.x = Math.max(0, Math.min(canvas.width, particle.x));
+                    particle.y = Math.max(0, Math.min(canvas.height, particle.y));
+                    
+                    // Update trail
+                    particle.trail.push({ x: particle.x, y: particle.y });
+                    if (particle.trail.length > 30) {
+                        particle.trail.shift();
+                    }
+                    
+                    // Draw trail
+                    if (particle.trail.length > 1) {
+                        ctx.beginPath();
+                        particle.trail.forEach((p, idx) => {
+                            if (idx === 0) {
+                                ctx.moveTo(p.x, p.y);
+                            } else {
+                                ctx.lineTo(p.x, p.y);
+                            }
+                        });
+                        
+                        const progress = i / pattern.swarm.length;
+                        const color = interpolateColor(
+                            appState.parameters.colors.primary,
+                            appState.parameters.colors.secondary,
+                            appState.parameters.colors.accent,
+                            progress
+                        );
+                        
+                        ctx.strokeStyle = color + '66';
+                        ctx.lineWidth = lineWeight * (1 - progress * 0.5);
+                        ctx.stroke();
+                    }
+                });
             }
         };
 
-        // Pattern Generation with error handling and performance optimization
-        async function generatePattern() {
-            if (appState.rendering.isGenerating) return;
+        // Animation loop
+        function animate(currentTime = 0) {
+            if (!appState.isAnimating) {
+                requestAnimationFrame(animate);
+                return;
+            }
             
-            try {
-                appState.rendering.isGenerating = true;
-                showLoading(true);
-                
-                // Use requestAnimationFrame for non-blocking rendering
-                await new Promise(resolve => {
-                    requestAnimationFrame(() => {
-                        const pattern = patterns[appState.currentPattern];
-                        if (pattern && pattern.generator) {
-                            // Clear canvas
-                            const rect = canvas.getBoundingClientRect();
-                            ctx.clearRect(0, 0, rect.width, rect.height);
-                            
-                            // Save context state
-                            ctx.save();
-                            
-                            // Apply transformations
-                            ctx.translate(rect.width / 2, rect.height / 2);
-                            ctx.scale(appState.parameters.scale, appState.parameters.scale);
-                            ctx.rotate(appState.parameters.rotation * Math.PI / 180);
-                            
-                            // Generate pattern
-                            pattern.generator();
-                            
-                            // Restore context state
-                            ctx.restore();
-                        }
-                        resolve();
-                    });
-                });
-                
-            } catch (error) {
-                console.error('Pattern generation error:', error);
-                showError('Failed to generate pattern. Please try again.');
-            } finally {
-                appState.rendering.isGenerating = false;
-                showLoading(false);
+            // Update time
+            appState.deltaTime = currentTime - appState.lastTime;
+            appState.lastTime = currentTime;
+            appState.time += appState.deltaTime;
+            
+            // Apply momentum to parameters
+            applyMomentum();
+            
+            // Auto-evolve parameters
+            if (appState.autoEvolve) {
+                autoEvolveParameters();
+            }
+            
+            // Clear with fade effect
+            const rect = canvas.getBoundingClientRect();
+            ctx.fillStyle = `rgba(0, 0, 0, ${1 - appState.parameters.fade})`;
+            ctx.fillRect(0, 0, rect.width, rect.height);
+            
+            // Render current pattern
+            if (patternRenderers[appState.currentPattern]) {
+                patternRenderers[appState.currentPattern]();
+            }
+            
+            // Update FPS
+            updateFPS(currentTime);
+            
+            requestAnimationFrame(animate);
+        }
+
+        // Helper functions
+        function interpolateColor(color1, color2, color3, progress) {
+            if (progress < 0.5) {
+                return lerpColor(color1, color2, progress * 2);
+            } else {
+                return lerpColor(color2, color3, (progress - 0.5) * 2);
             }
         }
 
-        // Pattern Generators (optimized versions)
-        function generateIslamicGeometric() {
-            const size = Math.min(canvas.width, canvas.height) / 3;
-            const { complexity, symmetry, colors, density } = appState.parameters;
+        function lerpColor(color1, color2, t) {
+            const r1 = parseInt(color1.slice(1, 3), 16);
+            const g1 = parseInt(color1.slice(3, 5), 16);
+            const b1 = parseInt(color1.slice(5, 7), 16);
+            const r2 = parseInt(color2.slice(1, 3), 16);
+            const g2 = parseInt(color2.slice(3, 5), 16);
+            const b2 = parseInt(color2.slice(5, 7), 16);
             
-            ctx.fillStyle = colors.background;
-            ctx.fillRect(-canvas.width/2, -canvas.height/2, canvas.width, canvas.height);
+            const r = Math.round(r1 + (r2 - r1) * t);
+            const g = Math.round(g1 + (g2 - g1) * t);
+            const b = Math.round(b1 + (b2 - b1) * t);
             
-            // Use path batching for performance
-            ctx.beginPath();
+            return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+        }
+
+        function applyMomentum() {
+            const damping = 0.92;
             
-            for (let ring = 1; ring <= complexity; ring++) {
-                const radius = (size * ring / complexity) * density;
-                const points = symmetry * ring;
-                
-                for (let i = 0; i < points; i++) {
-                    const angle = (i * 2 * Math.PI) / points;
-                    const x = radius * Math.cos(angle);
-                    const y = radius * Math.sin(angle);
-                    
-                    // Draw star pattern
-                    for (let j = 0; j < 8; j++) {
-                        const starAngle = angle + (j * Math.PI / 4);
-                        const innerRadius = radius * 0.3;
-                        const outerRadius = radius * 0.5;
+            Object.keys(appState.momentum).forEach(key => {
+                if (key !== 'motionX' && key !== 'motionY') {
+                    appState.momentum[key] *= damping;
+                    if (Math.abs(appState.momentum[key]) > 0.001) {
+                        appState.parameters[key] += appState.momentum[key];
                         
-                        const isOuter = j % 2 === 0;
-                        const r = isOuter ? outerRadius : innerRadius;
-                        
-                        const sx = x + r * Math.cos(starAngle);
-                        const sy = y + r * Math.sin(starAngle);
-                        
-                        if (j === 0) {
-                            ctx.moveTo(sx, sy);
-                        } else {
-                            ctx.lineTo(sx, sy);
-                        }
-                    }
-                    ctx.closePath();
-                }
-            }
-            
-            // Apply gradient
-            const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, size);
-            gradient.addColorStop(0, colors.primary);
-            gradient.addColorStop(0.5, colors.secondary);
-            gradient.addColorStop(1, colors.accent);
-            
-            ctx.strokeStyle = gradient;
-            ctx.lineWidth = 2;
-            ctx.stroke();
-        }
-
-        function generatePenroseTiling() {
-            const size = Math.min(canvas.width, canvas.height) / 3;
-            const { complexity, colors, density } = appState.parameters;
-            
-            ctx.fillStyle = colors.background;
-            ctx.fillRect(-canvas.width/2, -canvas.height/2, canvas.width, canvas.height);
-            
-            const goldenRatio = (1 + Math.sqrt(5)) / 2;
-            
-            // Batch path operations
-            ctx.beginPath();
-            
-            for (let i = 0; i < complexity; i++) {
-                for (let j = 0; j < 5; j++) {
-                    const angle = j * 2 * Math.PI / 5;
-                    const distance = i * size / complexity * density;
-                    
-                    // Kite shape
-                    const x = distance * Math.cos(angle);
-                    const y = distance * Math.sin(angle);
-                    
-                    ctx.save();
-                    ctx.translate(x, y);
-                    ctx.rotate(angle);
-                    
-                    // Draw kite
-                    ctx.moveTo(0, 0);
-                    ctx.lineTo(size/goldenRatio, 0);
-                    ctx.lineTo(size/goldenRatio * Math.cos(Math.PI/5), size/goldenRatio * Math.sin(Math.PI/5));
-                    ctx.lineTo(0, size/goldenRatio);
-                    ctx.closePath();
-                    
-                    ctx.restore();
-                }
-            }
-            
-            ctx.strokeStyle = colors.primary;
-            ctx.fillStyle = `${colors.secondary}33`;
-            ctx.lineWidth = 1;
-            ctx.fill();
-            ctx.stroke();
-        }
-
-        function generateTruchetTiles() {
-            const { complexity, colors, density } = appState.parameters;
-            const tileSize = Math.min(canvas.width, canvas.height) / (complexity * 3) * density;
-            
-            ctx.fillStyle = colors.background;
-            ctx.fillRect(-canvas.width/2, -canvas.height/2, canvas.width, canvas.height);
-            
-            const rows = Math.ceil(canvas.height / tileSize);
-            const cols = Math.ceil(canvas.width / tileSize);
-            
-            for (let row = -rows/2; row < rows/2; row++) {
-                for (let col = -cols/2; col < cols/2; col++) {
-                    const x = col * tileSize;
-                    const y = row * tileSize;
-                    const rotation = Math.random() < 0.5 ? 0 : Math.PI / 2;
-                    
-                    ctx.save();
-                    ctx.translate(x + tileSize/2, y + tileSize/2);
-                    ctx.rotate(rotation);
-                    
-                    ctx.beginPath();
-                    ctx.arc(-tileSize/2, -tileSize/2, tileSize/2, 0, Math.PI/2);
-                    ctx.arc(tileSize/2, tileSize/2, tileSize/2, Math.PI, Math.PI * 3/2);
-                    
-                    ctx.strokeStyle = colors.primary;
-                    ctx.lineWidth = tileSize / 10;
-                    ctx.stroke();
-                    
-                    ctx.restore();
-                }
-            }
-        }
-
-        function generateCelticKnots() {
-            const size = Math.min(canvas.width, canvas.height) / 3;
-            const { complexity, symmetry, colors, density } = appState.parameters;
-            
-            ctx.fillStyle = colors.background;
-            ctx.fillRect(-canvas.width/2, -canvas.height/2, canvas.width, canvas.height);
-            
-            const knotRadius = size * density;
-            const strands = symmetry;
-            
-            // Draw interlaced strands
-            for (let strand = 0; strand < strands; strand++) {
-                ctx.beginPath();
-                
-                for (let t = 0; t <= complexity * Math.PI * 2; t += 0.1) {
-                    const angle = t + (strand * 2 * Math.PI / strands);
-                    const r = knotRadius * (1 + 0.3 * Math.sin(complexity * t));
-                    
-                    const x = r * Math.cos(angle);
-                    const y = r * Math.sin(angle);
-                    
-                    if (t === 0) {
-                        ctx.moveTo(x, y);
-                    } else {
-                        ctx.lineTo(x, y);
-                    }
-                }
-                
-                const gradient = ctx.createLinearGradient(-size, -size, size, size);
-                gradient.addColorStop(0, colors.primary);
-                gradient.addColorStop(0.5, colors.secondary);
-                gradient.addColorStop(1, colors.accent);
-                
-                ctx.strokeStyle = gradient;
-                ctx.lineWidth = size / 20;
-                ctx.stroke();
-            }
-        }
-
-        function generateMandelbrot() {
-            const { complexity, colors, density, scale } = appState.parameters;
-            const width = canvas.width;
-            const height = canvas.height;
-            const imageData = ctx.createImageData(width, height);
-            const data = imageData.data;
-            
-            const zoom = 200 / density;
-            const offsetX = width / 2;
-            const offsetY = height / 2;
-            
-            // Optimized Mandelbrot calculation
-            for (let x = 0; x < width; x += 2) { // Skip pixels for performance
-                for (let y = 0; y < height; y += 2) {
-                    const c_re = (x - offsetX) / zoom - 0.5;
-                    const c_im = (y - offsetY) / zoom;
-                    
-                    let z_re = 0;
-                    let z_im = 0;
-                    let iteration = 0;
-                    
-                    while (z_re * z_re + z_im * z_im <= 4 && iteration < complexity) {
-                        const tmp = z_re * z_re - z_im * z_im + c_re;
-                        z_im = 2 * z_re * z_im + c_im;
-                        z_re = tmp;
-                        iteration++;
-                    }
-                    
-                    const color = iteration === complexity ? 0 : (iteration * 255 / complexity);
-                    const idx = (y * width + x) * 4;
-                    
-                    // Set pixel colors
-                    data[idx] = color * parseInt(colors.primary.slice(1, 3), 16) / 255;
-                    data[idx + 1] = color * parseInt(colors.secondary.slice(3, 5), 16) / 255;
-                    data[idx + 2] = color * parseInt(colors.accent.slice(5, 7), 16) / 255;
-                    data[idx + 3] = 255;
-                    
-                    // Fill skipped pixels
-                    if (x < width - 1 && y < height - 1) {
-                        for (let dx = 0; dx < 2; dx++) {
-                            for (let dy = 0; dy < 2; dy++) {
-                                const fillIdx = ((y + dy) * width + (x + dx)) * 4;
-                                data[fillIdx] = data[idx];
-                                data[fillIdx + 1] = data[idx + 1];
-                                data[fillIdx + 2] = data[idx + 2];
-                                data[fillIdx + 3] = 255;
-                            }
+                        // Update UI
+                        const slider = document.getElementById(`${key}Slider`);
+                        if (slider) {
+                            slider.value = appState.parameters[key];
+                            document.getElementById(`${key}Value`).textContent = 
+                                key === 'fade' || key === 'speed' || key === 'lineWeight' 
+                                    ? appState.parameters[key].toFixed(2) 
+                                    : Math.round(appState.parameters[key]);
                         }
                     }
                 }
-            }
-            
-            ctx.putImageData(imageData, -width/2, -height/2);
-        }
-
-        function generateVoronoi() {
-            const { complexity, colors, density } = appState.parameters;
-            const numPoints = complexity * 3;
-            const points = [];
-            
-            // Generate random points
-            for (let i = 0; i < numPoints; i++) {
-                points.push({
-                    x: (Math.random() - 0.5) * canvas.width,
-                    y: (Math.random() - 0.5) * canvas.height,
-                    color: i % 3 === 0 ? colors.primary : (i % 3 === 1 ? colors.secondary : colors.accent)
-                });
-            }
-            
-            // Draw Voronoi cells
-            const cellSize = Math.min(canvas.width, canvas.height) / (complexity * density);
-            
-            for (let x = -canvas.width/2; x < canvas.width/2; x += cellSize) {
-                for (let y = -canvas.height/2; y < canvas.height/2; y += cellSize) {
-                    let minDist = Infinity;
-                    let nearestPoint = null;
-                    
-                    for (const point of points) {
-                        const dist = Math.hypot(x - point.x, y - point.y);
-                        if (dist < minDist) {
-                            minDist = dist;
-                            nearestPoint = point;
-                        }
-                    }
-                    
-                    if (nearestPoint) {
-                        ctx.fillStyle = nearestPoint.color + '33';
-                        ctx.fillRect(x, y, cellSize, cellSize);
-                    }
-                }
-            }
-            
-            // Draw points
-            points.forEach(point => {
-                ctx.beginPath();
-                ctx.arc(point.x, point.y, 3, 0, Math.PI * 2);
-                ctx.fillStyle = point.color;
-                ctx.fill();
             });
         }
 
-        function generateCrystallographic() {
-            const { complexity, symmetry, colors, density } = appState.parameters;
-            const size = Math.min(canvas.width, canvas.height) / (complexity * 2);
+        function autoEvolveParameters() {
+            const evolveSpeed = 0.0001;
             
-            ctx.fillStyle = colors.background;
-            ctx.fillRect(-canvas.width/2, -canvas.height/2, canvas.width, canvas.height);
+            // Slowly evolve motion parameters
+            appState.parameters.motionX = Math.sin(appState.time * evolveSpeed) * 5;
+            appState.parameters.motionY = Math.cos(appState.time * evolveSpeed * 0.7) * 5;
             
-            // Hexagonal lattice
-            const a = size * density;
-            const b = a * Math.sqrt(3) / 2;
+            // Update 2D control position
+            update2DControl();
             
-            for (let i = -complexity; i <= complexity; i++) {
-                for (let j = -complexity; j <= complexity; j++) {
-                    const x = i * a * 1.5;
-                    const y = j * b * 2 + (i % 2) * b;
-                    
-                    // Draw hexagon
-                    ctx.beginPath();
-                    for (let k = 0; k < 6; k++) {
-                        const angle = k * Math.PI / 3;
-                        const hx = x + a * Math.cos(angle);
-                        const hy = y + a * Math.sin(angle);
-                        
-                        if (k === 0) {
-                            ctx.moveTo(hx, hy);
-                        } else {
-                            ctx.lineTo(hx, hy);
-                        }
-                    }
-                    ctx.closePath();
-                    
-                    const gradient = ctx.createRadialGradient(x, y, 0, x, y, a);
-                    gradient.addColorStop(0, colors.primary + '66');
-                    gradient.addColorStop(1, colors.secondary + '33');
-                    
-                    ctx.fillStyle = gradient;
-                    ctx.fill();
-                    ctx.strokeStyle = colors.accent;
-                    ctx.lineWidth = 1;
-                    ctx.stroke();
-                }
+            // Occasionally trigger small parameter changes
+            if (Math.random() < 0.001) {
+                const params = ['speed', 'complexity', 'lineWeight'];
+                const param = params[Math.floor(Math.random() * params.length)];
+                const change = (Math.random() - 0.5) * 0.2;
+                appState.momentum[param] = change;
             }
-        }
-
-        function generateLSystem() {
-            const { complexity, colors, density } = appState.parameters;
-            
-            ctx.fillStyle = colors.background;
-            ctx.fillRect(-canvas.width/2, -canvas.height/2, canvas.width, canvas.height);
-            
-            // L-System rules for a fractal tree
-            let axiom = 'F';
-            const rules = { 'F': 'FF+[+F-F-F]-[-F+F+F]' };
-            
-            // Generate string
-            let current = axiom;
-            for (let i = 0; i < complexity; i++) {
-                let next = '';
-                for (const char of current) {
-                    next += rules[char] || char;
-                }
-                current = next;
-            }
-            
-            // Draw L-System
-            ctx.beginPath();
-            ctx.moveTo(0, canvas.height/4);
-            
-            const stack = [];
-            let angle = -Math.PI / 2;
-            const angleIncrement = Math.PI / 6;
-            const stepSize = Math.min(canvas.width, canvas.height) / (Math.pow(2, complexity) * 5) * density;
-            
-            for (const char of current) {
-                switch (char) {
-                    case 'F':
-                        ctx.lineTo(
-                            ctx.currentX + stepSize * Math.cos(angle),
-                            ctx.currentY + stepSize * Math.sin(angle)
-                        );
-                        break;
-                    case '+':
-                        angle += angleIncrement;
-                        break;
-                    case '-':
-                        angle -= angleIncrement;
-                        break;
-                    case '[':
-                        stack.push({ x: ctx.currentX, y: ctx.currentY, angle });
-                        break;
-                    case ']':
-                        const state = stack.pop();
-                        if (state) {
-                            ctx.moveTo(state.x, state.y);
-                            angle = state.angle;
-                        }
-                        break;
-                }
-            }
-            
-            const gradient = ctx.createLinearGradient(0, -canvas.height/2, 0, canvas.height/2);
-            gradient.addColorStop(0, colors.primary);
-            gradient.addColorStop(0.5, colors.secondary);
-            gradient.addColorStop(1, colors.accent);
-            
-            ctx.strokeStyle = gradient;
-            ctx.lineWidth = Math.max(1, 5 - complexity);
-            ctx.stroke();
         }
 
         // UI Functions
         function selectPattern(patternType) {
-            if (patterns[patternType]) {
-                // Update active button
-                document.querySelectorAll('.pattern-btn').forEach(btn => {
-                    btn.classList.toggle('active', btn.dataset.pattern === patternType);
-                });
-                
-                // Update state
-                appState.currentPattern = patternType;
-                
-                // Update title
-                document.getElementById('patternTitle').textContent = patterns[patternType].title;
-                
-                // Apply default parameters
-                const defaults = patterns[patternType].defaultParams;
-                Object.assign(appState.parameters, defaults);
-                
-                // Update UI
-                updateUIValues();
-                
-                // Generate new pattern
-                generatePattern();
+            // Update active button
+            document.querySelectorAll('.pattern-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.pattern === patternType);
+            });
+            
+            // Update state
+            appState.currentPattern = patternType;
+            
+            // Update title
+            const titles = {
+                flowfield: 'Flow Fields',
+                lissajous: 'Lissajous Curves',
+                lorenz: 'Strange Attractor',
+                waves: 'Wave Interference',
+                growth: 'Differential Growth',
+                particles: 'Particle Swarm'
+            };
+            document.getElementById('patternTitle').textContent = titles[patternType];
+            
+            // Initialize pattern
+            if (appState.patterns[patternType] && appState.patterns[patternType].init) {
+                appState.patterns[patternType].init();
             }
+            
+            // Clear canvas
+            const rect = canvas.getBoundingClientRect();
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, rect.width, rect.height);
         }
 
-        function updateParameter(param, value) {
-            appState.parameters[param] = parseFloat(value);
-            document.getElementById(`${param}Value`).textContent = 
-                param === 'density' ? parseFloat(value).toFixed(1) : value;
-            
-            // Debounce pattern generation
-            clearTimeout(appState.rendering.updateTimeout);
-            appState.rendering.updateTimeout = setTimeout(() => generatePattern(), 100);
+        function toggleAnimation() {
+            appState.isAnimating = !appState.isAnimating;
+            document.getElementById('playPauseBtn').textContent = appState.isAnimating ? '⏸️' : '▶️';
         }
 
-        function updateColor(colorType, value) {
-            appState.parameters.colors[colorType] = value;
-            generatePattern();
-        }
-
-        function updateUIValues() {
-            const { complexity, density, symmetry } = appState.parameters;
-            
-            document.getElementById('complexitySlider').value = complexity;
-            document.getElementById('complexityValue').textContent = complexity;
-            
-            document.getElementById('densitySlider').value = density;
-            document.getElementById('densityValue').textContent = density.toFixed(1);
-            
-            document.getElementById('symmetrySlider').value = symmetry;
-            document.getElementById('symmetryValue').textContent = symmetry;
+        function toggleAutoEvolve() {
+            appState.autoEvolve = !appState.autoEvolve;
+            document.getElementById('autoEvolveBtn').classList.toggle('active', appState.autoEvolve);
+            document.getElementById('autoEvolveIndicator').classList.toggle('active', appState.autoEvolve);
         }
 
         function randomizePattern() {
-            const patternKeys = Object.keys(patterns);
-            const randomPattern = patternKeys[Math.floor(Math.random() * patternKeys.length)];
+            const patterns = Object.keys(patternRenderers);
+            const randomPattern = patterns[Math.floor(Math.random() * patterns.length)];
             selectPattern(randomPattern);
             
-            // Randomize parameters within reasonable bounds
-            appState.parameters.complexity = Math.floor(Math.random() * 10) + 3;
-            appState.parameters.density = Math.random() * 1.5 + 0.5;
-            appState.parameters.symmetry = Math.floor(Math.random() * 12) + 3;
+            // Randomize parameters with momentum
+            appState.momentum.speed = (Math.random() - 0.5) * 2;
+            appState.momentum.complexity = (Math.random() - 0.5) * 100;
+            appState.momentum.lineWeight = (Math.random() - 0.5) * 1;
             
             // Randomize colors
             appState.parameters.colors.primary = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
             appState.parameters.colors.secondary = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
             appState.parameters.colors.accent = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
             
-            updateUIValues();
             updateColorPickers();
-            generatePattern();
         }
 
-        function generateVariation() {
-            // Slightly modify current parameters
-            appState.parameters.complexity = Math.max(1, Math.min(20, 
-                appState.parameters.complexity + Math.floor(Math.random() * 5 - 2)));
-            appState.parameters.density = Math.max(0.1, Math.min(3.0, 
-                appState.parameters.density + (Math.random() * 0.4 - 0.2)));
-            appState.parameters.symmetry = Math.max(3, Math.min(24, 
-                appState.parameters.symmetry + Math.floor(Math.random() * 5 - 2)));
+        function morphToNext() {
+            const patterns = Object.keys(patternRenderers);
+            const currentIndex = patterns.indexOf(appState.currentPattern);
+            const nextIndex = (currentIndex + 1) % patterns.length;
+            selectPattern(patterns[nextIndex]);
             
-            updateUIValues();
-            generatePattern();
+            // Add momentum to parameters for smooth transition
+            appState.momentum.complexity = (Math.random() - 0.5) * 50;
+            appState.momentum.speed = (Math.random() - 0.5) * 1;
         }
 
-        function resetToDefault() {
-            const defaults = patterns[appState.currentPattern].defaultParams;
-            Object.assign(appState.parameters, defaults);
-            
-            // Reset colors
-            appState.parameters.colors = {
-                primary: '#4ECDC4',
-                secondary: '#FF6B6B',
-                accent: '#FFE66D',
-                background: '#000000'
+        function resetPattern() {
+            // Reset parameters
+            appState.parameters = {
+                speed: 1.0,
+                complexity: 50,
+                lineWeight: 1.0,
+                fade: 0.95,
+                motionX: 0.0,
+                motionY: 0.0,
+                colors: {
+                    primary: '#4ECDC4',
+                    secondary: '#FF6B6B',
+                    accent: '#FFE66D'
+                }
             };
             
-            // Reset scale and rotation
-            appState.parameters.scale = 1.0;
-            appState.parameters.rotation = 0;
+            // Reset momentum
+            Object.keys(appState.momentum).forEach(key => {
+                appState.momentum[key] = 0;
+            });
             
+            // Update UI
             updateUIValues();
             updateColorPickers();
             update2DControl();
-            generatePattern();
+            
+            // Reinitialize pattern
+            selectPattern(appState.currentPattern);
+        }
+
+        function updateColor(colorType, value) {
+            appState.parameters.colors[colorType] = value;
         }
 
         function updateColorPickers() {
@@ -1258,9 +1474,23 @@
             document.getElementById('accentColor').value = appState.parameters.colors.accent;
         }
 
+        function updateUIValues() {
+            document.getElementById('speedSlider').value = appState.parameters.speed;
+            document.getElementById('speedValue').textContent = appState.parameters.speed.toFixed(1);
+            
+            document.getElementById('complexitySlider').value = appState.parameters.complexity;
+            document.getElementById('complexityValue').textContent = Math.round(appState.parameters.complexity);
+            
+            document.getElementById('lineWeightSlider').value = appState.parameters.lineWeight;
+            document.getElementById('lineWeightValue').textContent = appState.parameters.lineWeight.toFixed(1);
+            
+            document.getElementById('fadeSlider').value = appState.parameters.fade;
+            document.getElementById('fadeValue').textContent = appState.parameters.fade.toFixed(2);
+        }
+
         function exportPattern() {
             const link = document.createElement('a');
-            link.download = `genshi-pattern-${appState.currentPattern}-${Date.now()}.png`;
+            link.download = `genshi-animated-${appState.currentPattern}-${Date.now()}.png`;
             link.href = canvas.toDataURL();
             link.click();
         }
@@ -1290,46 +1520,50 @@
             }
         }
 
-        // 2D Control Setup
+        // 2D Control Setup with trail visualization
         function setup2DControl() {
-            const control = document.getElementById('scaleRotControl');
-            const handle = document.getElementById('scaleRotHandle');
-            
-            if (!control || !handle) return;
+            const control = document.getElementById('motionControl');
+            const handle = document.getElementById('motionHandle');
+            const trail = [];
             
             const updateFromPosition = (clientX, clientY) => {
                 const rect = control.getBoundingClientRect();
                 const centerX = rect.width / 2;
                 const centerY = rect.height / 2;
                 
-                const x = clientX - rect.left - centerX;
-                const y = clientY - rect.top - centerY;
+                const x = (clientX - rect.left - centerX) / centerX * 5;
+                const y = (clientY - rect.top - centerY) / centerY * 5;
                 
-                // Calculate scale (distance from center)
-                const maxDist = Math.min(centerX, centerY);
-                const dist = Math.min(Math.hypot(x, y), maxDist);
-                const scale = 0.5 + (dist / maxDist) * 2.5;
-                
-                // Calculate rotation
-                const rotation = Math.atan2(y, x) * 180 / Math.PI;
-                
-                // Update state
-                appState.parameters.scale = scale;
-                appState.parameters.rotation = rotation;
+                appState.parameters.motionX = Math.max(-5, Math.min(5, x));
+                appState.parameters.motionY = Math.max(-5, Math.min(5, y));
                 
                 // Update UI
-                handle.style.left = `${centerX + x}px`;
-                handle.style.top = `${centerY + y}px`;
+                handle.style.left = `${clientX - rect.left}px`;
+                handle.style.top = `${clientY - rect.top}px`;
                 
-                document.getElementById('scaleRotValue').textContent = 
-                    `${scale.toFixed(1)}, ${Math.round(rotation)}°`;
+                document.getElementById('motionValue').textContent = 
+                    `${appState.parameters.motionX.toFixed(1)}, ${appState.parameters.motionY.toFixed(1)}`;
                 
-                generatePattern();
+                // Add to trail
+                trail.push({ x: clientX - rect.left, y: clientY - rect.top });
+                if (trail.length > 50) trail.shift();
+                
+                // Draw trail on motion canvas
+                motionCtx.clearRect(0, 0, motionCanvas.width, motionCanvas.height);
+                motionCtx.beginPath();
+                trail.forEach((p, i) => {
+                    if (i === 0) motionCtx.moveTo(p.x, p.y);
+                    else motionCtx.lineTo(p.x, p.y);
+                });
+                motionCtx.strokeStyle = '#4ECDC4';
+                motionCtx.lineWidth = 2;
+                motionCtx.stroke();
             };
             
             // Mouse events
             control.addEventListener('mousedown', (e) => {
                 appState.ui.isDragging = true;
+                handle.classList.add('dragging');
                 updateFromPosition(e.clientX, e.clientY);
             });
             
@@ -1341,12 +1575,27 @@
             
             window.addEventListener('mouseup', () => {
                 appState.ui.isDragging = false;
+                handle.classList.remove('dragging');
+                
+                // Fade out trail
+                const fadeTrail = () => {
+                    motionCtx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+                    motionCtx.fillRect(0, 0, motionCanvas.width, motionCanvas.height);
+                    if (trail.length > 0) {
+                        trail.pop();
+                        requestAnimationFrame(fadeTrail);
+                    } else {
+                        motionCtx.clearRect(0, 0, motionCanvas.width, motionCanvas.height);
+                    }
+                };
+                fadeTrail();
             });
             
             // Touch events
             control.addEventListener('touchstart', (e) => {
                 e.preventDefault();
                 appState.ui.isDragging = true;
+                handle.classList.add('dragging');
                 const touch = e.touches[0];
                 updateFromPosition(touch.clientX, touch.clientY);
             });
@@ -1362,83 +1611,84 @@
             control.addEventListener('touchend', (e) => {
                 e.preventDefault();
                 appState.ui.isDragging = false;
+                handle.classList.remove('dragging');
             });
         }
 
         function update2DControl() {
-            const control = document.getElementById('scaleRotControl');
-            const handle = document.getElementById('scaleRotHandle');
-            
-            if (!control || !handle) return;
+            const control = document.getElementById('motionControl');
+            const handle = document.getElementById('motionHandle');
             
             const rect = control.getBoundingClientRect();
             const centerX = rect.width / 2;
             const centerY = rect.height / 2;
             
-            const { scale, rotation } = appState.parameters;
-            const maxDist = Math.min(centerX, centerY);
-            const dist = ((scale - 0.5) / 2.5) * maxDist;
+            const x = centerX + (appState.parameters.motionX / 5) * centerX;
+            const y = centerY + (appState.parameters.motionY / 5) * centerY;
             
-            const x = dist * Math.cos(rotation * Math.PI / 180);
-            const y = dist * Math.sin(rotation * Math.PI / 180);
+            handle.style.left = `${x}px`;
+            handle.style.top = `${y}px`;
             
-            handle.style.left = `${centerX + x}px`;
-            handle.style.top = `${centerY + y}px`;
-            
-            document.getElementById('scaleRotValue').textContent = 
-                `${scale.toFixed(1)}, ${Math.round(rotation)}°`;
+            document.getElementById('motionValue').textContent = 
+                `${appState.parameters.motionX.toFixed(1)}, ${appState.parameters.motionY.toFixed(1)}`;
         }
 
-        // Performance Monitoring (throttled)
-        function startPerformanceMonitoring() {
-            let lastTime = performance.now();
+        // Setup slider momentum
+        function setupSliderMomentum() {
+            const sliders = ['speedSlider', 'complexitySlider', 'lineWeightSlider', 'fadeSlider'];
             
-            function updateFPS() {
-                const currentTime = performance.now();
-                const deltaTime = currentTime - lastTime;
+            sliders.forEach(sliderId => {
+                const slider = document.getElementById(sliderId);
+                const param = sliderId.replace('Slider', '');
+                let lastValue = parseFloat(slider.value);
+                let lastTime = Date.now();
                 
-                // Only update FPS display every 500ms
-                if (currentTime - appState.performance.lastFpsUpdate > 500) {
-                    const fps = Math.round(1000 / deltaTime);
-                    const fpsCounter = document.getElementById('fpsCounter');
+                slider.addEventListener('input', (e) => {
+                    const currentValue = parseFloat(e.target.value);
+                    const currentTime = Date.now();
+                    const deltaTime = currentTime - lastTime;
+                    const deltaValue = currentValue - lastValue;
                     
-                    if (fpsCounter) {
-                        fpsCounter.textContent = `${fps} FPS`;
-                        fpsCounter.className = fps >= 50 ? 'fps-good' : 
-                                             fps >= 30 ? 'fps-medium' : 'fps-poor';
+                    if (deltaTime > 0) {
+                        const velocity = deltaValue / deltaTime * 100;
+                        appState.momentum[param] = velocity * 0.01;
                     }
                     
-                    appState.performance.lastFpsUpdate = currentTime;
-                }
-                
-                lastTime = currentTime;
-                requestAnimationFrame(updateFPS);
-            }
+                    appState.parameters[param] = currentValue;
+                    document.getElementById(`${param}Value`).textContent = 
+                        param === 'fade' || param === 'speed' || param === 'lineWeight' 
+                            ? currentValue.toFixed(2) 
+                            : Math.round(currentValue);
+                    
+                    lastValue = currentValue;
+                    lastTime = currentTime;
+                });
+            });
+        }
+
+        // Performance monitoring
+        function updateFPS(currentTime) {
+            appState.performance.frameCount++;
             
-            requestAnimationFrame(updateFPS);
-        }
-
-        // Helper functions
-        function showLoading(show) {
-            if (loadingIndicator) {
-                loadingIndicator.classList.toggle('active', show);
-            }
-        }
-
-        function showError(message) {
-            if (errorMessage) {
-                errorMessage.style.display = 'block';
-                errorMessage.querySelector('p').textContent = message;
+            if (currentTime - appState.performance.lastFpsUpdate > 1000) {
+                const fps = appState.performance.frameCount;
+                const fpsCounter = document.getElementById('fpsCounter');
+                
+                fpsCounter.textContent = `${fps} FPS`;
+                fpsCounter.className = fps >= 50 ? 'fps-good' : 
+                                     fps >= 30 ? 'fps-medium' : 'fps-poor';
+                
+                appState.performance.frameCount = 0;
+                appState.performance.lastFpsUpdate = currentTime;
             }
         }
 
         // Window resize handler
         window.addEventListener('resize', () => {
-            clearTimeout(appState.rendering.resizeTimeout);
-            appState.rendering.resizeTimeout = setTimeout(() => {
-                setupCanvas();
-                generatePattern();
-            }, 250);
+            setupCanvas();
+            if (appState.patterns[appState.currentPattern] && appState.patterns[appState.currentPattern].init) {
+                appState.patterns[appState.currentPattern].init();
+            }
         });
 
         // Initialize on load
