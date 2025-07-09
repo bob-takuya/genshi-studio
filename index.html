@@ -41,6 +41,7 @@
             justify-content: space-between;
             align-items: center;
             z-index: 100;
+            flex-shrink: 0;
         }
 
         .logo {
@@ -94,21 +95,19 @@
         .main-canvas-container {
             flex: 1;
             position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: radial-gradient(circle at center, rgba(20, 20, 30, 0.5), rgba(0, 0, 0, 1));
-        }
-
-        canvas {
-            max-width: 100%;
-            max-height: 100%;
-            display: block;
-            touch-action: none;
+            overflow: hidden;
+            background: #000;
+            min-height: 0; /* Important for flex children */
         }
 
         #patternCanvas {
-            background: #000;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            touch-action: none;
         }
 
         /* Bottom Controls */
@@ -122,6 +121,9 @@
             flex-direction: column;
             gap: 20px;
             z-index: 100;
+            flex-shrink: 0;
+            max-height: 50vh;
+            overflow-y: auto;
         }
 
         /* Pattern Selector */
@@ -373,6 +375,72 @@
             font-family: monospace;
             opacity: 0.6;
         }
+
+        /* Laptop optimizations */
+        @media (min-width: 1024px) {
+            .header {
+                padding: 10px 24px;
+            }
+
+            .bottom-controls {
+                padding: 16px 24px;
+                max-height: 35vh;
+            }
+
+            .control-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 16px;
+            }
+
+            .control-section {
+                padding: 14px;
+            }
+
+            .pattern-selector {
+                justify-content: center;
+                flex-wrap: wrap;
+                overflow-x: visible;
+            }
+
+            .motion-control {
+                width: 120px;
+                height: 120px;
+            }
+
+            /* Minimize controls button */
+            .minimize-controls {
+                position: absolute;
+                top: -30px;
+                right: 20px;
+                background: rgba(0, 0, 0, 0.9);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 8px 8px 0 0;
+                padding: 6px 12px;
+                font-size: 11px;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+
+            .minimize-controls:hover {
+                background: rgba(255, 255, 255, 0.1);
+            }
+
+            .bottom-controls.minimized {
+                transform: translateY(calc(100% - 40px));
+            }
+
+            .bottom-controls.minimized .minimize-controls {
+                top: -40px;
+            }
+        }
+
+        /* Ultra-wide screens */
+        @media (min-width: 1920px) {
+            .control-grid {
+                max-width: 1600px;
+                margin: 0 auto;
+            }
+        }
     </style>
 </head>
 <body>
@@ -388,7 +456,7 @@
         </div>
 
         <!-- Main Canvas -->
-        <div class="main-canvas-container">
+        <div class="main-canvas-container" id="canvasContainer">
             <canvas id="patternCanvas"></canvas>
         </div>
 
@@ -399,7 +467,11 @@
         </div>
 
         <!-- Bottom Controls -->
-        <div class="bottom-controls">
+        <div class="bottom-controls" id="bottomControls">
+            <div class="minimize-controls" onclick="toggleMinimize()" style="display: none;">
+                <span id="minimizeText">⌄ Minimize</span>
+            </div>
+
             <!-- Pattern Selector -->
             <div class="pattern-selector">
                 <button class="pattern-btn active" data-pattern="flowfield" onclick="selectPattern('flowfield')">Flow Fields</button>
@@ -682,6 +754,7 @@
             initializePatterns();
             setup2DControl();
             setupSliderMomentum();
+            setupLaptopFeatures();
             
             // Start animation loop
             animate();
@@ -689,26 +762,20 @@
 
         // Canvas setup
         function setupCanvas() {
+            const container = document.getElementById('canvasContainer');
             const dpr = window.devicePixelRatio || 1;
-            const rect = canvas.getBoundingClientRect();
+            const rect = container.getBoundingClientRect();
             
-            // Store logical dimensions
+            // Store logical dimensions (use container size)
             appState.canvasWidth = rect.width;
             appState.canvasHeight = rect.height;
-            
-            // Set canvas display size
-            canvas.style.width = rect.width + 'px';
-            canvas.style.height = rect.height + 'px';
             
             // Set canvas buffer size
             canvas.width = rect.width * dpr;
             canvas.height = rect.height * dpr;
             
             // Scale context to match device pixel ratio
-            ctx.scale(dpr, dpr);
-            
-            // Save context state for restoration
-            ctx.save();
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
             
             // Black background
             ctx.fillStyle = '#000';
@@ -718,6 +785,64 @@
             const motionRect = motionCanvas.getBoundingClientRect();
             motionCanvas.width = motionRect.width;
             motionCanvas.height = motionRect.height;
+        }
+
+        // Setup laptop-specific features
+        function setupLaptopFeatures() {
+            // Show minimize button on laptops
+            if (window.innerWidth >= 1024) {
+                document.querySelector('.minimize-controls').style.display = 'block';
+            }
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                switch(e.key) {
+                    case ' ':
+                        e.preventDefault();
+                        toggleAnimation();
+                        break;
+                    case 'r':
+                    case 'R':
+                        randomizePattern();
+                        break;
+                    case 'e':
+                    case 'E':
+                        toggleAutoEvolve();
+                        break;
+                    case 'm':
+                    case 'M':
+                        if (window.innerWidth >= 1024) {
+                            toggleMinimize();
+                        }
+                        break;
+                    case 'ArrowRight':
+                        morphToNext();
+                        break;
+                    case 'ArrowLeft':
+                        morphToPrevious();
+                        break;
+                }
+            });
+        }
+
+        // Toggle minimize controls
+        function toggleMinimize() {
+            const controls = document.getElementById('bottomControls');
+            const minimizeText = document.getElementById('minimizeText');
+            
+            controls.classList.toggle('minimized');
+            
+            if (controls.classList.contains('minimized')) {
+                minimizeText.textContent = '⌃ Expand';
+            } else {
+                minimizeText.textContent = '⌄ Minimize';
+            }
+            
+            // Resize canvas after transition
+            setTimeout(() => {
+                setupCanvas();
+                selectPattern(appState.currentPattern);
+            }, 300);
         }
 
         // Initialize pattern systems
@@ -1620,6 +1745,17 @@
             appState.momentum.speed = (Math.random() - 0.5) * 1;
         }
 
+        function morphToPrevious() {
+            const patterns = Object.keys(patternRenderers);
+            const currentIndex = patterns.indexOf(appState.currentPattern);
+            const prevIndex = (currentIndex - 1 + patterns.length) % patterns.length;
+            selectPattern(patterns[prevIndex]);
+            
+            // Add momentum to parameters for smooth transition
+            appState.momentum.complexity = (Math.random() - 0.5) * 50;
+            appState.momentum.speed = (Math.random() - 0.5) * 1;
+        }
+
         function resetPattern() {
             // Reset parameters
             appState.parameters = {
@@ -1658,6 +1794,13 @@
         window.addEventListener('resize', () => {
             setupCanvas();
             selectPattern(appState.currentPattern);
+            
+            // Update minimize button visibility
+            if (window.innerWidth >= 1024) {
+                document.querySelector('.minimize-controls').style.display = 'block';
+            } else {
+                document.querySelector('.minimize-controls').style.display = 'none';
+            }
         });
 
         // Initialize app when DOM is ready
