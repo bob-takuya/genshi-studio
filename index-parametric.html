@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Genshi Studio - Parametric Pattern Editor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SF Pro Display', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #000;
+            color: white;
+            overflow: hidden;
+            height: 100vh;
+            touch-action: manipulation;
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            position: relative;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 18px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4, #45B7D1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .pattern-title {
+            font-size: 14px;
+            opacity: 0.8;
+            max-width: 120px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .header-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: white;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .header-btn:active {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(0.95);
+        }
+
+        /* Main Canvas Area */
+        .canvas-container {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at center, rgba(70, 70, 90, 0.3), rgba(20, 20, 30, 0.8));
+        }
+
+        .pattern-canvas {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            touch-action: pan-x pan-y;
+        }
+
+        /* Mobile Parameter Panel */
+        .params-panel {
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: height 0.3s ease;
+        }
+
+        .params-header {
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .panel-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .panel-toggle {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .panel-toggle.expanded {
+            transform: rotate(180deg);
+        }
+
+        .params-content {
+            max-height: 40vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 0 20px 20px;
+        }
+
+        /* Pattern Type Selector */
+        .pattern-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .pattern-btn {
+            aspect-ratio: 1;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-size: 10px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .pattern-btn.active {
+            border-color: #4ECDC4;
+            background: rgba(78, 205, 196, 0.2);
+            box-shadow: 0 0 20px rgba(78, 205, 196, 0.3);
+        }
+
+        .pattern-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Parameter Controls */
+        .param-group {
+            margin-bottom: 20px;
+        }
+
+        .param-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .param-value {
+            color: #4ECDC4;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .param-slider {
+            width: 100%;
+            height: 40px;
+            background: none;
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+            border-radius: 20px;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1));
+            position: relative;
+            cursor: pointer;
+        }
+
+        .param-slider::-webkit-slider-track {
+            height: 4px;
+            border-radius: 2px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .param-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .param-slider::-moz-range-thumb {
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Multi-touch 2D Parameter Control */
+        .param-2d {
+            width: 100%;
+            height: 120px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            position: relative;
+            cursor: crosshair;
+            touch-action: none;
+            margin-bottom: 12px;
+        }
+
+        .param-2d-handle {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            pointer-events: none;
+        }
+
+        /* Color Controls */
+        .color-group {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .color-control {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .color-picker {
+            width: 40px;
+            height: 40px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            background: none;
+            cursor: pointer;
+            -webkit-appearance: none;
+            appearance: none;
+            overflow: hidden;
+        }
+
+        .color-picker::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+
+        .color-picker::-webkit-color-swatch {
+            border: none;
+            border-radius: 50%;
+        }
+
+        .color-label {
+            font-size: 10px;
+            opacity: 0.8;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .action-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Performance Indicator */
+        .perf-indicator {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 500;
+            z-index: 10;
+        }
+
+        .fps-good { color: #4ECDC4; }
+        .fps-medium { color: #FFE66D; }
+        .fps-poor { color: #FF6B6B; }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .header {
+                padding: 8px 16px;
+            }
+            
+            .logo {
+                font-size: 16px;
+            }
+            
+            .pattern-title {
+                font-size: 12px;
+            }
+            
+            .params-content {
+                padding: 0 16px 16px;
+            }
+            
+            .pattern-selector {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (orientation: landscape) and (max-height: 600px) {
+            .params-content {
+                max-height: 30vh;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .loading::after {
+            content: '';
+            animation: loading-dots 1.5s infinite;
+        }
+
+        @keyframes loading-dots {
+            0%, 20% { content: '●'; }
+            40% { content: '●●'; }
+            60% { content: '●●●'; }
+            80%, 100% { content: '●●●●'; }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">Genshi Studio</div>
+            <div class="pattern-title" id="patternTitle">Islamic Geometric</div>
+            <div class="header-controls">
+                <button class="header-btn" onclick="randomizePattern()">🎲</button>
+                <button class="header-btn" onclick="exportPattern()">📤</button>
+                <button class="header-btn" onclick="toggleFullscreen()">⛶</button>
+            </div>
+        </header>
+
+        <!-- Canvas Area -->
+        <main class="canvas-container">
+            <canvas id="patternCanvas" class="pattern-canvas" width="800" height="800"></canvas>
+            <div class="perf-indicator">
+                <span id="fpsCounter" class="fps-good">60 FPS</span>
+            </div>
+            <div class="loading" id="loadingIndicator">Generating Pattern</div>
+        </main>
+
+        <!-- Parameter Panel -->
+        <section class="params-panel" id="paramsPanel">
+            <div class="params-header" onclick="togglePanel()">
+                <h2 class="panel-title">Pattern Parameters</h2>
+                <button class="panel-toggle" id="panelToggle">▲</button>
+            </div>
+            
+            <div class="params-content" id="paramsContent">
+                <!-- Pattern Type Selector -->
+                <div class="param-group">
+                    <div class="param-label">Pattern Type</div>
+                    <div class="pattern-selector">
+                        <button class="pattern-btn active" data-pattern="islamic" onclick="selectPattern('islamic')">
+                            Islamic<br>Geometric
+                        </button>
+                        <button class="pattern-btn" data-pattern="penrose" onclick="selectPattern('penrose')">
+                            Penrose<br>Tiling
+                        </button>
+                        <button class="pattern-btn" data-pattern="truchet" onclick="selectPattern('truchet')">
+                            Truchet<br>Tiles
+                        </button>
+                        <button class="pattern-btn" data-pattern="celtic" onclick="selectPattern('celtic')">
+                            Celtic<br>Knots
+                        </button>
+                        <button class="pattern-btn" data-pattern="mandelbrot" onclick="selectPattern('mandelbrot')">
+                            Mandelbrot<br>Fractal
+                        </button>
+                        <button class="pattern-btn" data-pattern="voronoi" onclick="selectPattern('voronoi')">
+                            Voronoi<br>Cells
+                        </button>
+                        <button class="pattern-btn" data-pattern="crystallographic" onclick="selectPattern('crystallographic')">
+                            Crystal<br>Lattice
+                        </button>
+                        <button class="pattern-btn" data-pattern="lsystem" onclick="selectPattern('lsystem')">
+                            L-System<br>Fractal
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2D Parameter Control -->
+                <div class="param-group">
+                    <div class="param-label">
+                        Scale & Rotation
+                        <span class="param-value" id="scaleRotValue">1.0, 0°</span>
+                    </div>
+                    <div class="param-2d" id="scaleRotControl">
+                        <div class="param-2d-handle" id="scaleRotHandle"></div>
+                    </div>
+                </div>
+
+                <!-- Primary Parameters -->
+                <div class="param-group">
+                    <div class="param-label">
+                        Complexity
+                        <span class="param-value" id="complexityValue">5</span>
+                    </div>
+                    <input type="range" class="param-slider" id="complexitySlider" 
+                           min="1" max="20" value="5" 
+                           oninput="updateParameter('complexity', this.value)">
+                </div>
+
+                <div class="param-group">
+                    <div class="param-label">
+                        Density
+                        <span class="param-value" id="densityValue">1.0</span>
+                    </div>
+                    <input type="range" class="param-slider" id="densitySlider" 
+                           min="0.1" max="3.0" step="0.1" value="1.0"
+                           oninput="updateParameter('density', this.value)">
+                </div>
+
+                <div class="param-group">
+                    <div class="param-label">
+                        Symmetry
+                        <span class="param-value" id="symmetryValue">8</span>
+                    </div>
+                    <input type="range" class="param-slider" id="symmetrySlider" 
+                           min="3" max="24" value="8"
+                           oninput="updateParameter('symmetry', this.value)">
+                </div>
+
+                <!-- Color Controls -->
+                <div class="param-group">
+                    <div class="param-label">Colors</div>
+                    <div class="color-group">
+                        <div class="color-control">
+                            <input type="color" class="color-picker" id="primaryColor" 
+                                   value="#4ECDC4" onchange="updateColor('primary', this.value)">
+                            <span class="color-label">Primary</span>
+                        </div>
+                        <div class="color-control">
+                            <input type="color" class="color-picker" id="secondaryColor" 
+                                   value="#FF6B6B" onchange="updateColor('secondary', this.value)">
+                            <span class="color-label">Secondary</span>
+                        </div>
+                        <div class="color-control">
+                            <input type="color" class="color-picker" id="accentColor" 
+                                   value="#FFE66D" onchange="updateColor('accent', this.value)">
+                            <span class="color-label">Accent</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button class="action-btn btn-primary" onclick="generateVariation()">
+                        Generate Variation
+                    </button>
+                    <button class="action-btn btn-secondary" onclick="resetToDefault()">
+                        Reset Default
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // App State
+        let appState = {
+            currentPattern: 'islamic',
+            parameters: {
+                complexity: 5,
+                density: 1.0,
+                symmetry: 8,
+                scale: 1.0,
+                rotation: 0,
+                colors: {
+                    primary: '#4ECDC4',
+                    secondary: '#FF6B6B',
+                    accent: '#FFE66D',
+                    background: '#000000'
+                }
+            },
+            performance: {
+                fps: 60,
+                frameTime: 16.67,
+                lastFrameTime: 0
+            },
+            ui: {
+                panelExpanded: true,
+                isDragging: false
+            }
+        };
+
+        // Canvas and Context
+        const canvas = document.getElementById('patternCanvas');
+        const ctx = canvas.getContext('2d');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+
+        // Pattern Definitions
+        const patterns = {
+            islamic: {
+                title: 'Islamic Geometric',
+                generator: generateIslamicGeometric,
+                defaultParams: { complexity: 5, density: 1.0, symmetry: 8 }
+            },
+            penrose: {
+                title: 'Penrose Tiling',
+                generator: generatePenroseTiling,
+                defaultParams: { complexity: 3, density: 1.2, symmetry: 5 }
+            },
+            truchet: {
+                title: 'Truchet Tiles',
+                generator: generateTruchetTiles,
+                defaultParams: { complexity: 2, density: 0.8, symmetry: 4 }
+            },
+            celtic: {
+                title: 'Celtic Knots',
+                generator: generateCelticKnots,
+                defaultParams: { complexity: 4, density: 1.0, symmetry: 6 }
+            },
+            mandelbrot: {
+                title: 'Mandelbrot Fractal',
+                generator: generateMandelbrot,
+                defaultParams: { complexity: 50, density: 2.0, symmetry: 1 }
+            },
+            voronoi: {
+                title: 'Voronoi Cells',
+                generator: generateVoronoi,
+                defaultParams: { complexity: 20, density: 1.0, symmetry: 1 }
+            },
+            crystallographic: {
+                title: 'Crystal Lattice',
+                generator: generateCrystallographic,
+                defaultParams: { complexity: 6, density: 1.0, symmetry: 6 }
+            },
+            lsystem: {
+                title: 'L-System Fractal',
+                generator: generateLSystem,
+                defaultParams: { complexity: 5, density: 1.0, symmetry: 1 }
+            }
+        };
+
+        // Initialize
+        function init() {
+            setupCanvas();
+            setup2DControl();
+            updatePattern();
+            startPerformanceMonitoring();
+            hideLoading();
+        }
+
+        function setupCanvas() {
+            const dpr = window.devicePixelRatio || 1;
+            const rect = canvas.getBoundingClientRect();
+            
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            
+            ctx.scale(dpr, dpr);
+            canvas.style.width = rect.width + 'px';
+            canvas.style.height = rect.height + 'px';
+        }
+
+        function setup2DControl() {
+            const control = document.getElementById('scaleRotControl');
+            const handle = document.getElementById('scaleRotHandle');
+            
+            // Initialize handle position
+            updateHandlePosition();
+            
+            // Touch/Mouse events
+            control.addEventListener('pointerdown', start2DControl);
+            control.addEventListener('pointermove', update2DControl);
+            control.addEventListener('pointerup', end2DControl);
+            control.addEventListener('pointercancel', end2DControl);
+        }
+
+        function start2DControl(e) {
+            appState.ui.isDragging = true;
+            update2DControlFromEvent(e);
+            e.preventDefault();
+        }
+
+        function update2DControl(e) {
+            if (appState.ui.isDragging) {
+                update2DControlFromEvent(e);
+                e.preventDefault();
+            }
+        }
+
+        function end2DControl(e) {
+            appState.ui.isDragging = false;
+        }
+
+        function update2DControlFromEvent(e) {
+            const control = document.getElementById('scaleRotControl');
+            const rect = control.getBoundingClientRect();
+            
+            const x = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+            const y = Math.max(0, Math.min(1, (e.clientY - rect.top) / rect.height));
+            
+            // Map to scale (0.1 to 3.0) and rotation (0 to 360)
+            appState.parameters.scale = 0.1 + x * 2.9;
+            appState.parameters.rotation = y * 360;
+            
+            updateHandlePosition();
+            updateScaleRotDisplay();
+            updatePattern();
+        }
+
+        function updateHandlePosition() {
+            const handle = document.getElementById('scaleRotHandle');
+            const x = (appState.parameters.scale - 0.1) / 2.9 * 100;
+            const y = appState.parameters.rotation / 360 * 100;
+            
+            handle.style.left = x + '%';
+            handle.style.top = y + '%';
+        }
+
+        function updateScaleRotDisplay() {
+            const value = `${appState.parameters.scale.toFixed(1)}, ${Math.round(appState.parameters.rotation)}°`;
+            document.getElementById('scaleRotValue').textContent = value;
+        }
+
+        // Pattern Selection
+        function selectPattern(patternType) {
+            appState.currentPattern = patternType;
+            
+            // Update UI
+            document.querySelectorAll('.pattern-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-pattern="${patternType}"]`).classList.add('active');
+            
+            // Update title
+            document.getElementById('patternTitle').textContent = patterns[patternType].title;
+            
+            // Reset to default parameters for this pattern
+            const defaults = patterns[patternType].defaultParams;
+            Object.assign(appState.parameters, defaults);
+            updateUIFromState();
+            updatePattern();
+        }
+
+        // Parameter Updates
+        function updateParameter(param, value) {
+            appState.parameters[param] = parseFloat(value);
+            document.getElementById(param + 'Value').textContent = 
+                param === 'density' ? parseFloat(value).toFixed(1) : Math.round(value);
+            updatePattern();
+        }
+
+        function updateColor(colorType, value) {
+            appState.parameters.colors[colorType] = value;
+            updatePattern();
+        }
+
+        function updateUIFromState() {
+            const params = appState.parameters;
+            
+            document.getElementById('complexitySlider').value = params.complexity;
+            document.getElementById('complexityValue').textContent = params.complexity;
+            
+            document.getElementById('densitySlider').value = params.density;
+            document.getElementById('densityValue').textContent = params.density.toFixed(1);
+            
+            document.getElementById('symmetrySlider').value = params.symmetry;
+            document.getElementById('symmetryValue').textContent = params.symmetry;
+            
+            updateHandlePosition();
+            updateScaleRotDisplay();
+        }
+
+        // Pattern Generation
+        function updatePattern() {
+            showLoading();
+            
+            // Use requestAnimationFrame for smooth performance
+            requestAnimationFrame(() => {
+                const pattern = patterns[appState.currentPattern];
+                if (pattern && pattern.generator) {
+                    pattern.generator(ctx, canvas, appState.parameters);
+                }
+                hideLoading();
+            });
+        }
+
+        // Pattern Generators
+        function generateIslamicGeometric(ctx, canvas, params) {
+            const { complexity, density, symmetry, scale, rotation, colors } = params;
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            
+            ctx.fillStyle = colors.background;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.save();
+            ctx.translate(centerX, centerY);
+            ctx.rotate(rotation * Math.PI / 180);
+            ctx.scale(scale, scale);
+            
+            const radius = Math.min(canvas.width, canvas.height) / 4 * density;
+            const angleStep = (2 * Math.PI) / symmetry;
+            
+            for (let ring = 1; ring <= complexity; ring++) {
+                const ringRadius = radius * ring / complexity;
+                
+                for (let i = 0; i < symmetry; i++) {
+                    const angle = i * angleStep;
+                    const x = Math.cos(angle) * ringRadius;
+                    const y = Math.sin(angle) * ringRadius;
+                    
+                    // Draw star pattern
+                    ctx.beginPath();
+                    for (let j = 0; j < 8; j++) {
+                        const starAngle = j * Math.PI / 4;
+                        const starRadius = ringRadius / (ring + 2);
+                        const sx = x + Math.cos(starAngle) * starRadius;
+                        const sy = y + Math.sin(starAngle) * starRadius;
+                        
+                        if (j === 0) ctx.moveTo(sx, sy);
+                        else ctx.lineTo(sx, sy);
+                    }
+                    ctx.closePath();
+                    
+                    ctx.fillStyle = ring % 2 ? colors.primary : colors.secondary;
+                    ctx.fill();
+                    ctx.strokeStyle = colors.accent;
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                }
+            }
+            
+            ctx.restore();
+        }
+
+        function generatePenroseTiling(ctx, canvas, params) {
+            const { complexity, density, scale, rotation, colors } = params;
+            
+            ctx.fillStyle = colors.background;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.save();
+            ctx.translate(canvas.width / 2, canvas.height / 2);
+            ctx.rotate(rotation * Math.PI / 180);
+            ctx.scale(scale, scale);
+            
+            const goldenRatio = (1 + Math.sqrt(5)) / 2;
+            const size = 60 * density;
+            
+            // Generate Penrose tiling pattern
+            for (let i = 0; i < complexity; i++) {
+                for (let j = 0; j < 5; j++) {
+                    const angle = j * 2 * Math.PI / 5;
+                    const distance = i * size / goldenRatio;
+                    
+                    const x = Math.cos(angle) * distance;
+                    const y = Math.sin(angle) * distance;
+                    
+                    // Draw kite shape
+                    ctx.beginPath();
+                    ctx.moveTo(x, y);
+                    ctx.lineTo(x + size * Math.cos(angle), y + size * Math.sin(angle));
+                    ctx.lineTo(x + size * Math.cos(angle + Math.PI/5), y + size * Math.sin(angle + Math.PI/5));
+                    ctx.lineTo(x + size * Math.cos(angle - Math.PI/5), y + size * Math.sin(angle - Math.PI/5));
+                    ctx.closePath();
+                    
+                    ctx.fillStyle = i % 2 ? colors.primary : colors.secondary;
+                    ctx.fill();
+                    ctx.strokeStyle = colors.accent;
+                    ctx.stroke();
+                }
+            }
+            
+            ctx.restore();
+        }
+
+        function generateTruchetTiles(ctx, canvas, params) {
+            const { complexity, density, scale, rotation, colors } = params;
+            const tileSize = 40 * density * scale;
+            
+            ctx.fillStyle = colors.background;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.save();
+            ctx.translate(canvas.width / 2, canvas.height / 2);
+            ctx.rotate(rotation * Math.PI / 180);
+            
+            const cols = Math.ceil(canvas.width / tileSize) + 2;
+            const rows = Math.ceil(canvas.height / tileSize) + 2;
+            
+            for (let i = -rows/2; i < rows/2; i++) {
+                for (let j = -cols/2; j < cols/2; j++) {
+                    const x = j * tileSize;
+                    const y = i * tileSize;
+                    
+                    // Random orientation for each tile
+                    const orientation = Math.floor(Math.random() * 4);
+                    
+                    ctx.save();
+                    ctx.translate(x + tileSize/2, y + tileSize/2);
+                    ctx.rotate(orientation * Math.PI / 2);
+                    
+                    // Draw quarter circles
+                    ctx.strokeStyle = (i + j) % 2 ? colors.primary : colors.secondary;
+                    ctx.lineWidth = complexity;
+                    
+                    ctx.beginPath();
+                    ctx.arc(-tileSize/2, -tileSize/2, tileSize/2, 0, Math.PI/2);
+                    ctx.stroke();
+                    
+                    ctx.beginPath();
+                    ctx.arc(tileSize/2, tileSize/2, tileSize/2, Math.PI, 3*Math.PI/2);
+                    ctx.stroke();
+                    
+                    ctx.restore();
+                }
+            }
+            
+            ctx.restore();
+        }
+
+        function generateCelticKnots(ctx, canvas, params) {
+            const { complexity, density, scale, rotation, colors } = params;
+            
+            ctx.fillStyle = colors.background;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.save();
+            ctx.translate(canvas.width / 2, canvas.height / 2);
+            ctx.rotate(rotation * Math.PI / 180);
+            ctx.scale(scale, scale);
+            
+            const radius = Math.min(canvas.width, canvas.height) / 4 * density;
+            
+            // Generate interlaced Celtic knot pattern
+            for (let ring = 1; ring <= complexity; ring++) {
+                const ringRadius = radius * ring / complexity;
+                const segments = ring * 6;
+                
+                ctx.strokeStyle = ring % 2 ? colors.primary : colors.secondary;
+                ctx.lineWidth = 8 / ring;
+                
+                for (let i = 0; i < segments; i++) {
+                    const angle1 = (i / segments) * 2 * Math.PI;
+                    const angle2 = ((i + 1) / segments) * 2 * Math.PI;
+                    
+                    const x1 = Math.cos(angle1) * ringRadius;
+                    const y1 = Math.sin(angle1) * ringRadius;
+                    const x2 = Math.cos(angle2) * ringRadius;
+                    const y2 = Math.sin(angle2) * ringRadius;
+                    
+                    // Create interlacing effect
+                    if (i % 2 === 0) {
+                        ctx.beginPath();
+                        ctx.moveTo(x1, y1);
+                        ctx.quadraticCurveTo(0, 0, x2, y2);
+                        ctx.stroke();
+                    }
+                }
+            }
+            
+            ctx.restore();
+        }
+
+        function generateMandelbrot(ctx, canvas, params) {
+            const { complexity, density, scale, rotation, colors } = params;
+            
+            const imageData = ctx.createImageData(canvas.width, canvas.height);
+            const data = imageData.data;
+            
+            const zoom = scale * 200 * density;
+            const offsetX = canvas.width / 2;
+            const offsetY = canvas.height / 2;
+            
+            for (let x = 0; x < canvas.width; x++) {
+                for (let y = 0; y < canvas.height; y++) {
+                    const c_re = (x - offsetX) / zoom;
+                    const c_im = (y - offsetY) / zoom;
+                    
+                    let z_re = 0, z_im = 0;
+                    let iteration = 0;
+                    
+                    while (z_re * z_re + z_im * z_im <= 4 && iteration < complexity * 10) {
+                        const temp = z_re * z_re - z_im * z_im + c_re;
+                        z_im = 2 * z_re * z_im + c_im;
+                        z_re = temp;
+                        iteration++;
+                    }
+                    
+                    const index = (y * canvas.width + x) * 4;
+                    
+                    if (iteration === complexity * 10) {
+                        // Inside set - use primary color
+                        const color = hexToRgb(colors.primary);
+                        data[index] = color.r;
+                        data[index + 1] = color.g;
+                        data[index + 2] = color.b;
+                        data[index + 3] = 255;
+                    } else {
+                        // Outside set - gradient based on iteration
+                        const t = iteration / (complexity * 10);
+                        const color1 = hexToRgb(colors.secondary);
+                        const color2 = hexToRgb(colors.accent);
+                        
+                        data[index] = Math.floor(color1.r + (color2.r - color1.r) * t);
+                        data[index + 1] = Math.floor(color1.g + (color2.g - color1.g) * t);
+                        data[index + 2] = Math.floor(color1.b + (color2.b - color1.b) * t);
+                        data[index + 3] = 255;
+                    }
+                }
+            }
+            
+            ctx.putImageData(imageData, 0, 0);
+        }
+
+        function generateVoronoi(ctx, canvas, params) {
+            const { complexity, density, scale, rotation, colors } = params;
+            
+            ctx.fillStyle = colors.background;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Generate random seed points
+            const points = [];
+            const numPoints = complexity * 2;
+            
+            for (let i = 0; i < numPoints; i++) {
+                points.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    color: i % 3 === 0 ? colors.primary : i % 3 === 1 ? colors.secondary : colors.accent
+                });
+            }
+            
+            const imageData = ctx.createImageData(canvas.width, canvas.height);
+            const data = imageData.data;
+            
+            // Calculate Voronoi diagram
+            for (let x = 0; x < canvas.width; x += 2) { // Skip pixels for performance
+                for (let y = 0; y < canvas.height; y += 2) {
+                    let minDist = Infinity;
+                    let nearestPoint = points[0];
+                    
+                    for (const point of points) {
+                        const dist = Math.sqrt((x - point.x) ** 2 + (y - point.y) ** 2);
+                        if (dist < minDist) {
+                            minDist = dist;
+                            nearestPoint = point;
+                        }
+                    }
+                    
+                    const color = hexToRgb(nearestPoint.color);
+                    const index = (y * canvas.width + x) * 4;
+                    
+                    // Fill 2x2 block for performance
+                    for (let dx = 0; dx < 2 && x + dx < canvas.width; dx++) {
+                        for (let dy = 0; dy < 2 && y + dy < canvas.height; dy++) {
+                            const pixelIndex = ((y + dy) * canvas.width + (x + dx)) * 4;
+                            data[pixelIndex] = color.r;
+                            data[pixelIndex + 1] = color.g;
+                            data[pixelIndex + 2] = color.b;
+                            data[pixelIndex + 3] = 255;
+                        }
+                    }
+                }
+            }
+            
+            ctx.putImageData(imageData, 0, 0);
+            
+            // Draw points
+            ctx.fillStyle = '#ffffff';
+            for (const point of points) {
+                ctx.beginPath();
+                ctx.arc(point.x, point.y, 3 * scale, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+        }
+
+        function generateCrystallographic(ctx, canvas, params) {
+            const { complexity, density, scale, rotation, colors } = params;
+            
+            ctx.fillStyle = colors.background;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.save();
+            ctx.translate(canvas.width / 2, canvas.height / 2);
+            ctx.rotate(rotation * Math.PI / 180);
+            ctx.scale(scale, scale);
+            
+            const latticeSize = 30 * density;
+            const rows = Math.ceil(canvas.height / latticeSize) + 2;
+            const cols = Math.ceil(canvas.width / latticeSize) + 2;
+            
+            // Generate hexagonal crystal lattice (wallpaper group p6m)
+            for (let i = -rows/2; i < rows/2; i++) {
+                for (let j = -cols/2; j < cols/2; j++) {
+                    const x = j * latticeSize + (i % 2) * latticeSize / 2;
+                    const y = i * latticeSize * 0.866; // sqrt(3)/2
+                    
+                    // Draw hexagon
+                    ctx.beginPath();
+                    for (let k = 0; k < 6; k++) {
+                        const angle = k * Math.PI / 3;
+                        const hx = x + Math.cos(angle) * latticeSize / 3;
+                        const hy = y + Math.sin(angle) * latticeSize / 3;
+                        
+                        if (k === 0) ctx.moveTo(hx, hy);
+                        else ctx.lineTo(hx, hy);
+                    }
+                    ctx.closePath();
+                    
+                    ctx.fillStyle = (i + j) % 3 === 0 ? colors.primary : 
+                                   (i + j) % 3 === 1 ? colors.secondary : colors.accent;
+                    ctx.fill();
+                    ctx.strokeStyle = colors.background;
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                    
+                    // Add center point for complexity
+                    if (complexity > 3) {
+                        ctx.fillStyle = colors.accent;
+                        ctx.beginPath();
+                        ctx.arc(x, y, 2, 0, 2 * Math.PI);
+                        ctx.fill();
+                    }
+                }
+            }
+            
+            ctx.restore();
+        }
+
+        function generateLSystem(ctx, canvas, params) {
+            const { complexity, density, scale, rotation, colors } = params;
+            
+            ctx.fillStyle = colors.background;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.save();
+            ctx.translate(canvas.width / 2, canvas.height / 2);
+            ctx.rotate(rotation * Math.PI / 180);
+            ctx.scale(scale, scale);
+            
+            // Simple L-System: Dragon Curve
+            let axiom = 'F';
+            let rules = { 'F': 'F+G', 'G': 'F-G' };
+            
+            // Generate L-System string
+            let current = axiom;
+            for (let i = 0; i < Math.min(complexity, 12); i++) {
+                let next = '';
+                for (let char of current) {
+                    next += rules[char] || char;
+                }
+                current = next;
+            }
+            
+            // Draw L-System
+            ctx.strokeStyle = colors.primary;
+            ctx.lineWidth = 2;
+            
+            let x = 0, y = 0;
+            let angle = 0;
+            const stepSize = 5 * density;
+            const angleStep = Math.PI / 2;
+            
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            
+            for (let char of current) {
+                switch (char) {
+                    case 'F':
+                    case 'G':
+                        x += Math.cos(angle) * stepSize;
+                        y += Math.sin(angle) * stepSize;
+                        ctx.lineTo(x, y);
+                        break;
+                    case '+':
+                        angle += angleStep;
+                        break;
+                    case '-':
+                        angle -= angleStep;
+                        break;
+                }
+            }
+            
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        // Utility Functions
+        function hexToRgb(hex) {
+            const r = parseInt(hex.slice(1, 3), 16);
+            const g = parseInt(hex.slice(3, 5), 16);
+            const b = parseInt(hex.slice(5, 7), 16);
+            return { r, g, b };
+        }
+
+        function showLoading() {
+            loadingIndicator.style.display = 'block';
+        }
+
+        function hideLoading() {
+            loadingIndicator.style.display = 'none';
+        }
+
+        // UI Functions
+        function togglePanel() {
+            const panel = document.getElementById('paramsPanel');
+            const toggle = document.getElementById('panelToggle');
+            const content = document.getElementById('paramsContent');
+            
+            appState.ui.panelExpanded = !appState.ui.panelExpanded;
+            
+            if (appState.ui.panelExpanded) {
+                content.style.display = 'block';
+                toggle.classList.add('expanded');
+                toggle.textContent = '▲';
+            } else {
+                content.style.display = 'none';
+                toggle.classList.remove('expanded');
+                toggle.textContent = '▼';
+            }
+        }
+
+        function randomizePattern() {
+            const params = appState.parameters;
+            
+            params.complexity = Math.floor(Math.random() * 15) + 1;
+            params.density = Math.random() * 2.5 + 0.5;
+            params.symmetry = Math.floor(Math.random() * 20) + 3;
+            params.scale = Math.random() * 2 + 0.5;
+            params.rotation = Math.random() * 360;
+            
+            // Random colors
+            const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E9'];
+            params.colors.primary = colors[Math.floor(Math.random() * colors.length)];
+            params.colors.secondary = colors[Math.floor(Math.random() * colors.length)];
+            params.colors.accent = colors[Math.floor(Math.random() * colors.length)];
+            
+            updateUIFromState();
+            updatePattern();
+        }
+
+        function generateVariation() {
+            const params = appState.parameters;
+            
+            // Subtle variations
+            params.complexity = Math.max(1, Math.min(20, params.complexity + (Math.random() - 0.5) * 4));
+            params.density = Math.max(0.1, Math.min(3.0, params.density + (Math.random() - 0.5) * 0.5));
+            params.symmetry = Math.max(3, Math.min(24, params.symmetry + Math.floor((Math.random() - 0.5) * 4)));
+            
+            updateUIFromState();
+            updatePattern();
+        }
+
+        function resetToDefault() {
+            const pattern = patterns[appState.currentPattern];
+            Object.assign(appState.parameters, pattern.defaultParams);
+            appState.parameters.scale = 1.0;
+            appState.parameters.rotation = 0;
+            
+            updateUIFromState();
+            updatePattern();
+        }
+
+        function exportPattern() {
+            const link = document.createElement('a');
+            link.download = `genshi-${appState.currentPattern}-${Date.now()}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // Performance Monitoring
+        function startPerformanceMonitoring() {
+            let frameCount = 0;
+            let lastTime = performance.now();
+            
+            function updateFPS() {
+                frameCount++;
+                const currentTime = performance.now();
+                
+                if (currentTime - lastTime >= 1000) {
+                    const fps = Math.round((frameCount * 1000) / (currentTime - lastTime));
+                    frameCount = 0;
+                    lastTime = currentTime;
+                    
+                    const fpsElement = document.getElementById('fpsCounter');
+                    fpsElement.textContent = fps + ' FPS';
+                    
+                    // Color code FPS
+                    fpsElement.className = fps >= 50 ? 'fps-good' : fps >= 30 ? 'fps-medium' : 'fps-poor';
+                }
+                
+                requestAnimationFrame(updateFPS);
+            }
+            
+            updateFPS();
+        }
+
+        // Event Listeners
+        window.addEventListener('resize', () => {
+            setupCanvas();
+            updatePattern();
+        });
+
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => {
+                setupCanvas();
+                updatePattern();
+            }, 100);
+        });
+
+        // Prevent zoom on iOS
+        document.addEventListener('gesturestart', e => e.preventDefault());
+        document.addEventListener('gesturechange', e => e.preventDefault());
+
+        // Initialize app
+        init();
+    </script>
+</body>
+</html>
