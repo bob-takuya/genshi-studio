@@ -4,6 +4,7 @@ import { MainLayout } from './components/layout/MainLayout'
 import { StudioPage } from './pages/StudioPage'
 import { HomePage } from './pages/HomePage'
 import { GalleryPage } from './pages/GalleryPage'
+import AboutPage from './pages/AboutPage'
 import { useAppStore } from './hooks/useAppStore'
 import { ThemeProvider } from './components/providers/ThemeProvider'
 
@@ -18,6 +19,7 @@ function App() {
             <Route index element={<HomePage />} />
             <Route path="studio" element={<StudioPage />} />
             <Route path="gallery" element={<GalleryPage />} />
+            <Route path="about" element={<AboutPage />} />
           </Route>
         </Routes>
       </div>

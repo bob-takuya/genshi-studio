@@ -42,23 +42,23 @@ export default function AboutPage() {
   const values = [
     {
       icon: Heart,
-      title: 'Creativity First',
-      description: 'Empowering creative expression through intuitive tools',
+      title: 'Cultural Respect',
+      description: 'Honoring the origins and significance of traditional patterns',
     },
     {
       icon: Globe,
-      title: 'Cultural Diversity',
-      description: 'Celebrating design patterns from cultures worldwide',
+      title: 'Global Heritage',
+      description: 'Preserving and sharing cultural art forms from around the world',
     },
     {
       icon: Users,
-      title: 'Community Driven',
-      description: 'Built by creators, for creators, with love',
+      title: 'Creative Community',
+      description: 'Building bridges between traditional artisans and digital creators',
     },
     {
       icon: Code,
-      title: 'Open Innovation',
-      description: 'Leveraging cutting-edge web technologies',
+      title: 'Modern Innovation',
+      description: 'Using advanced web technologies to make heritage accessible',
     },
   ]
 
@@ -90,9 +90,9 @@ export default function AboutPage() {
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
               About <span className="gradient-text">Genshi Studio</span>
             </h1>
-            <p className="text-xl md:text-2xl text-text-secondary max-w-2xl mx-auto">
-              Where cultural heritage meets digital innovation, creating a new paradigm
-              for creative expression in the modern world.
+            <p className="text-xl md:text-2xl text-text-secondary max-w-3xl mx-auto">
+              源始 (Genshi) means "origin" in Japanese. Our studio honors the origins of cultural art patterns 
+              while pioneering new digital creative tools that respect tradition and embrace innovation.
             </p>
           </motion.div>
         </div>
@@ -111,8 +111,9 @@ export default function AboutPage() {
               Our <span className="gradient-text">Mission</span>
             </h2>
             <p className="text-xl text-text-secondary max-w-3xl mx-auto">
-              To democratize design by combining traditional artistic patterns with
-              modern technology, making professional creative tools accessible to everyone.
+              To preserve and celebrate cultural heritage through digital innovation, creating tools that 
+              make traditional art patterns accessible to modern creators while respecting their origins 
+              and cultural significance.
             </p>
           </motion.div>
 
@@ -196,6 +197,73 @@ export default function AboutPage() {
                 <h3 className="font-semibold text-lg mb-1">{member.name}</h3>
                 <p className="text-primary text-sm mb-2">{member.role}</p>
                 <p className="text-text-secondary text-sm">{member.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Cultural Context Section */}
+      <section className="py-20 px-6 bg-surface">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl font-bold mb-4">
+              Cultural <span className="gradient-text">Heritage</span>
+            </h2>
+            <p className="text-xl text-text-secondary max-w-3xl mx-auto">
+              Traditional Japanese patterns carry deep cultural meaning and artistic wisdom passed down through generations.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                name: 'Seigaiha',
+                japanese: '青海波',
+                meaning: 'Blue Ocean Wave',
+                description: 'Represents tranquility, strength, and good fortune. This pattern symbolizes the power of the ocean and the peaceful waves that bring prosperity.',
+                origin: 'Heian Period (794-1185)',
+                color: 'from-blue-400 to-blue-600'
+              },
+              {
+                name: 'Ichimatsu',
+                japanese: '市松',
+                meaning: 'Market Board',
+                description: 'A checkered pattern representing expansion and growth. Named after kabuki actor Sanogawa Ichimatsu, it symbolizes prosperity and development.',
+                origin: 'Edo Period (1603-1868)',
+                color: 'from-gray-400 to-gray-600'
+              },
+              {
+                name: 'Asanoha',
+                japanese: '麻の葉',
+                meaning: 'Hemp Leaf',
+                description: 'Symbolizes healthy growth and protection. Hemp grows quickly and straight, making this pattern popular for children\'s clothing as a wish for healthy development.',
+                origin: 'Heian Period (794-1185)',
+                color: 'from-green-400 to-green-600'
+              }
+            ].map((pattern, index) => (
+              <motion.div
+                key={pattern.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="bg-background rounded-lg p-6 text-center shadow-lg"
+              >
+                <div className={`w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-br ${pattern.color} flex items-center justify-center`}>
+                  <div className="text-white text-2xl font-bold">{pattern.japanese}</div>
+                </div>
+                <h3 className="text-xl font-semibold mb-2">{pattern.name}</h3>
+                <p className="text-primary text-sm mb-2">{pattern.meaning}</p>
+                <p className="text-text-secondary text-sm mb-4">{pattern.description}</p>
+                <div className="text-xs text-text-secondary opacity-75">
+                  Origin: {pattern.origin}
+                </div>
               </motion.div>
             ))}
           </div>

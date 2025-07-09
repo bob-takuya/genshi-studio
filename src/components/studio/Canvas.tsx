@@ -2,16 +2,19 @@ import React, { useRef, useEffect, useState, useCallback } from 'react'
 import { fabric } from 'fabric'
 import { useAppStore } from '../../hooks/useAppStore'
 import { CanvasControls } from './CanvasControls'
+import { ExportDialog } from './ExportDialog'
+import { PatternLibrary } from './PatternLibrary'
 
 export function Canvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const fabricRef = useRef<fabric.Canvas | null>(null)
+  const fabricRef = useRef<any>(null)
   const containerRef = useRef<HTMLDivElement>(null)
+  const [showExportDialog, setShowExportDialog] = useState(false)
+  const [showPatternLibrary, setShowPatternLibrary] = useState(true)
   
   const { 
     activeColor, 
     activeLayerId, 
-    layers,
     zoom,
     setZoom 
   } = useAppStore()
@@ -29,6 +32,14 @@ export function Canvas() {
     fabricRef.current = canvas
 
     // Set initial size
+    const handleResize = () => {
+      if (!fabricRef.current || !containerRef.current) return
+      
+      const { width, height } = containerRef.current.getBoundingClientRect()
+      fabricRef.current.setDimensions({ width, height })
+      fabricRef.current.renderAll()
+    }
+    
     handleResize()
 
     // Event listeners
@@ -46,7 +57,7 @@ export function Canvas() {
 
   // Handle window resize
   useEffect(() => {
-    const handleResize = () => {
+    const handleWindowResize = () => {
       if (!fabricRef.current || !containerRef.current) return
       
       const { width, height } = containerRef.current.getBoundingClientRect()
@@ -54,10 +65,10 @@ export function Canvas() {
       fabricRef.current.renderAll()
     }
 
-    window.addEventListener('resize', handleResize)
-    handleResize()
+    window.addEventListener('resize', handleWindowResize)
+    handleWindowResize()
 
-    return () => window.removeEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleWindowResize)
   }, [])
 
   // Update active color for drawing
@@ -186,59 +197,106 @@ export function Canvas() {
     fabricRef.current.renderAll()
   }, [])
 
-  // Export canvas
-  const exportCanvas = useCallback((format: 'png' | 'svg' | 'json') => {
+  // Open export dialog
+  const openExportDialog = useCallback(() => {
+    setShowExportDialog(true)
+  }, [])
+  
+  // Generate test pattern
+  const generateTestPattern = useCallback(() => {
     if (!fabricRef.current) return
-
-    switch (format) {
-      case 'png':
-        const dataURL = fabricRef.current.toDataURL({
-          format: 'png',
-          quality: 1,
-          multiplier: 2
-        })
-        downloadFile(dataURL, 'canvas.png')
-        break
-      case 'svg':
-        const svg = fabricRef.current.toSVG()
-        const blob = new Blob([svg], { type: 'image/svg+xml' })
-        const url = URL.createObjectURL(blob)
-        downloadFile(url, 'canvas.svg')
-        break
-      case 'json':
-        const json = JSON.stringify(fabricRef.current.toJSON())
-        const blob2 = new Blob([json], { type: 'application/json' })
-        const url2 = URL.createObjectURL(blob2)
-        downloadFile(url2, 'canvas.json')
-        break
+    
+    // Clear canvas
+    fabricRef.current.clear()
+    fabricRef.current.backgroundColor = '#ffffff'
+    
+    // Create a simple geometric pattern
+    const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#f0932b', '#eb4d4b', '#6c5ce7']
+    const size = 40
+    const rows = Math.ceil(fabricRef.current.height! / size)
+    const cols = Math.ceil(fabricRef.current.width! / size)
+    
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < cols; col++) {
+        const colorIndex = (row + col) % colors.length
+        const shape = (row + col) % 3
+        
+        let element
+        if (shape === 0) {
+          element = new fabric.Circle({
+            left: col * size + size/2,
+            top: row * size + size/2,
+            radius: size/3,
+            fill: colors[colorIndex],
+            originX: 'center',
+            originY: 'center',
+            selectable: false
+          })
+        } else if (shape === 1) {
+          element = new fabric.Rect({
+            left: col * size + size/2,
+            top: row * size + size/2,
+            width: size * 0.8,
+            height: size * 0.8,
+            fill: colors[colorIndex],
+            originX: 'center',
+            originY: 'center',
+            selectable: false
+          })
+        } else {
+          element = new fabric.Triangle({
+            left: col * size + size/2,
+            top: row * size + size/2,
+            width: size * 0.8,
+            height: size * 0.8,
+            fill: colors[colorIndex],
+            originX: 'center',
+            originY: 'center',
+            selectable: false
+          })
+        }
+        
+        fabricRef.current.add(element)
+      }
     }
+    
+    fabricRef.current.renderAll()
   }, [])
 
-  // Helper function to download files
-  const downloadFile = (url: string, filename: string) => {
-    const a = document.createElement('a')
-    a.href = url
-    a.download = filename
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-    if (url.startsWith('blob:')) {
-      URL.revokeObjectURL(url)
-    }
-  }
 
   return (
-    <div ref={containerRef} className="relative w-full h-full bg-gray-50">
-      {/* Canvas element */}
-      <canvas ref={canvasRef} />
+    <div ref={containerRef} className="relative w-full h-full bg-gray-50 flex">
+      {/* Canvas container */}
+      <div className="flex-1 relative">
+        {/* Canvas element */}
+        <canvas ref={canvasRef} />
+        
+        {/* Canvas controls */}
+        <CanvasControls
+          onModeChange={setDrawingMode}
+          onAddShape={addShape}
+          onClear={clearCanvas}
+          onExport={openExportDialog}
+          onTogglePatterns={() => setShowPatternLibrary(!showPatternLibrary)}
+          showPatternLibrary={showPatternLibrary}
+          onGenerateTestPattern={generateTestPattern}
+        />
+        
+        {/* Export dialog */}
+        <ExportDialog
+          isOpen={showExportDialog}
+          onClose={() => setShowExportDialog(false)}
+          canvas={fabricRef.current}
+        />
+      </div>
       
-      {/* Canvas controls */}
-      <CanvasControls
-        onModeChange={setDrawingMode}
-        onAddShape={addShape}
-        onClear={clearCanvas}
-        onExport={exportCanvas}
-      />
+      {/* Pattern library */}
+      {showPatternLibrary && (
+        <PatternLibrary
+          canvas={fabricRef.current}
+          onClose={() => setShowPatternLibrary(false)}
+        />
+      )}
     </div>
   )
 }

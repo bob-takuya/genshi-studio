@@ -101,4 +101,78 @@ export interface PatternGeneratorOptions {
   color1: Color;
   color2: Color;
   complexity?: number;
+  // Animation properties
+  animationSpeed?: number;
+  animationDirection?: 'forward' | 'reverse' | 'alternate';
+  animationEnabled?: boolean;
+  // Custom variation properties
+  variations?: PatternVariation[];
+  // Combination properties
+  blendMode?: BlendMode;
+  opacity?: number;
+}
+
+export interface PatternVariation {
+  id: string;
+  name: string;
+  description: string;
+  parameters: PatternParameterConfig[];
+  basePattern: string;
+  createdAt: Date;
+  modifiedAt: Date;
+  isCustom: boolean;
+}
+
+export interface PatternParameterConfig {
+  name: string;
+  type: 'range' | 'color' | 'select' | 'boolean' | 'text';
+  min?: number;
+  max?: number;
+  step?: number;
+  value: number | string | boolean;
+  options?: string[];
+  description?: string;
+  group?: string;
+}
+
+export interface CustomPattern {
+  id: string;
+  name: string;
+  description: string;
+  basePattern: string;
+  parameters: PatternParameterConfig[];
+  animation?: AnimationConfig;
+  combinations?: PatternCombination[];
+  createdAt: Date;
+  modifiedAt: Date;
+  tags: string[];
+  isPublic: boolean;
+  shareId?: string;
+}
+
+export interface AnimationConfig {
+  enabled: boolean;
+  duration: number; // in seconds
+  direction: 'forward' | 'reverse' | 'alternate';
+  easing: 'linear' | 'ease' | 'ease-in' | 'ease-out' | 'ease-in-out';
+  animatedParams: string[];
+  keyframes: AnimationKeyframe[];
+}
+
+export interface AnimationKeyframe {
+  time: number; // 0-1
+  parameters: { [key: string]: any };
+}
+
+export interface PatternCombination {
+  id: string;
+  patterns: {
+    patternId: string;
+    blendMode: BlendMode;
+    opacity: number;
+    offset: Point;
+    scale: number;
+    rotation: number;
+  }[];
+  compositionMode: 'overlay' | 'multiply' | 'screen' | 'difference';
 }
