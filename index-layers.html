@@ -1,0 +1,2922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Genshi Studio - Multi-Layer Animated Line Art</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background: #000;
+            color: white;
+            overflow: hidden;
+            height: 100vh;
+            touch-action: none;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            position: relative;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(0, 0, 0, 0.9);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-size: 18px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4, #45B7D1);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-fill-color: transparent;
+        }
+
+        .pattern-title {
+            font-size: 14px;
+            opacity: 0.8;
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .header-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: white;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .header-btn:active {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(0.95);
+        }
+
+        .header-btn.active {
+            background: rgba(78, 205, 196, 0.3);
+            box-shadow: 0 0 10px rgba(78, 205, 196, 0.5);
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            display: flex;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Main Canvas Area */
+        .main-canvas-container {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .canvas-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            touch-action: none;
+        }
+
+        /* Layer Panel */
+        .layer-panel {
+            width: 250px;
+            background: rgba(0, 0, 0, 0.95);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 50;
+        }
+
+        .layer-panel h3 {
+            font-size: 14px;
+            font-weight: 600;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Layer Controls */
+        .layer-controls {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .layer-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 6px;
+            padding: 6px 12px;
+            color: white;
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex: 1;
+        }
+
+        .layer-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .layer-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Layer Items */
+        .layer-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .layer-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 12px;
+            cursor: move;
+            transition: all 0.2s ease;
+        }
+
+        .layer-item.active {
+            background: rgba(78, 205, 196, 0.1);
+            border-color: rgba(78, 205, 196, 0.3);
+        }
+
+        .layer-item.dragging {
+            opacity: 0.5;
+        }
+
+        .layer-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .layer-thumbnail {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .layer-thumbnail canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .layer-info {
+            flex: 1;
+        }
+
+        .layer-name {
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .layer-pattern {
+            font-size: 10px;
+            opacity: 0.6;
+        }
+
+        .layer-visibility {
+            width: 24px;
+            height: 24px;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.2s ease;
+        }
+
+        .layer-visibility:hover {
+            opacity: 1;
+        }
+
+        /* Layer Settings */
+        .layer-settings {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .blend-mode-select {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            padding: 8px;
+            color: white;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .blend-mode-select option {
+            background: #222;
+        }
+
+        /* Opacity Slider */
+        .opacity-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .opacity-label {
+            font-size: 11px;
+            opacity: 0.8;
+            min-width: 50px;
+        }
+
+        .opacity-slider {
+            flex: 1;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .opacity-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            background: #4ECDC4;
+            cursor: pointer;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(78, 205, 196, 0.5);
+        }
+
+        .opacity-value {
+            font-size: 11px;
+            opacity: 0.6;
+            min-width: 35px;
+            text-align: right;
+        }
+
+        /* Bottom Controls */
+        .bottom-controls {
+            background: rgba(0, 0, 0, 0.95);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 100;
+            flex-shrink: 0;
+            max-height: 40vh;
+            overflow-y: auto;
+        }
+
+        /* Pattern Selector */
+        .pattern-selector {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 8px;
+        }
+
+        .pattern-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: white;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .pattern-btn:active {
+            transform: scale(0.95);
+        }
+
+        .pattern-btn.active {
+            background: rgba(78, 205, 196, 0.2);
+            border-color: rgba(78, 205, 196, 0.5);
+            box-shadow: 0 0 10px rgba(78, 205, 196, 0.3);
+        }
+
+        /* Control Grid */
+        .control-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .control-section {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .control-section h3 {
+            font-size: 12px;
+            font-weight: 600;
+            opacity: 0.6;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Sliders */
+        .slider-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .slider-label {
+            font-size: 12px;
+            opacity: 0.8;
+            min-width: 80px;
+        }
+
+        .slider {
+            flex: 1;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #4ECDC4;
+            cursor: pointer;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(78, 205, 196, 0.5);
+        }
+
+        .slider-value {
+            font-size: 12px;
+            opacity: 0.6;
+            min-width: 40px;
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Color Pickers */
+        .color-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .color-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            flex: 1;
+        }
+
+        .color-picker {
+            width: 100%;
+            height: 40px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            -webkit-appearance: none;
+            appearance: none;
+            outline: none;
+        }
+
+        .color-label {
+            font-size: 10px;
+            opacity: 0.6;
+        }
+
+        /* Motion Control */
+        .motion-control {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 0 auto;
+            cursor: crosshair;
+            overflow: hidden;
+        }
+
+        #motionCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .motion-indicator {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #4ECDC4;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            box-shadow: 0 0 10px rgba(78, 205, 196, 0.8);
+        }
+
+        /* Cross-Layer Controls */
+        .cross-layer-section {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            margin-top: 20px;
+        }
+
+        .cross-layer-section h3 {
+            font-size: 12px;
+            font-weight: 600;
+            opacity: 0.6;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sync-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .sync-checkbox {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .sync-label {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        /* Master Opacity */
+        .master-opacity {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Auto-evolve indicator */
+        .auto-evolve-indicator {
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            background: rgba(78, 205, 196, 0.2);
+            color: #4ECDC4;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .auto-evolve-indicator.active {
+            opacity: 1;
+        }
+
+        .pulse {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #4ECDC4;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.5; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* FPS Counter */
+        .fps-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-family: monospace;
+            opacity: 0.6;
+        }
+
+        /* Laptop optimizations */
+        @media (min-width: 1024px) {
+            .layer-panel {
+                width: 300px;
+            }
+
+            .bottom-controls {
+                max-height: 30vh;
+            }
+
+            .control-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Hide layer panel on mobile */
+        @media (max-width: 768px) {
+            .layer-panel {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">Genshi Studio</div>
+            <div class="pattern-title" id="patternTitle">Multi-Layer Composition</div>
+            <div class="header-controls">
+                <button class="header-btn" id="playPauseBtn" onclick="toggleAnimation()">⏸️</button>
+                <button class="header-btn" id="autoEvolveBtn" onclick="toggleAutoEvolve()">🧬</button>
+                <button class="header-btn" id="layerToggleBtn" onclick="toggleLayerPanel()">📑</button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Main Canvas -->
+            <div class="main-canvas-container" id="canvasContainer">
+                <!-- Canvases will be dynamically created here -->
+            </div>
+
+            <!-- Layer Panel -->
+            <div class="layer-panel" id="layerPanel">
+                <h3>Layers</h3>
+                
+                <div class="layer-controls">
+                    <button class="layer-btn" onclick="addLayer()">+ Add</button>
+                    <button class="layer-btn" onclick="removeActiveLayer()">− Remove</button>
+                </div>
+
+                <div class="layer-list" id="layerList">
+                    <!-- Layer items will be dynamically created here -->
+                </div>
+
+                <div class="cross-layer-section">
+                    <h3>Cross-Layer Effects</h3>
+                    
+                    <div class="sync-option">
+                        <input type="checkbox" id="syncAnimation" class="sync-checkbox" onchange="updateCrossLayerSettings()">
+                        <label for="syncAnimation" class="sync-label">Synchronized Animation</label>
+                    </div>
+                    
+                    <div class="sync-option">
+                        <input type="checkbox" id="paramInfluence" class="sync-checkbox" onchange="updateCrossLayerSettings()">
+                        <label for="paramInfluence" class="sync-label">Parameter Influence</label>
+                    </div>
+
+                    <div class="master-opacity">
+                        <div class="opacity-container">
+                            <span class="opacity-label">Master</span>
+                            <input type="range" class="opacity-slider" id="masterOpacity" min="0" max="100" value="100" oninput="updateMasterOpacity(this.value)">
+                            <span class="opacity-value" id="masterOpacityValue">100%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Auto-evolve Indicator -->
+        <div class="auto-evolve-indicator" id="autoEvolveIndicator">
+            <span class="pulse"></span>
+            <span>Auto-evolving</span>
+        </div>
+
+        <!-- Bottom Controls -->
+        <div class="bottom-controls" id="bottomControls">
+            <!-- Pattern Selector -->
+            <div class="pattern-selector" id="patternSelector">
+                <button class="pattern-btn active" data-pattern="flowfield" onclick="selectPatternForLayer('flowfield')">Flow Fields</button>
+                <button class="pattern-btn" data-pattern="waves" onclick="selectPatternForLayer('waves')">Wave Interference</button>
+                <button class="pattern-btn" data-pattern="growth" onclick="selectPatternForLayer('growth')">Differential Growth</button>
+                <button class="pattern-btn" data-pattern="truchet" onclick="selectPatternForLayer('truchet')">Truchet Tiles ✨</button>
+                <button class="pattern-btn" data-pattern="reaction" onclick="selectPatternForLayer('reaction')">Reaction-Diffusion</button>
+                <button class="pattern-btn" data-pattern="voronoi" onclick="selectPatternForLayer('voronoi')">Voronoi Cells</button>
+                <button class="pattern-btn" data-pattern="maze" onclick="selectPatternForLayer('maze')">Maze Growth</button>
+                <button class="pattern-btn" data-pattern="lsystem" onclick="selectPatternForLayer('lsystem')">L-Systems</button>
+                <button class="pattern-btn" data-pattern="circles" onclick="selectPatternForLayer('circles')">Circle Packing</button>
+            </div>
+
+            <!-- Control Grid -->
+            <div class="control-grid">
+                <!-- Parameters -->
+                <div class="control-section">
+                    <h3>Parameters</h3>
+                    <div class="slider-group">
+                        <div class="slider-container">
+                            <span class="slider-label">Speed</span>
+                            <input type="range" class="slider" id="speedSlider" min="0.1" max="5" step="0.1" value="1">
+                            <span class="slider-value" id="speedValue">1.0</span>
+                        </div>
+                        <div class="slider-container">
+                            <span class="slider-label">Complexity</span>
+                            <input type="range" class="slider" id="complexitySlider" min="10" max="100" step="1" value="50">
+                            <span class="slider-value" id="complexityValue">50</span>
+                        </div>
+                        <div class="slider-container">
+                            <span class="slider-label">Line Weight</span>
+                            <input type="range" class="slider" id="lineWeightSlider" min="0.1" max="5" step="0.1" value="1">
+                            <span class="slider-value" id="lineWeightValue">1.0</span>
+                        </div>
+                        <div class="slider-container">
+                            <span class="slider-label">Fade</span>
+                            <input type="range" class="slider" id="fadeSlider" min="0.8" max="1" step="0.01" value="0.95">
+                            <span class="slider-value" id="fadeValue">0.95</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Colors -->
+                <div class="control-section">
+                    <h3>Colors</h3>
+                    <div class="color-group">
+                        <div class="color-container">
+                            <input type="color" class="color-picker" id="primaryColor" value="#4ECDC4">
+                            <span class="color-label">Primary</span>
+                        </div>
+                        <div class="color-container">
+                            <input type="color" class="color-picker" id="secondaryColor" value="#FF6B6B">
+                            <span class="color-label">Secondary</span>
+                        </div>
+                        <div class="color-container">
+                            <input type="color" class="color-picker" id="accentColor" value="#FFE66D">
+                            <span class="color-label">Accent</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Motion -->
+                <div class="control-section">
+                    <h3>Motion Control</h3>
+                    <div class="motion-control" id="motionControl">
+                        <canvas id="motionCanvas"></canvas>
+                        <div class="motion-indicator" id="motionIndicator"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FPS Counter -->
+        <div class="fps-counter" id="fpsCounter">FPS: 0</div>
+    </div>
+
+    <script>
+        // Perlin Noise Implementation
+        class PerlinNoise {
+            constructor() {
+                this.perm = new Array(512);
+                this.gradP = new Array(512);
+                this.seed(Math.random());
+            }
+
+            seed(seed) {
+                const grad3 = [
+                    [1,1,0],[-1,1,0],[1,-1,0],[-1,-1,0],
+                    [1,0,1],[-1,0,1],[1,0,-1],[-1,0,-1],
+                    [0,1,1],[0,-1,1],[0,1,-1],[0,-1,-1]
+                ];
+                
+                const p = [];
+                for (let i = 0; i < 256; i++) {
+                    p[i] = i;
+                }
+                
+                for (let i = 0; i < 255; i++) {
+                    const n = i + ~~(seed * (256 - i));
+                    const t = p[i];
+                    p[i] = p[n];
+                    p[n] = t;
+                }
+                
+                for(let i = 0; i < 512; i++) {
+                    this.perm[i] = p[i & 255];
+                    this.gradP[i] = grad3[this.perm[i] % 12];
+                }
+            }
+
+            fade(t) {
+                return t * t * t * (t * (t * 6 - 15) + 10);
+            }
+
+            lerp(a, b, t) {
+                return (1 - t) * a + t * b;
+            }
+
+            get(x, y, z = 0) {
+                const X = Math.floor(x);
+                const Y = Math.floor(y);
+                const Z = Math.floor(z);
+
+                x = x - X;
+                y = y - Y;
+                z = z - Z;
+
+                const xi = X & 255;
+                const yi = Y & 255;
+                const zi = Z & 255;
+
+                const u = this.fade(x);
+                const v = this.fade(y);
+                const w = this.fade(z);
+
+                const A = this.perm[xi] + yi;
+                const AA = this.perm[A] + zi;
+                const AB = this.perm[A + 1] + zi;
+                const B = this.perm[xi + 1] + yi;
+                const BA = this.perm[B] + zi;
+                const BB = this.perm[B + 1] + zi;
+
+                const g1 = this.gradP[AA];
+                const g2 = this.gradP[BA];
+                const g3 = this.gradP[AB];
+                const g4 = this.gradP[BB];
+                const g5 = this.gradP[AA + 1];
+                const g6 = this.gradP[BA + 1];
+                const g7 = this.gradP[AB + 1];
+                const g8 = this.gradP[BB + 1];
+
+                const n1 = this.dot(g1, [x, y, z]);
+                const n2 = this.dot(g2, [x - 1, y, z]);
+                const n3 = this.dot(g3, [x, y - 1, z]);
+                const n4 = this.dot(g4, [x - 1, y - 1, z]);
+                const n5 = this.dot(g5, [x, y, z - 1]);
+                const n6 = this.dot(g6, [x - 1, y, z - 1]);
+                const n7 = this.dot(g7, [x, y - 1, z - 1]);
+                const n8 = this.dot(g8, [x - 1, y - 1, z - 1]);
+
+                const nx1 = this.lerp(n1, n2, u);
+                const nx2 = this.lerp(n3, n4, u);
+                const ny1 = this.lerp(nx1, nx2, v);
+
+                const nx3 = this.lerp(n5, n6, u);
+                const nx4 = this.lerp(n7, n8, u);
+                const ny2 = this.lerp(nx3, nx4, v);
+
+                return this.lerp(ny1, ny2, w);
+            }
+
+            dot(g, v) {
+                return g[0] * v[0] + g[1] * v[1] + g[2] * v[2];
+            }
+        }
+
+        // Color interpolation
+        function interpolateColor(color1, color2, color3, t) {
+            const c1 = hexToRgb(color1);
+            const c2 = hexToRgb(color2);
+            const c3 = hexToRgb(color3);
+            
+            let r, g, b;
+            if (t < 0.5) {
+                const localT = t * 2;
+                r = Math.round(c1.r + (c2.r - c1.r) * localT);
+                g = Math.round(c1.g + (c2.g - c1.g) * localT);
+                b = Math.round(c1.b + (c2.b - c1.b) * localT);
+            } else {
+                const localT = (t - 0.5) * 2;
+                r = Math.round(c2.r + (c3.r - c2.r) * localT);
+                g = Math.round(c2.g + (c3.g - c2.g) * localT);
+                b = Math.round(c2.b + (c3.b - c2.b) * localT);
+            }
+            
+            return `rgb(${r}, ${g}, ${b})`;
+        }
+
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        }
+
+        // Layer class
+        class Layer {
+            constructor(id, name, pattern = 'flowfield') {
+                this.id = id;
+                this.name = name;
+                this.pattern = pattern;
+                this.visible = true;
+                this.opacity = 100;
+                this.blendMode = 'normal';
+                this.canvas = null;
+                this.ctx = null;
+                this.thumbnailCanvas = null;
+                this.thumbnailCtx = null;
+                this.patternInstance = null;
+                this.parameters = {
+                    speed: 1.0,
+                    complexity: 50,
+                    lineWeight: 1.0,
+                    fade: 0.95,
+                    motionX: 0.0,
+                    motionY: 0.0,
+                    colors: {
+                        primary: '#4ECDC4',
+                        secondary: '#FF6B6B',
+                        accent: '#FFE66D'
+                    }
+                };
+                this.time = 0;
+                this.perlinNoise = new PerlinNoise();
+            }
+
+            initCanvas(width, height) {
+                // Main canvas
+                this.canvas = document.createElement('canvas');
+                this.canvas.className = 'canvas-layer';
+                this.canvas.id = `layer-canvas-${this.id}`;
+                this.canvas.width = width;
+                this.canvas.height = height;
+                this.ctx = this.canvas.getContext('2d', { 
+                    alpha: true,
+                    desynchronized: true 
+                });
+                
+                // Thumbnail canvas
+                this.thumbnailCanvas = document.createElement('canvas');
+                this.thumbnailCanvas.width = 40;
+                this.thumbnailCanvas.height = 40;
+                this.thumbnailCtx = this.thumbnailCanvas.getContext('2d');
+                
+                // Initialize pattern
+                this.initPattern();
+            }
+
+            initPattern() {
+                switch(this.pattern) {
+                    case 'flowfield':
+                        this.patternInstance = this.createFlowFieldPattern();
+                        break;
+                    case 'waves':
+                        this.patternInstance = this.createWavePattern();
+                        break;
+                    case 'growth':
+                        this.patternInstance = this.createGrowthPattern();
+                        break;
+                    case 'truchet':
+                        this.patternInstance = this.createTruchetPattern();
+                        break;
+                    case 'reaction':
+                        this.patternInstance = this.createReactionPattern();
+                        break;
+                    case 'voronoi':
+                        this.patternInstance = this.createVoronoiPattern();
+                        break;
+                    case 'maze':
+                        this.patternInstance = this.createMazePattern();
+                        break;
+                    case 'lsystem':
+                        this.patternInstance = this.createLSystemPattern();
+                        break;
+                    case 'circles':
+                        this.patternInstance = this.createCirclePattern();
+                        break;
+                }
+                
+                if (this.patternInstance && this.patternInstance.init) {
+                    this.patternInstance.init();
+                }
+            }
+
+            createFlowFieldPattern() {
+                return {
+                    particles: [],
+                    init: function() {
+                        this.particles = [];
+                        const numParticles = this.parameters.complexity * 2;
+                        for (let i = 0; i < numParticles; i++) {
+                            this.particles.push({
+                                x: Math.random() * this.canvas.width,
+                                y: Math.random() * this.canvas.height,
+                                vx: 0,
+                                vy: 0,
+                                age: 0,
+                                maxAge: 200 + Math.random() * 300
+                            });
+                        }
+                    }.bind(this)
+                };
+            }
+
+            createWavePattern() {
+                return {
+                    sources: [],
+                    init: function() {
+                        this.sources = [];
+                        const numSources = Math.max(2, Math.floor(this.parameters.complexity / 20));
+                        for (let i = 0; i < numSources; i++) {
+                            this.sources.push({
+                                x: Math.random() * this.canvas.width,
+                                y: Math.random() * this.canvas.height,
+                                frequency: 0.02 + Math.random() * 0.03,
+                                amplitude: 20 + Math.random() * 30,
+                                phase: Math.random() * Math.PI * 2
+                            });
+                        }
+                    }.bind(this)
+                };
+            }
+
+            createGrowthPattern() {
+                return {
+                    nodes: [],
+                    shapes: [],
+                    init: function() {
+                        this.nodes = [];
+                        this.shapes = [];
+                        
+                        const numShapes = Math.max(2, Math.floor(this.parameters.complexity / 25));
+                        
+                        for (let s = 0; s < numShapes; s++) {
+                            const centerX = (s + 0.5) * (this.canvas.width / numShapes) + (Math.random() - 0.5) * 100;
+                            const centerY = this.canvas.height * (0.2 + Math.random() * 0.6);
+                            const radius = Math.min(this.canvas.width, this.canvas.height) * (0.05 + Math.random() * 0.1);
+                            const numNodes = Math.max(8, Math.floor(this.parameters.complexity / numShapes));
+                            
+                            const shape = { nodes: [], id: s };
+                            
+                            for (let i = 0; i < numNodes; i++) {
+                                const angle = (i / numNodes) * Math.PI * 2;
+                                shape.nodes.push({
+                                    x: centerX + radius * Math.cos(angle),
+                                    y: centerY + radius * Math.sin(angle),
+                                    vx: 0,
+                                    vy: 0,
+                                    originalAngle: angle,
+                                    shapeId: s
+                                });
+                            }
+                            
+                            this.shapes.push(shape);
+                            this.nodes.push(...shape.nodes);
+                        }
+                    }.bind(this)
+                };
+            }
+
+            createTruchetPattern() {
+                return {
+                    grid: [],
+                    gridSize: 20,
+                    init: function() {
+                        const baseSize = Math.max(10, 50 - Math.floor(this.parameters.complexity / 3));
+                        this.gridSize = baseSize;
+                        
+                        const gridCols = Math.ceil(this.canvas.width / this.gridSize);
+                        const gridRows = Math.ceil(this.canvas.height / this.gridSize);
+                        
+                        this.grid = [];
+                        for (let y = 0; y < gridRows; y++) {
+                            this.grid[y] = [];
+                            for (let x = 0; x < gridCols; x++) {
+                                this.grid[y][x] = {
+                                    rotation: Math.floor(Math.random() * 4) * 90,
+                                    type: Math.floor(Math.random() * 3),
+                                    animationOffset: Math.random() * Math.PI * 2
+                                };
+                            }
+                        }
+                    }.bind(this)
+                };
+            }
+
+            createReactionPattern() {
+                return {
+                    grid: [],
+                    gridSizeX: 80,
+                    gridSizeY: 60,
+                    init: function() {
+                        const baseSize = Math.max(40, 120 - this.parameters.complexity / 2);
+                        this.gridSizeX = Math.floor(baseSize * (this.canvas.width / this.canvas.height));
+                        this.gridSizeY = baseSize;
+                        
+                        this.grid = [];
+                        for (let y = 0; y < this.gridSizeY; y++) {
+                            this.grid[y] = [];
+                            for (let x = 0; x < this.gridSizeX; x++) {
+                                const isCenter1 = x === Math.floor(this.gridSizeX / 3) && y === Math.floor(this.gridSizeY / 3);
+                                const isCenter2 = x === Math.floor(this.gridSizeX * 2 / 3) && y === Math.floor(this.gridSizeY * 2 / 3);
+                                const isRandom = Math.random() < 0.01;
+                                
+                                this.grid[y][x] = {
+                                    u: 1.0,
+                                    v: (isCenter1 || isCenter2 || isRandom) ? 0.5 + Math.random() * 0.3 : 0.0,
+                                    newU: 1.0,
+                                    newV: 0.0
+                                };
+                            }
+                        }
+                    }.bind(this)
+                };
+            }
+
+            createVoronoiPattern() {
+                return {
+                    seeds: [],
+                    cells: [],
+                    centroids: [],
+                    relaxationForce: 0.15,
+                    momentum: 0.85,
+                    init: function() {
+                        this.seeds = [];
+                        this.centroids = [];
+                        const numSeeds = Math.max(10, this.parameters.complexity / 4);
+                        for (let i = 0; i < numSeeds; i++) {
+                            const seed = {
+                                x: Math.random() * this.canvas.width,
+                                y: Math.random() * this.canvas.height,
+                                vx: (Math.random() - 0.5) * 0.5,
+                                vy: (Math.random() - 0.5) * 0.5,
+                                id: i,
+                                weight: 0.5 + Math.random() * 1.5,
+                                mass: [],
+                                targetX: 0,
+                                targetY: 0
+                            };
+                            this.seeds.push(seed);
+                            this.centroids.push({ x: seed.x, y: seed.y, count: 0 });
+                        }
+                        this.cells = [];
+                    }.bind(this)
+                };
+            }
+
+            createMazePattern() {
+                return {
+                    grid: [],
+                    gridSizeX: 25,
+                    gridSizeY: 20,
+                    walker: null,
+                    stack: [],
+                    currentPath: [],
+                    unvisitedCells: [],
+                    algorithm: 'wilson',
+                    organicGrowthCenters: [],
+                    wallDecay: 1.0,
+                    init: function() {
+                        const complexity = Math.max(15, Math.min(40, Math.floor(this.parameters.complexity / 4)));
+                        this.gridSizeX = Math.floor(complexity * (this.canvas.width / this.canvas.height));
+                        this.gridSizeY = complexity;
+                        
+                        this.grid = [];
+                        this.stack = [];
+                        this.currentPath = [];
+                        this.unvisitedCells = [];
+                        this.organicGrowthCenters = [];
+                        this.wallDecay = 1.0;
+                        
+                        for (let y = 0; y < this.gridSizeY; y++) {
+                            this.grid[y] = [];
+                            for (let x = 0; x < this.gridSizeX; x++) {
+                                const cell = {
+                                    walls: { top: true, right: true, bottom: true, left: true },
+                                    visited: false,
+                                    x: x,
+                                    y: y,
+                                    inPath: false,
+                                    pathDirection: null,
+                                    wallStrength: { top: 1, right: 1, bottom: 1, left: 1 },
+                                    growthPotential: Math.random()
+                                };
+                                this.grid[y][x] = cell;
+                                this.unvisitedCells.push(cell);
+                            }
+                        }
+                        
+                        this.algorithm = Math.random() < 0.5 ? 'wilson' : 'organic';
+                        
+                        if (this.algorithm === 'wilson') {
+                            const startIdx = Math.floor(Math.random() * this.unvisitedCells.length);
+                            const startCell = this.unvisitedCells.splice(startIdx, 1)[0];
+                            startCell.visited = true;
+                            
+                            if (this.unvisitedCells.length > 0) {
+                                const walkerIdx = Math.floor(Math.random() * this.unvisitedCells.length);
+                                this.walker = { 
+                                    x: this.unvisitedCells[walkerIdx].x, 
+                                    y: this.unvisitedCells[walkerIdx].y 
+                                };
+                            }
+                        } else {
+                            const numCenters = Math.max(3, Math.floor(this.parameters.complexity / 20));
+                            for (let i = 0; i < numCenters; i++) {
+                                const cx = Math.floor(Math.random() * this.gridSizeX);
+                                const cy = Math.floor(Math.random() * this.gridSizeY);
+                                this.organicGrowthCenters.push({ x: cx, y: cy, strength: Math.random() });
+                                this.grid[cy][cx].visited = true;
+                            }
+                        }
+                    }.bind(this)
+                };
+            }
+
+            createLSystemPattern() {
+                return {
+                    systems: [],
+                    rulesets: [
+                        {
+                            axiom: 'F',
+                            rules: { 'F': 'FF+[+F-F-F]-[-F+F+F]' },
+                            angle: 25,
+                            length: 8
+                        },
+                        {
+                            axiom: 'X',
+                            rules: { 'X': 'F+[[X]-X]-F[-FX]+X', 'F': 'FF' },
+                            angle: 20,
+                            length: 6
+                        },
+                        {
+                            axiom: 'F',
+                            rules: { 'F': 'F[+F]F[-F]F' },
+                            angle: 30,
+                            length: 10
+                        }
+                    ],
+                    init: function() {
+                        this.systems = [];
+                        const numSystems = Math.max(2, Math.floor(this.parameters.complexity / 30));
+                        
+                        for (let i = 0; i < numSystems; i++) {
+                            const ruleset = this.rulesets[Math.floor(Math.random() * this.rulesets.length)];
+                            const system = {
+                                x: Math.random() * this.canvas.width,
+                                y: this.canvas.height * (0.5 + Math.random() * 0.5),
+                                ruleset: ruleset,
+                                string: ruleset.axiom,
+                                generation: 0,
+                                branches: [],
+                                windForce: 0,
+                                growthPhase: Math.random() * Math.PI * 2
+                            };
+                            
+                            // Evolve a few generations
+                            for (let gen = 0; gen < 3; gen++) {
+                                let newString = '';
+                                for (let char of system.string) {
+                                    newString += system.ruleset.rules[char] || char;
+                                }
+                                system.string = newString;
+                                system.generation++;
+                            }
+                            
+                            system.branches = this.parseLSystem(system);
+                            this.systems.push(system);
+                        }
+                    }.bind(this),
+                    
+                    parseLSystem: function(system) {
+                        const branches = [];
+                        const stack = [];
+                        let x = system.x;
+                        let y = system.y;
+                        let angle = -90;
+                        let depth = 0;
+                        
+                        for (let char of system.string) {
+                            switch(char) {
+                                case 'F':
+                                    const len = system.ruleset.length * (1 - depth * 0.1);
+                                    const rad = (angle + system.windForce * depth * 5) * Math.PI / 180;
+                                    const newX = x + len * Math.cos(rad);
+                                    const newY = y + len * Math.sin(rad);
+                                    
+                                    branches.push({
+                                        x1: x, y1: y,
+                                        x2: newX, y2: newY,
+                                        depth: depth,
+                                        thickness: Math.max(0.5, 3 - depth * 0.3)
+                                    });
+                                    
+                                    x = newX;
+                                    y = newY;
+                                    break;
+                                    
+                                case '+':
+                                    angle += system.ruleset.angle;
+                                    break;
+                                    
+                                case '-':
+                                    angle -= system.ruleset.angle;
+                                    break;
+                                    
+                                case '[':
+                                    stack.push({ x, y, angle });
+                                    depth++;
+                                    break;
+                                    
+                                case ']':
+                                    const state = stack.pop();
+                                    if (state) {
+                                        x = state.x;
+                                        y = state.y;
+                                        angle = state.angle;
+                                    }
+                                    depth = Math.max(0, depth - 1);
+                                    break;
+                            }
+                        }
+                        
+                        return branches;
+                    }.bind(this),
+                    
+                    evolve: function() {
+                        this.systems.forEach(system => {
+                            if (system.generation < 5 && system.string.length < 1000) {
+                                let newString = '';
+                                for (let char of system.string) {
+                                    newString += system.ruleset.rules[char] || char;
+                                }
+                                system.string = newString;
+                                system.generation++;
+                            }
+                        });
+                    }.bind(this)
+                };
+            }
+
+            createCirclePattern() {
+                return {
+                    circles: [],
+                    init: function() {
+                        this.circles = [];
+                        const numCircles = Math.max(10, this.parameters.complexity / 2);
+                        for (let i = 0; i < numCircles; i++) {
+                            this.circles.push({
+                                x: Math.random() * this.canvas.width,
+                                y: Math.random() * this.canvas.height,
+                                radius: Math.random() * 30 + 10,
+                                growth: Math.random() * Math.PI * 2,
+                                targetRadius: Math.random() * 30 + 10,
+                                vx: (Math.random() - 0.5) * 0.5,
+                                vy: (Math.random() - 0.5) * 0.5
+                            });
+                        }
+                    }.bind(this)
+                };
+            }
+
+            update(deltaTime) {
+                this.time += deltaTime * this.parameters.speed;
+                
+                // Clear canvas with fade effect
+                this.ctx.fillStyle = `rgba(0, 0, 0, ${1 - this.parameters.fade})`;
+                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                // Update and render pattern
+                switch(this.pattern) {
+                    case 'flowfield':
+                        this.updateFlowField();
+                        break;
+                    case 'waves':
+                        this.updateWaves();
+                        break;
+                    case 'growth':
+                        this.updateGrowth();
+                        break;
+                    case 'truchet':
+                        this.updateTruchet();
+                        break;
+                    case 'reaction':
+                        this.updateReaction();
+                        break;
+                    case 'voronoi':
+                        this.updateVoronoi();
+                        break;
+                    case 'maze':
+                        this.updateMaze();
+                        break;
+                    case 'lsystem':
+                        this.updateLSystem();
+                        break;
+                    case 'circles':
+                        this.updateCircles();
+                        break;
+                }
+                
+                // Update thumbnail
+                this.updateThumbnail();
+            }
+
+            updateFlowField() {
+                const pattern = this.patternInstance;
+                const { speed, motionX, motionY, lineWeight } = this.parameters;
+                
+                pattern.particles.forEach((particle, i) => {
+                    const noiseScale = 0.005;
+                    const angle = this.perlinNoise.get(
+                        particle.x * noiseScale + motionX * 0.1,
+                        particle.y * noiseScale + motionY * 0.1,
+                        this.time * 0.0001
+                    ) * Math.PI * 4;
+                    
+                    particle.vx += Math.cos(angle) * 0.1 * speed;
+                    particle.vy += Math.sin(angle) * 0.1 * speed;
+                    
+                    particle.vx *= 0.98;
+                    particle.vy *= 0.98;
+                    
+                    particle.x += particle.vx;
+                    particle.y += particle.vy;
+                    
+                    if (particle.x < 0) particle.x = this.canvas.width;
+                    if (particle.x > this.canvas.width) particle.x = 0;
+                    if (particle.y < 0) particle.y = this.canvas.height;
+                    if (particle.y > this.canvas.height) particle.y = 0;
+                    
+                    particle.age++;
+                    if (particle.age > particle.maxAge) {
+                        particle.x = Math.random() * this.canvas.width;
+                        particle.y = Math.random() * this.canvas.height;
+                        particle.age = 0;
+                        particle.vx = 0;
+                        particle.vy = 0;
+                    }
+                    
+                    const progress = i / pattern.particles.length;
+                    const ageProgress = particle.age / particle.maxAge;
+                    const color = interpolateColor(
+                        this.parameters.colors.primary,
+                        this.parameters.colors.secondary,
+                        this.parameters.colors.accent,
+                        progress
+                    );
+                    
+                    const opacity = Math.floor((1 - ageProgress * 0.7) * 255).toString(16).padStart(2, '0');
+                    this.ctx.strokeStyle = color + opacity;
+                    this.ctx.lineWidth = lineWeight * (1 - ageProgress * 0.5);
+                    
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(particle.x - particle.vx * 5, particle.y - particle.vy * 5);
+                    this.ctx.lineTo(particle.x, particle.y);
+                    this.ctx.stroke();
+                });
+            }
+
+            updateWaves() {
+                const pattern = this.patternInstance;
+                const { speed, motionX, motionY, lineWeight } = this.parameters;
+                
+                pattern.sources.forEach((source, idx) => {
+                    source.x += motionX * 0.5;
+                    source.y += motionY * 0.5;
+                    
+                    if (source.x < 0) source.x = this.canvas.width;
+                    if (source.x > this.canvas.width) source.x = 0;
+                    if (source.y < 0) source.y = this.canvas.height;
+                    if (source.y > this.canvas.height) source.y = 0;
+                });
+                
+                const gridSize = 15;
+                const cols = Math.ceil(this.canvas.width / gridSize);
+                const rows = Math.ceil(this.canvas.height / gridSize);
+                
+                for (let y = 0; y < rows; y++) {
+                    for (let x = 0; x < cols; x++) {
+                        const px = x * gridSize;
+                        const py = y * gridSize;
+                        
+                        let totalWave = 0;
+                        pattern.sources.forEach(source => {
+                            const dx = px - source.x;
+                            const dy = py - source.y;
+                            const distance = Math.sqrt(dx * dx + dy * dy);
+                            const wave = Math.sin(distance * source.frequency - this.time * 0.002 * speed + source.phase) * source.amplitude;
+                            totalWave += wave / (1 + distance * 0.01);
+                        });
+                        
+                        const intensity = Math.abs(totalWave) / (pattern.sources.length * 30);
+                        const progress = (x + y) / (cols + rows);
+                        
+                        if (intensity > 0.1) {
+                            const color = interpolateColor(
+                                this.parameters.colors.primary,
+                                this.parameters.colors.secondary,
+                                this.parameters.colors.accent,
+                                progress
+                            );
+                            
+                            const opacity = Math.floor(intensity * 255).toString(16).padStart(2, '0');
+                            this.ctx.strokeStyle = color + opacity;
+                            this.ctx.lineWidth = lineWeight * intensity;
+                            
+                            const angle = Math.atan2(totalWave, 20);
+                            const length = gridSize * 0.8;
+                            
+                            this.ctx.beginPath();
+                            this.ctx.moveTo(px, py);
+                            this.ctx.lineTo(
+                                px + Math.cos(angle) * length,
+                                py + Math.sin(angle) * length
+                            );
+                            this.ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            updateGrowth() {
+                const pattern = this.patternInstance;
+                const { speed, motionX, motionY, lineWeight } = this.parameters;
+                
+                pattern.nodes.forEach(node => {
+                    const shape = pattern.shapes[node.shapeId];
+                    const shapeCenter = shape.nodes.reduce((acc, n) => ({
+                        x: acc.x + n.x / shape.nodes.length,
+                        y: acc.y + n.y / shape.nodes.length
+                    }), { x: 0, y: 0 });
+                    
+                    const distFromCenter = Math.sqrt(
+                        Math.pow(node.x - shapeCenter.x, 2) + 
+                        Math.pow(node.y - shapeCenter.y, 2)
+                    );
+                    
+                    const growthForce = 0.02 * speed;
+                    const dx = node.x - shapeCenter.x;
+                    const dy = node.y - shapeCenter.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+                    
+                    node.vx += (dx / dist) * growthForce;
+                    node.vy += (dy / dist) * growthForce;
+                    
+                    shape.nodes.forEach(other => {
+                        if (other !== node) {
+                            const dx = other.x - node.x;
+                            const dy = other.y - node.y;
+                            const dist = Math.sqrt(dx * dx + dy * dy);
+                            
+                            if (dist < 50 && dist > 0) {
+                                const force = (50 - dist) * 0.001;
+                                node.vx -= (dx / dist) * force;
+                                node.vy -= (dy / dist) * force;
+                            }
+                        }
+                    });
+                    
+                    node.vx += motionX * 0.01;
+                    node.vy += motionY * 0.01;
+                    
+                    node.vx *= 0.95;
+                    node.vy *= 0.95;
+                    
+                    node.x += node.vx;
+                    node.y += node.vy;
+                    
+                    const margin = 50;
+                    if (node.x < margin) node.vx += 0.5;
+                    if (node.x > this.canvas.width - margin) node.vx -= 0.5;
+                    if (node.y < margin) node.vy += 0.5;
+                    if (node.y > this.canvas.height - margin) node.vy -= 0.5;
+                });
+                
+                pattern.shapes.forEach((shape, shapeIndex) => {
+                    if (shape.nodes.length > 15 && Math.random() < 0.01 * speed) {
+                        const idx = Math.floor(Math.random() * shape.nodes.length);
+                        const node1 = shape.nodes[idx];
+                        const node2 = shape.nodes[(idx + 1) % shape.nodes.length];
+                        
+                        const newNode = {
+                            x: (node1.x + node2.x) / 2 + (Math.random() - 0.5) * 10,
+                            y: (node1.y + node2.y) / 2 + (Math.random() - 0.5) * 10,
+                            vx: 0,
+                            vy: 0,
+                            shapeId: shapeIndex
+                        };
+                        
+                        shape.nodes.splice(idx + 1, 0, newNode);
+                        pattern.nodes.push(newNode);
+                    }
+                    
+                    if (shape.nodes.length > 2) {
+                        this.ctx.beginPath();
+                        shape.nodes.forEach((node, i) => {
+                            if (i === 0) {
+                                this.ctx.moveTo(node.x, node.y);
+                            } else {
+                                this.ctx.lineTo(node.x, node.y);
+                            }
+                        });
+                        this.ctx.closePath();
+                        
+                        const progress = shapeIndex / pattern.shapes.length;
+                        const color = interpolateColor(
+                            this.parameters.colors.primary,
+                            this.parameters.colors.secondary,
+                            this.parameters.colors.accent,
+                            progress
+                        );
+                        
+                        this.ctx.strokeStyle = color;
+                        this.ctx.lineWidth = lineWeight * (1 + shapeIndex * 0.2);
+                        this.ctx.stroke();
+                        
+                        pattern.shapes.forEach((otherShape, otherIndex) => {
+                            if (otherIndex !== shapeIndex) {
+                                shape.nodes.forEach(node => {
+                                    otherShape.nodes.forEach(otherNode => {
+                                        const dx = otherNode.x - node.x;
+                                        const dy = otherNode.y - node.y;
+                                        const dist = Math.sqrt(dx * dx + dy * dy);
+                                        
+                                        if (dist < 80 && Math.random() < 0.01) {
+                                            this.ctx.strokeStyle = color + '22';
+                                            this.ctx.lineWidth = lineWeight * 0.3;
+                                            this.ctx.beginPath();
+                                            this.ctx.moveTo(node.x, node.y);
+                                            this.ctx.lineTo(otherNode.x, otherNode.y);
+                                            this.ctx.stroke();
+                                        }
+                                    });
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+
+            updateTruchet() {
+                const pattern = this.patternInstance;
+                const { speed, motionX, motionY, lineWeight } = this.parameters;
+                
+                if (Math.random() < 0.02 * speed) {
+                    const randomX = Math.floor(Math.random() * pattern.grid[0].length);
+                    const randomY = Math.floor(Math.random() * pattern.grid.length);
+                    const cell = pattern.grid[randomY][randomX];
+                    cell.rotation = (cell.rotation + 90) % 360;
+                    cell.type = (cell.type + 1) % 3;
+                }
+                
+                const gridCols = Math.ceil(this.canvas.width / pattern.gridSize);
+                const gridRows = Math.ceil(this.canvas.height / pattern.gridSize);
+                
+                for (let y = 0; y < gridRows && y < pattern.grid.length; y++) {
+                    for (let x = 0; x < gridCols && x < pattern.grid[y].length; x++) {
+                        const cell = pattern.grid[y][x];
+                        const px = x * pattern.gridSize;
+                        const py = y * pattern.gridSize;
+                        const cx = px + pattern.gridSize / 2;
+                        const cy = py + pattern.gridSize / 2;
+                        
+                        const progress = (x + y) / (gridCols + gridRows);
+                        const animPhase = this.time * 0.001 * speed + cell.animationOffset;
+                        const pulseScale = 1 + Math.sin(animPhase) * 0.1;
+                        
+                        const color = interpolateColor(
+                            this.parameters.colors.primary,
+                            this.parameters.colors.secondary,
+                            this.parameters.colors.accent,
+                            progress
+                        );
+                        
+                        this.ctx.save();
+                        this.ctx.translate(cx, cy);
+                        this.ctx.rotate((cell.rotation + Math.sin(animPhase) * 5) * Math.PI / 180);
+                        this.ctx.scale(pulseScale, pulseScale);
+                        
+                        this.ctx.strokeStyle = color;
+                        this.ctx.lineWidth = lineWeight;
+                        
+                        const s = pattern.gridSize / 2;
+                        
+                        switch(cell.type) {
+                            case 0:
+                                this.ctx.beginPath();
+                                this.ctx.arc(-s, -s, s * 0.7, 0, Math.PI / 2);
+                                this.ctx.stroke();
+                                this.ctx.beginPath();
+                                this.ctx.arc(s, s, s * 0.7, Math.PI, Math.PI * 1.5);
+                                this.ctx.stroke();
+                                break;
+                                
+                            case 1:
+                                this.ctx.beginPath();
+                                this.ctx.moveTo(-s, 0);
+                                this.ctx.lineTo(s, 0);
+                                this.ctx.stroke();
+                                this.ctx.beginPath();
+                                this.ctx.moveTo(0, -s);
+                                this.ctx.lineTo(0, s);
+                                this.ctx.stroke();
+                                break;
+                                
+                            case 2:
+                                this.ctx.beginPath();
+                                this.ctx.arc(0, 0, s * 0.5, 0, Math.PI * 2);
+                                this.ctx.stroke();
+                                
+                                const fadeOpacity = Math.floor(Math.abs(Math.sin(animPhase)) * 100).toString(16).padStart(2, '0');
+                                this.ctx.strokeStyle = color + fadeOpacity;
+                                this.ctx.beginPath();
+                                this.ctx.arc(0, 0, s * 0.8, 0, Math.PI * 2);
+                                this.ctx.stroke();
+                                break;
+                        }
+                        
+                        this.ctx.restore();
+                    }
+                }
+            }
+
+            updateReaction() {
+                const pattern = this.patternInstance;
+                const { speed, motionX, motionY, lineWeight } = this.parameters;
+                
+                const dA = 1.0;
+                const dB = 0.5;
+                const feed = 0.055 + motionX * 0.01;
+                const kill = 0.062 + motionY * 0.01;
+                
+                for (let i = 0; i < Math.ceil(speed * 5); i++) {
+                    for (let y = 1; y < pattern.gridSizeY - 1; y++) {
+                        for (let x = 1; x < pattern.gridSizeX - 1; x++) {
+                            const cell = pattern.grid[y][x];
+                            const u = cell.u;
+                            const v = cell.v;
+                            
+                            let sumU = 0, sumV = 0;
+                            const neighbors = [
+                                [-1, -1, 0.05], [0, -1, 0.2], [1, -1, 0.05],
+                                [-1, 0, 0.2], [1, 0, 0.2],
+                                [-1, 1, 0.05], [0, 1, 0.2], [1, 1, 0.05]
+                            ];
+                            
+                            neighbors.forEach(([dx, dy, weight]) => {
+                                const neighbor = pattern.grid[y + dy][x + dx];
+                                sumU += neighbor.u * weight;
+                                sumV += neighbor.v * weight;
+                            });
+                            
+                            const laplacianU = sumU - u;
+                            const laplacianV = sumV - v;
+                            
+                            const reaction = u * v * v;
+                            
+                            cell.newU = u + (dA * laplacianU - reaction + feed * (1 - u)) * 0.1;
+                            cell.newV = v + (dB * laplacianV + reaction - (kill + feed) * v) * 0.1;
+                            
+                            cell.newU = Math.max(0, Math.min(1, cell.newU));
+                            cell.newV = Math.max(0, Math.min(1, cell.newV));
+                        }
+                    }
+                    
+                    for (let y = 1; y < pattern.gridSizeY - 1; y++) {
+                        for (let x = 1; x < pattern.gridSizeX - 1; x++) {
+                            const cell = pattern.grid[y][x];
+                            cell.u = cell.newU;
+                            cell.v = cell.newV;
+                        }
+                    }
+                }
+                
+                const cellSizeX = this.canvas.width / pattern.gridSizeX;
+                const cellSizeY = this.canvas.height / pattern.gridSizeY;
+                
+                pattern.grid.forEach((row, y) => {
+                    row.forEach((cell, x) => {
+                        const concentration = cell.v;
+                        
+                        if (concentration > 0.1) {
+                            const px = x * cellSizeX;
+                            const py = y * cellSizeY;
+                            
+                            const progress = concentration;
+                            const color = interpolateColor(
+                                this.parameters.colors.primary,
+                                this.parameters.colors.secondary,
+                                this.parameters.colors.accent,
+                                progress
+                            );
+                            
+                            this.ctx.fillStyle = color;
+                            this.ctx.fillRect(px, py, cellSizeX, cellSizeY);
+                        }
+                    });
+                });
+            }
+
+            updateVoronoi() {
+                const pattern = this.patternInstance;
+                const { speed, motionX, motionY, lineWeight } = this.parameters;
+                
+                pattern.centroids.forEach(centroid => {
+                    centroid.x = 0;
+                    centroid.y = 0;
+                    centroid.count = 0;
+                });
+                
+                const cellData = new Array(this.canvas.width * this.canvas.height);
+                
+                for (let y = 0; y < this.canvas.height; y += 2) {
+                    for (let x = 0; x < this.canvas.width; x += 2) {
+                        let minDist = Infinity;
+                        let closestSeed = null;
+                        
+                        pattern.seeds.forEach(seed => {
+                            const dx = x - seed.x;
+                            const dy = y - seed.y;
+                            const dist = Math.sqrt(dx * dx + dy * dy) / seed.weight;
+                            
+                            if (dist < minDist) {
+                                minDist = dist;
+                                closestSeed = seed;
+                            }
+                        });
+                        
+                        if (closestSeed) {
+                            const idx = y * this.canvas.width + x;
+                            cellData[idx] = closestSeed.id;
+                            
+                            pattern.centroids[closestSeed.id].x += x;
+                            pattern.centroids[closestSeed.id].y += y;
+                            pattern.centroids[closestSeed.id].count++;
+                        }
+                    }
+                }
+                
+                pattern.seeds.forEach((seed, i) => {
+                    const centroid = pattern.centroids[i];
+                    if (centroid.count > 0) {
+                        seed.targetX = centroid.x / centroid.count;
+                        seed.targetY = centroid.y / centroid.count;
+                        
+                        const dx = seed.targetX - seed.x;
+                        const dy = seed.targetY - seed.y;
+                        
+                        seed.vx = seed.vx * pattern.momentum + dx * pattern.relaxationForce * speed;
+                        seed.vy = seed.vy * pattern.momentum + dy * pattern.relaxationForce * speed;
+                    }
+                    
+                    seed.vx += motionX * 0.1;
+                    seed.vy += motionY * 0.1;
+                    
+                    seed.vx *= 0.9;
+                    seed.vy *= 0.9;
+                    
+                    seed.x += seed.vx;
+                    seed.y += seed.vy;
+                    
+                    seed.x = Math.max(50, Math.min(this.canvas.width - 50, seed.x));
+                    seed.y = Math.max(50, Math.min(this.canvas.height - 50, seed.y));
+                });
+                
+                for (let y = 0; y < this.canvas.height - 1; y += 2) {
+                    for (let x = 0; x < this.canvas.width - 1; x += 2) {
+                        const idx = y * this.canvas.width + x;
+                        const currentCell = cellData[idx];
+                        
+                        if (currentCell !== undefined) {
+                            const rightCell = cellData[idx + 2];
+                            const bottomCell = cellData[(y + 2) * this.canvas.width + x];
+                            
+                            const progress = currentCell / pattern.seeds.length;
+                            const color = interpolateColor(
+                                this.parameters.colors.primary,
+                                this.parameters.colors.secondary,
+                                this.parameters.colors.accent,
+                                progress
+                            );
+                            
+                            this.ctx.strokeStyle = color;
+                            this.ctx.lineWidth = lineWeight;
+                            
+                            if (rightCell !== undefined && rightCell !== currentCell) {
+                                this.ctx.beginPath();
+                                this.ctx.moveTo(x + 1, y);
+                                this.ctx.lineTo(x + 1, y + 2);
+                                this.ctx.stroke();
+                            }
+                            
+                            if (bottomCell !== undefined && bottomCell !== currentCell) {
+                                this.ctx.beginPath();
+                                this.ctx.moveTo(x, y + 1);
+                                this.ctx.lineTo(x + 2, y + 1);
+                                this.ctx.stroke();
+                            }
+                        }
+                    }
+                }
+                
+                pattern.seeds.forEach((seed, i) => {
+                    const progress = i / pattern.seeds.length;
+                    const color = interpolateColor(
+                        this.parameters.colors.primary,
+                        this.parameters.colors.secondary,
+                        this.parameters.colors.accent,
+                        progress
+                    );
+                    
+                    this.ctx.fillStyle = color + '44';
+                    this.ctx.beginPath();
+                    this.ctx.arc(seed.x, seed.y, 3 * seed.weight, 0, Math.PI * 2);
+                    this.ctx.fill();
+                });
+            }
+
+            updateMaze() {
+                const pattern = this.patternInstance;
+                const { speed, motionX, motionY, lineWeight } = this.parameters;
+                const cellSizeX = this.canvas.width / pattern.gridSizeX;
+                const cellSizeY = this.canvas.height / pattern.gridSizeY;
+                
+                if (pattern.algorithm === 'wilson') {
+                    if (pattern.walker && pattern.unvisitedCells.length > 0 && Math.random() < 0.3 * speed) {
+                        const { x, y } = pattern.walker;
+                        const cell = pattern.grid[y][x];
+                        
+                        if (!cell.visited) {
+                            cell.inPath = true;
+                            
+                            const directions = [[0, -1, 'top', 'bottom'], [1, 0, 'right', 'left'], 
+                                              [0, 1, 'bottom', 'top'], [-1, 0, 'left', 'right']];
+                            const validDirs = [];
+                            
+                            directions.forEach(([dx, dy, fromWall, toWall], idx) => {
+                                const nx = x + dx;
+                                const ny = y + dy;
+                                if (nx >= 0 && nx < pattern.gridSizeX && ny >= 0 && ny < pattern.gridSizeY) {
+                                    validDirs.push({ nx, ny, fromWall, toWall, idx });
+                                }
+                            });
+                            
+                            const choice = validDirs[Math.floor(Math.random() * validDirs.length)];
+                            const nextCell = pattern.grid[choice.ny][choice.nx];
+                            
+                            cell.pathDirection = choice;
+                            
+                            if (nextCell.visited) {
+                                let current = { x, y };
+                                
+                                while (current) {
+                                    const currentCell = pattern.grid[current.y][current.x];
+                                    currentCell.visited = true;
+                                    currentCell.inPath = false;
+                                    
+                                    const idx = pattern.unvisitedCells.findIndex(c => c.x === current.x && c.y === current.y);
+                                    if (idx >= 0) pattern.unvisitedCells.splice(idx, 1);
+                                    
+                                    if (currentCell.pathDirection) {
+                                        const dir = currentCell.pathDirection;
+                                        const neighbor = pattern.grid[dir.ny][dir.nx];
+                                        
+                                        currentCell.walls[dir.fromWall] = false;
+                                        neighbor.walls[dir.toWall] = false;
+                                        
+                                        current = { x: dir.nx, y: dir.ny };
+                                        if (neighbor.visited) current = null;
+                                    } else {
+                                        current = null;
+                                    }
+                                }
+                                
+                                pattern.grid.forEach(row => {
+                                    row.forEach(cell => {
+                                        cell.inPath = false;
+                                        cell.pathDirection = null;
+                                    });
+                                });
+                                
+                                if (pattern.unvisitedCells.length > 0) {
+                                    const newWalker = pattern.unvisitedCells[Math.floor(Math.random() * pattern.unvisitedCells.length)];
+                                    pattern.walker = { x: newWalker.x, y: newWalker.y };
+                                }
+                            } else if (nextCell.inPath) {
+                                let current = { x, y };
+                                
+                                while (current.x !== choice.nx || current.y !== choice.ny) {
+                                    const currentCell = pattern.grid[current.y][current.x];
+                                    currentCell.inPath = false;
+                                    const dir = currentCell.pathDirection;
+                                    currentCell.pathDirection = null;
+                                    
+                                    if (dir) {
+                                        current = { x: dir.nx, y: dir.ny };
+                                    } else {
+                                        break;
+                                    }
+                                }
+                                
+                                pattern.walker = { x: choice.nx, y: choice.ny };
+                            } else {
+                                pattern.walker = { x: choice.nx, y: choice.ny };
+                            }
+                        }
+                    }
+                } else {
+                    if (Math.random() < 0.2 * speed) {
+                        pattern.organicGrowthCenters.forEach(center => {
+                            const cx = center.x;
+                            const cy = center.y;
+                            
+                            const neighbors = [];
+                            [[0, -1], [1, 0], [0, 1], [-1, 0]].forEach(([dx, dy]) => {
+                                const nx = cx + dx;
+                                const ny = cy + dy;
+                                
+                                if (nx >= 0 && nx < pattern.gridSizeX && ny >= 0 && ny < pattern.gridSizeY) {
+                                    const neighbor = pattern.grid[ny][nx];
+                                    if (!neighbor.visited && neighbor.growthPotential > 0.3) {
+                                        neighbors.push({ x: nx, y: ny, dx, dy });
+                                    }
+                                }
+                            });
+                            
+                            if (neighbors.length > 0) {
+                                const selected = neighbors[Math.floor(Math.random() * neighbors.length)];
+                                const cell = pattern.grid[cy][cx];
+                                const neighbor = pattern.grid[selected.y][selected.x];
+                                
+                                const wallStrength = 0.2 + Math.random() * 0.6;
+                                
+                                if (selected.dx === 0 && selected.dy === -1) {
+                                    cell.wallStrength.top *= wallStrength;
+                                    neighbor.wallStrength.bottom *= wallStrength;
+                                } else if (selected.dx === 1 && selected.dy === 0) {
+                                    cell.wallStrength.right *= wallStrength;
+                                    neighbor.wallStrength.left *= wallStrength;
+                                } else if (selected.dx === 0 && selected.dy === 1) {
+                                    cell.wallStrength.bottom *= wallStrength;
+                                    neighbor.wallStrength.top *= wallStrength;
+                                } else if (selected.dx === -1 && selected.dy === 0) {
+                                    cell.wallStrength.left *= wallStrength;
+                                    neighbor.wallStrength.right *= wallStrength;
+                                }
+                                
+                                neighbor.visited = true;
+                                
+                                if (Math.random() < center.strength) {
+                                    center.x = selected.x;
+                                    center.y = selected.y;
+                                    center.strength *= 0.95;
+                                }
+                            }
+                        });
+                        
+                        if (Math.random() < 0.01) {
+                            const newX = Math.floor((0.5 + motionX * 0.3) * pattern.gridSizeX);
+                            const newY = Math.floor((0.5 + motionY * 0.3) * pattern.gridSizeY);
+                            if (newX >= 0 && newX < pattern.gridSizeX && newY >= 0 && newY < pattern.gridSizeY) {
+                                pattern.organicGrowthCenters.push({ x: newX, y: newY, strength: 0.8 });
+                            }
+                        }
+                    }
+                    
+                    pattern.wallDecay *= 0.999;
+                }
+                
+                pattern.grid.forEach((row, y) => {
+                    row.forEach((cell, x) => {
+                        const px = x * cellSizeX;
+                        const py = y * cellSizeY;
+                        
+                        const progress = (x + y) / (pattern.gridSizeX + pattern.gridSizeY);
+                        const color = interpolateColor(
+                            this.parameters.colors.primary,
+                            this.parameters.colors.secondary,
+                            this.parameters.colors.accent,
+                            progress
+                        );
+                        
+                        if (cell.visited) {
+                            const brightness = pattern.algorithm === 'organic' ? 
+                                cell.growthPotential * 0.1 : 0.05;
+                            this.ctx.fillStyle = color + Math.floor(brightness * 255).toString(16).padStart(2, '0');
+                            this.ctx.fillRect(px, py, cellSizeX, cellSizeY);
+                        }
+                        
+                        this.ctx.strokeStyle = color;
+                        
+                        if (cell.walls.top && cell.wallStrength.top > 0.1) {
+                            this.ctx.lineWidth = lineWeight * cell.wallStrength.top * pattern.wallDecay;
+                            this.ctx.globalAlpha = Math.min(1, cell.wallStrength.top + 0.3);
+                            this.ctx.beginPath();
+                            this.ctx.moveTo(px, py);
+                            this.ctx.lineTo(px + cellSizeX, py);
+                            this.ctx.stroke();
+                        }
+                        
+                        if (cell.walls.right && cell.wallStrength.right > 0.1) {
+                            this.ctx.lineWidth = lineWeight * cell.wallStrength.right * pattern.wallDecay;
+                            this.ctx.globalAlpha = Math.min(1, cell.wallStrength.right + 0.3);
+                            this.ctx.beginPath();
+                            this.ctx.moveTo(px + cellSizeX, py);
+                            this.ctx.lineTo(px + cellSizeX, py + cellSizeY);
+                            this.ctx.stroke();
+                        }
+                        
+                        if (cell.walls.bottom && cell.wallStrength.bottom > 0.1) {
+                            this.ctx.lineWidth = lineWeight * cell.wallStrength.bottom * pattern.wallDecay;
+                            this.ctx.globalAlpha = Math.min(1, cell.wallStrength.bottom + 0.3);
+                            this.ctx.beginPath();
+                            this.ctx.moveTo(px + cellSizeX, py + cellSizeY);
+                            this.ctx.lineTo(px, py + cellSizeY);
+                            this.ctx.stroke();
+                        }
+                        
+                        if (cell.walls.left && cell.wallStrength.left > 0.1) {
+                            this.ctx.lineWidth = lineWeight * cell.wallStrength.left * pattern.wallDecay;
+                            this.ctx.globalAlpha = Math.min(1, cell.wallStrength.left + 0.3);
+                            this.ctx.beginPath();
+                            this.ctx.moveTo(px, py + cellSizeY);
+                            this.ctx.lineTo(px, py);
+                            this.ctx.stroke();
+                        }
+                        
+                        this.ctx.globalAlpha = 1;
+                        
+                        if (pattern.walker && pattern.walker.x === x && pattern.walker.y === y) {
+                            this.ctx.fillStyle = color + '66';
+                            this.ctx.beginPath();
+                            this.ctx.arc(px + cellSizeX/2, py + cellSizeY/2, cellSizeX/4, 0, Math.PI * 2);
+                            this.ctx.fill();
+                        }
+                        
+                        if (cell.inPath) {
+                            this.ctx.fillStyle = this.parameters.colors.accent + '44';
+                            this.ctx.fillRect(px + cellSizeX/4, py + cellSizeY/4, cellSizeX/2, cellSizeY/2);
+                        }
+                        
+                        if (pattern.algorithm === 'organic') {
+                            pattern.organicGrowthCenters.forEach(center => {
+                                if (center.x === x && center.y === y) {
+                                    this.ctx.fillStyle = color + Math.floor(center.strength * 128).toString(16).padStart(2, '0');
+                                    this.ctx.beginPath();
+                                    this.ctx.arc(px + cellSizeX/2, py + cellSizeY/2, cellSizeX/3 * center.strength, 0, Math.PI * 2);
+                                    this.ctx.fill();
+                                }
+                            });
+                        }
+                    });
+                });
+            }
+
+            updateLSystem() {
+                const pattern = this.patternInstance;
+                const { speed, motionX, motionY, lineWeight } = this.parameters;
+                
+                pattern.systems.forEach(system => {
+                    system.windForce += (Math.random() - 0.5) * 0.02 * speed;
+                    system.windForce *= 0.95;
+                    system.windForce = Math.max(-0.2, Math.min(0.2, system.windForce));
+                    
+                    system.growthPhase += 0.001 * speed;
+                    
+                    system.x += motionX * 0.5;
+                    system.y += motionY * 0.3;
+                    
+                    if (system.x < 0) system.x = this.canvas.width;
+                    if (system.x > this.canvas.width) system.x = 0;
+                    if (system.y < -100) system.y = this.canvas.height + 100;
+                    if (system.y > this.canvas.height + 100) system.y = -100;
+                });
+                
+                if (Math.random() < 0.003 * speed) {
+                    pattern.evolve();
+                    pattern.systems.forEach(system => {
+                        if (system.string.length < 10000) {
+                            system.branches = pattern.parseLSystem(system);
+                        }
+                    });
+                }
+                
+                if (Math.random() < 0.001 * speed) {
+                    const randomSystem = pattern.systems[Math.floor(Math.random() * pattern.systems.length)];
+                    randomSystem.ruleset = pattern.rulesets[Math.floor(Math.random() * pattern.rulesets.length)];
+                    randomSystem.string = randomSystem.ruleset.axiom;
+                    randomSystem.generation = 0;
+                    
+                    for (let i = 0; i < 3; i++) {
+                        let newString = '';
+                        for (let char of randomSystem.string) {
+                            newString += randomSystem.ruleset.rules[char] || char;
+                        }
+                        randomSystem.string = newString;
+                    }
+                    randomSystem.branches = pattern.parseLSystem(randomSystem);
+                }
+                
+                pattern.systems.forEach(system => {
+                    system.branches = pattern.parseLSystem(system);
+                });
+                
+                pattern.systems.forEach((system, systemIndex) => {
+                    const baseColor = interpolateColor(
+                        this.parameters.colors.primary,
+                        this.parameters.colors.secondary,
+                        this.parameters.colors.accent,
+                        systemIndex / pattern.systems.length
+                    );
+                    
+                    const sortedBranches = [...system.branches].sort((a, b) => a.depth - b.depth);
+                    
+                    sortedBranches.forEach((branch, i) => {
+                        const depthFactor = Math.max(0.3, 1 - branch.depth * 0.15);
+                        const progress = i / system.branches.length;
+                        
+                        const colorShift = Math.sin(branch.y1 * 0.01 + this.time * 0.0005) * 0.1;
+                        const adjustedProgress = Math.max(0, Math.min(1, progress + colorShift));
+                        
+                        const color = interpolateColor(
+                            this.parameters.colors.primary,
+                            this.parameters.colors.secondary,
+                            this.parameters.colors.accent,
+                            adjustedProgress
+                        );
+                        
+                        const opacity = Math.floor(depthFactor * 255).toString(16).padStart(2, '0');
+                        this.ctx.strokeStyle = color + opacity;
+                        
+                        this.ctx.lineWidth = lineWeight * branch.thickness * depthFactor;
+                        
+                        const curveFactor = system.windForce * branch.depth * 10;
+                        const midX = (branch.x1 + branch.x2) / 2 + curveFactor;
+                        const midY = (branch.y1 + branch.y2) / 2;
+                        
+                        this.ctx.beginPath();
+                        this.ctx.moveTo(branch.x1, branch.y1);
+                        this.ctx.quadraticCurveTo(midX, midY, branch.x2, branch.y2);
+                        this.ctx.stroke();
+                        
+                        if (branch.depth > 2 && Math.random() < 0.1) {
+                            this.ctx.fillStyle = color + '44';
+                            this.ctx.beginPath();
+                            this.ctx.arc(branch.x2, branch.y2, lineWeight * 2, 0, Math.PI * 2);
+                            this.ctx.fill();
+                        }
+                    });
+                });
+            }
+
+            updateCircles() {
+                const pattern = this.patternInstance;
+                const { speed, motionX, motionY, lineWeight } = this.parameters;
+                
+                pattern.circles.forEach(circle => {
+                    circle.x += circle.vx * speed + motionX * 0.5;
+                    circle.y += circle.vy * speed + motionY * 0.5;
+                    
+                    if (circle.x < -circle.radius) circle.x = this.canvas.width + circle.radius;
+                    if (circle.x > this.canvas.width + circle.radius) circle.x = -circle.radius;
+                    if (circle.y < -circle.radius) circle.y = this.canvas.height + circle.radius;
+                    if (circle.y > this.canvas.height + circle.radius) circle.y = -circle.radius;
+                    
+                    circle.growth += 0.02 * speed;
+                    circle.radius = circle.targetRadius + Math.sin(circle.growth) * 5;
+                });
+                
+                pattern.circles.forEach((circle, i) => {
+                    const progress = i / pattern.circles.length;
+                    const color = interpolateColor(
+                        this.parameters.colors.primary,
+                        this.parameters.colors.secondary,
+                        this.parameters.colors.accent,
+                        progress
+                    );
+                    
+                    this.ctx.strokeStyle = color;
+                    this.ctx.lineWidth = lineWeight;
+                    this.ctx.beginPath();
+                    this.ctx.arc(circle.x, circle.y, circle.radius, 0, Math.PI * 2);
+                    this.ctx.stroke();
+                    
+                    pattern.circles.forEach((other, j) => {
+                        if (i !== j) {
+                            const dx = other.x - circle.x;
+                            const dy = other.y - circle.y;
+                            const distance = Math.sqrt(dx * dx + dy * dy);
+                            const threshold = circle.radius + other.radius + 20;
+                            
+                            if (distance < threshold) {
+                                this.ctx.strokeStyle = color + '33';
+                                this.ctx.lineWidth = lineWeight * 0.3;
+                                this.ctx.beginPath();
+                                this.ctx.moveTo(circle.x, circle.y);
+                                this.ctx.lineTo(other.x, other.y);
+                                this.ctx.stroke();
+                            }
+                        }
+                    });
+                });
+                
+                if (Math.random() < 0.001 * speed && pattern.circles.length < 100) {
+                    const newCircle = {
+                        x: Math.random() * this.canvas.width,
+                        y: Math.random() * this.canvas.height,
+                        radius: Math.random() * 20 + 5,
+                        growth: 0,
+                        targetRadius: Math.random() * 20 + 5,
+                        vx: (Math.random() - 0.5) * 0.2,
+                        vy: (Math.random() - 0.5) * 0.2
+                    };
+                    
+                    let canPlace = true;
+                    pattern.circles.forEach(existing => {
+                        const dx = existing.x - newCircle.x;
+                        const dy = existing.y - newCircle.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        if (distance < existing.radius + newCircle.radius + 10) {
+                            canPlace = false;
+                        }
+                    });
+                    
+                    if (canPlace) {
+                        pattern.circles.push(newCircle);
+                    }
+                }
+                
+                if (pattern.circles.length > 100) {
+                    pattern.circles.splice(0, 1);
+                }
+            }
+
+            updateThumbnail() {
+                const scale = 40 / Math.max(this.canvas.width, this.canvas.height);
+                this.thumbnailCtx.clearRect(0, 0, 40, 40);
+                this.thumbnailCtx.drawImage(
+                    this.canvas,
+                    0, 0, this.canvas.width, this.canvas.height,
+                    0, 0, 40, 40
+                );
+            }
+        }
+
+        // Global state
+        const appState = {
+            layers: [],
+            activeLayerId: null,
+            isAnimating: true,
+            autoEvolve: false,
+            time: 0,
+            frameCount: 0,
+            lastFrameTime: performance.now(),
+            canvasWidth: 0,
+            canvasHeight: 0,
+            masterOpacity: 1.0,
+            crossLayerSettings: {
+                syncAnimation: false,
+                paramInfluence: false
+            },
+            motion: {
+                isDragging: false,
+                x: 0,
+                y: 0
+            }
+        };
+
+        // Canvas container and other elements
+        let canvasContainer, compositeCanvas, compositeCtx;
+        let motionCanvas, motionCtx;
+        let layerIdCounter = 0;
+
+        // Initialize
+        function initializeApp() {
+            canvasContainer = document.getElementById('canvasContainer');
+            
+            // Create composite canvas
+            compositeCanvas = document.createElement('canvas');
+            compositeCanvas.id = 'compositeCanvas';
+            compositeCanvas.className = 'canvas-layer';
+            canvasContainer.appendChild(compositeCanvas);
+            compositeCtx = compositeCanvas.getContext('2d');
+            
+            motionCanvas = document.getElementById('motionCanvas');
+            motionCtx = motionCanvas.getContext('2d');
+            
+            setupCanvas();
+            setup2DControl();
+            setupSliders();
+            setupColorPickers();
+            
+            // Create initial layer
+            addLayer();
+            
+            // Start animation loop
+            animate();
+        }
+
+        // Canvas setup
+        function setupCanvas() {
+            const rect = canvasContainer.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            
+            appState.canvasWidth = rect.width;
+            appState.canvasHeight = rect.height;
+            
+            // Setup composite canvas
+            compositeCanvas.width = rect.width * dpr;
+            compositeCanvas.height = rect.height * dpr;
+            compositeCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            
+            // Setup layer canvases
+            appState.layers.forEach(layer => {
+                if (layer.canvas) {
+                    layer.canvas.width = rect.width * dpr;
+                    layer.canvas.height = rect.height * dpr;
+                    layer.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                }
+            });
+            
+            // Motion canvas setup
+            const motionRect = motionCanvas.getBoundingClientRect();
+            motionCanvas.width = motionRect.width;
+            motionCanvas.height = motionRect.height;
+        }
+
+        // Add new layer
+        function addLayer() {
+            if (appState.layers.length >= 3) {
+                alert('Maximum 3 layers allowed');
+                return;
+            }
+            
+            const layerId = layerIdCounter++;
+            const layer = new Layer(layerId, `Layer ${layerId + 1}`);
+            layer.initCanvas(appState.canvasWidth, appState.canvasHeight);
+            
+            appState.layers.push(layer);
+            appState.activeLayerId = layerId;
+            
+            canvasContainer.appendChild(layer.canvas);
+            
+            updateLayerUI();
+            setupCanvas();
+        }
+
+        // Remove active layer
+        function removeActiveLayer() {
+            if (appState.layers.length <= 1) {
+                alert('Must have at least one layer');
+                return;
+            }
+            
+            const activeIndex = appState.layers.findIndex(l => l.id === appState.activeLayerId);
+            if (activeIndex >= 0) {
+                const layer = appState.layers[activeIndex];
+                canvasContainer.removeChild(layer.canvas);
+                appState.layers.splice(activeIndex, 1);
+                
+                if (appState.layers.length > 0) {
+                    appState.activeLayerId = appState.layers[0].id;
+                }
+                
+                updateLayerUI();
+            }
+        }
+
+        // Update layer UI
+        function updateLayerUI() {
+            const layerList = document.getElementById('layerList');
+            layerList.innerHTML = '';
+            
+            // Reverse order for top-to-bottom display
+            const reversedLayers = [...appState.layers].reverse();
+            
+            reversedLayers.forEach((layer, index) => {
+                const layerItem = document.createElement('div');
+                layerItem.className = 'layer-item' + (layer.id === appState.activeLayerId ? ' active' : '');
+                layerItem.setAttribute('data-layer-id', layer.id);
+                
+                layerItem.innerHTML = `
+                    <div class="layer-header">
+                        <div class="layer-thumbnail">
+                            <canvas id="thumbnail-${layer.id}"></canvas>
+                        </div>
+                        <div class="layer-info">
+                            <div class="layer-name">${layer.name}</div>
+                            <div class="layer-pattern">${layer.pattern}</div>
+                        </div>
+                        <button class="layer-visibility" onclick="toggleLayerVisibility(${layer.id})">
+                            ${layer.visible ? '👁️' : '🙈'}
+                        </button>
+                    </div>
+                    <div class="layer-settings">
+                        <select class="blend-mode-select" onchange="updateLayerBlendMode(${layer.id}, this.value)">
+                            <option value="normal" ${layer.blendMode === 'normal' ? 'selected' : ''}>Normal</option>
+                            <option value="screen" ${layer.blendMode === 'screen' ? 'selected' : ''}>Screen</option>
+                            <option value="multiply" ${layer.blendMode === 'multiply' ? 'selected' : ''}>Multiply</option>
+                            <option value="overlay" ${layer.blendMode === 'overlay' ? 'selected' : ''}>Overlay</option>
+                            <option value="soft-light" ${layer.blendMode === 'soft-light' ? 'selected' : ''}>Soft Light</option>
+                            <option value="difference" ${layer.blendMode === 'difference' ? 'selected' : ''}>Difference</option>
+                        </select>
+                        <div class="opacity-container">
+                            <span class="opacity-label">Opacity</span>
+                            <input type="range" class="opacity-slider" min="0" max="100" value="${layer.opacity}" 
+                                   oninput="updateLayerOpacity(${layer.id}, this.value)">
+                            <span class="opacity-value">${layer.opacity}%</span>
+                        </div>
+                    </div>
+                `;
+                
+                layerItem.onclick = (e) => {
+                    if (!e.target.closest('button') && !e.target.closest('select') && !e.target.closest('input')) {
+                        selectLayer(layer.id);
+                    }
+                };
+                
+                layerList.appendChild(layerItem);
+                
+                // Setup thumbnail
+                const thumbnailCanvas = document.getElementById(`thumbnail-${layer.id}`);
+                if (thumbnailCanvas && layer.thumbnailCanvas) {
+                    thumbnailCanvas.width = 40;
+                    thumbnailCanvas.height = 40;
+                    const ctx = thumbnailCanvas.getContext('2d');
+                    ctx.drawImage(layer.thumbnailCanvas, 0, 0);
+                }
+            });
+            
+            // Make layer list sortable
+            makeSortable();
+        }
+
+        // Make layers sortable
+        function makeSortable() {
+            const layerList = document.getElementById('layerList');
+            let draggedElement = null;
+            
+            layerList.addEventListener('dragstart', (e) => {
+                draggedElement = e.target.closest('.layer-item');
+                if (draggedElement) {
+                    draggedElement.classList.add('dragging');
+                    e.dataTransfer.effectAllowed = 'move';
+                }
+            });
+            
+            layerList.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                const afterElement = getDragAfterElement(layerList, e.clientY);
+                if (afterElement == null) {
+                    layerList.appendChild(draggedElement);
+                } else {
+                    layerList.insertBefore(draggedElement, afterElement);
+                }
+            });
+            
+            layerList.addEventListener('dragend', (e) => {
+                if (draggedElement) {
+                    draggedElement.classList.remove('dragging');
+                    reorderLayers();
+                }
+            });
+        }
+
+        function getDragAfterElement(container, y) {
+            const draggableElements = [...container.querySelectorAll('.layer-item:not(.dragging)')];
+            
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = y - box.top - box.height / 2;
+                
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+
+        function reorderLayers() {
+            const layerItems = document.querySelectorAll('.layer-item');
+            const newOrder = [];
+            
+            // Build new order from bottom to top (reversed)
+            for (let i = layerItems.length - 1; i >= 0; i--) {
+                const layerId = parseInt(layerItems[i].getAttribute('data-layer-id'));
+                const layer = appState.layers.find(l => l.id === layerId);
+                if (layer) {
+                    newOrder.push(layer);
+                }
+            }
+            
+            appState.layers = newOrder;
+        }
+
+        // Select layer
+        function selectLayer(layerId) {
+            appState.activeLayerId = layerId;
+            updateLayerUI();
+            
+            // Update controls to reflect active layer
+            const activeLayer = appState.layers.find(l => l.id === layerId);
+            if (activeLayer) {
+                updateUIFromLayer(activeLayer);
+            }
+        }
+
+        // Update UI from layer parameters
+        function updateUIFromLayer(layer) {
+            document.getElementById('speedSlider').value = layer.parameters.speed;
+            document.getElementById('speedValue').textContent = layer.parameters.speed.toFixed(1);
+            
+            document.getElementById('complexitySlider').value = layer.parameters.complexity;
+            document.getElementById('complexityValue').textContent = layer.parameters.complexity;
+            
+            document.getElementById('lineWeightSlider').value = layer.parameters.lineWeight;
+            document.getElementById('lineWeightValue').textContent = layer.parameters.lineWeight.toFixed(1);
+            
+            document.getElementById('fadeSlider').value = layer.parameters.fade;
+            document.getElementById('fadeValue').textContent = layer.parameters.fade.toFixed(2);
+            
+            document.getElementById('primaryColor').value = layer.parameters.colors.primary;
+            document.getElementById('secondaryColor').value = layer.parameters.colors.secondary;
+            document.getElementById('accentColor').value = layer.parameters.colors.accent;
+            
+            // Update pattern selector
+            document.querySelectorAll('.pattern-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-pattern') === layer.pattern);
+            });
+        }
+
+        // Toggle layer visibility
+        function toggleLayerVisibility(layerId) {
+            const layer = appState.layers.find(l => l.id === layerId);
+            if (layer) {
+                layer.visible = !layer.visible;
+                updateLayerUI();
+            }
+        }
+
+        // Update layer blend mode
+        function updateLayerBlendMode(layerId, blendMode) {
+            const layer = appState.layers.find(l => l.id === layerId);
+            if (layer) {
+                layer.blendMode = blendMode;
+            }
+        }
+
+        // Update layer opacity
+        function updateLayerOpacity(layerId, opacity) {
+            const layer = appState.layers.find(l => l.id === layerId);
+            if (layer) {
+                layer.opacity = parseInt(opacity);
+                const opacityValue = layer.opacity + '%';
+                document.querySelector(`.layer-item[data-layer-id="${layerId}"] .opacity-value`).textContent = opacityValue;
+            }
+        }
+
+        // Select pattern for active layer
+        function selectPatternForLayer(pattern) {
+            const activeLayer = appState.layers.find(l => l.id === appState.activeLayerId);
+            if (activeLayer) {
+                activeLayer.pattern = pattern;
+                activeLayer.initPattern();
+                updateLayerUI();
+                updateUIFromLayer(activeLayer);
+            }
+        }
+
+        // Cross-layer settings
+        function updateCrossLayerSettings() {
+            appState.crossLayerSettings.syncAnimation = document.getElementById('syncAnimation').checked;
+            appState.crossLayerSettings.paramInfluence = document.getElementById('paramInfluence').checked;
+        }
+
+        // Master opacity
+        function updateMasterOpacity(value) {
+            appState.masterOpacity = value / 100;
+            document.getElementById('masterOpacityValue').textContent = value + '%';
+        }
+
+        // Toggle layer panel
+        function toggleLayerPanel() {
+            const panel = document.getElementById('layerPanel');
+            panel.style.display = panel.style.display === 'none' ? 'flex' : 'none';
+            
+            // Update button state
+            const btn = document.getElementById('layerToggleBtn');
+            btn.classList.toggle('active');
+        }
+
+        // Setup 2D control
+        function setup2DControl() {
+            const control = document.getElementById('motionControl');
+            const indicator = document.getElementById('motionIndicator');
+            
+            const handleMotion = (e) => {
+                const rect = control.getBoundingClientRect();
+                const x = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+                const y = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+                
+                const relX = Math.max(0, Math.min(rect.width, x - rect.left));
+                const relY = Math.max(0, Math.min(rect.height, y - rect.top));
+                
+                appState.motion.x = (relX / rect.width - 0.5) * 2;
+                appState.motion.y = (relY / rect.height - 0.5) * 2;
+                
+                indicator.style.left = relX + 'px';
+                indicator.style.top = relY + 'px';
+                
+                // Update active layer
+                const activeLayer = appState.layers.find(l => l.id === appState.activeLayerId);
+                if (activeLayer) {
+                    activeLayer.parameters.motionX = appState.motion.x;
+                    activeLayer.parameters.motionY = appState.motion.y;
+                    
+                    // Apply to other layers if param influence is on
+                    if (appState.crossLayerSettings.paramInfluence) {
+                        appState.layers.forEach(layer => {
+                            if (layer.id !== appState.activeLayerId) {
+                                layer.parameters.motionX = appState.motion.x * 0.5;
+                                layer.parameters.motionY = appState.motion.y * 0.5;
+                            }
+                        });
+                    }
+                }
+                
+                drawMotionTrail();
+            };
+            
+            control.addEventListener('mousedown', (e) => {
+                appState.motion.isDragging = true;
+                handleMotion(e);
+            });
+            
+            control.addEventListener('mousemove', (e) => {
+                if (appState.motion.isDragging) {
+                    handleMotion(e);
+                }
+            });
+            
+            control.addEventListener('mouseup', () => {
+                appState.motion.isDragging = false;
+            });
+            
+            control.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                appState.motion.isDragging = true;
+                handleMotion(e);
+            });
+            
+            control.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                if (appState.motion.isDragging) {
+                    handleMotion(e);
+                }
+            });
+            
+            control.addEventListener('touchend', () => {
+                appState.motion.isDragging = false;
+            });
+            
+            // Center indicator
+            const rect = control.getBoundingClientRect();
+            indicator.style.left = rect.width / 2 + 'px';
+            indicator.style.top = rect.height / 2 + 'px';
+        }
+
+        // Draw motion trail
+        function drawMotionTrail() {
+            const rect = motionCanvas.getBoundingClientRect();
+            motionCtx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            motionCtx.fillRect(0, 0, rect.width, rect.height);
+            
+            const x = (appState.motion.x + 1) / 2 * rect.width;
+            const y = (appState.motion.y + 1) / 2 * rect.height;
+            
+            motionCtx.fillStyle = '#4ECDC4';
+            motionCtx.beginPath();
+            motionCtx.arc(x, y, 2, 0, Math.PI * 2);
+            motionCtx.fill();
+        }
+
+        // Setup sliders
+        function setupSliders() {
+            const sliders = [
+                { id: 'speedSlider', valueId: 'speedValue', param: 'speed', decimals: 1 },
+                { id: 'complexitySlider', valueId: 'complexityValue', param: 'complexity', decimals: 0 },
+                { id: 'lineWeightSlider', valueId: 'lineWeightValue', param: 'lineWeight', decimals: 1 },
+                { id: 'fadeSlider', valueId: 'fadeValue', param: 'fade', decimals: 2 }
+            ];
+            
+            sliders.forEach(slider => {
+                const element = document.getElementById(slider.id);
+                const valueElement = document.getElementById(slider.valueId);
+                
+                element.addEventListener('input', (e) => {
+                    const value = parseFloat(e.target.value);
+                    valueElement.textContent = value.toFixed(slider.decimals);
+                    
+                    // Update active layer
+                    const activeLayer = appState.layers.find(l => l.id === appState.activeLayerId);
+                    if (activeLayer) {
+                        activeLayer.parameters[slider.param] = value;
+                        
+                        // Apply to other layers if param influence is on
+                        if (appState.crossLayerSettings.paramInfluence && slider.param !== 'fade') {
+                            appState.layers.forEach(layer => {
+                                if (layer.id !== appState.activeLayerId) {
+                                    const variance = 0.8 + Math.random() * 0.4;
+                                    layer.parameters[slider.param] = value * variance;
+                                }
+                            });
+                        }
+                    }
+                });
+            });
+        }
+
+        // Setup color pickers
+        function setupColorPickers() {
+            const colors = ['primaryColor', 'secondaryColor', 'accentColor'];
+            const colorMap = {
+                'primaryColor': 'primary',
+                'secondaryColor': 'secondary',
+                'accentColor': 'accent'
+            };
+            
+            colors.forEach(colorId => {
+                const element = document.getElementById(colorId);
+                element.addEventListener('input', (e) => {
+                    const activeLayer = appState.layers.find(l => l.id === appState.activeLayerId);
+                    if (activeLayer) {
+                        activeLayer.parameters.colors[colorMap[colorId]] = e.target.value;
+                    }
+                });
+            });
+        }
+
+        // Toggle animation
+        function toggleAnimation() {
+            appState.isAnimating = !appState.isAnimating;
+            document.getElementById('playPauseBtn').textContent = appState.isAnimating ? '⏸️' : '▶️';
+        }
+
+        // Toggle auto-evolve
+        function toggleAutoEvolve() {
+            appState.autoEvolve = !appState.autoEvolve;
+            const btn = document.getElementById('autoEvolveBtn');
+            const indicator = document.getElementById('autoEvolveIndicator');
+            
+            btn.classList.toggle('active', appState.autoEvolve);
+            indicator.classList.toggle('active', appState.autoEvolve);
+        }
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            if (!appState.isAnimating) return;
+            
+            const now = performance.now();
+            const deltaTime = now - appState.lastFrameTime;
+            appState.lastFrameTime = now;
+            appState.time += deltaTime;
+            appState.frameCount++;
+            
+            // Clear composite canvas
+            compositeCtx.fillStyle = '#000';
+            compositeCtx.fillRect(0, 0, appState.canvasWidth, appState.canvasHeight);
+            
+            // Update and render layers
+            appState.layers.forEach(layer => {
+                if (layer.visible) {
+                    // Apply synchronized animation if enabled
+                    if (appState.crossLayerSettings.syncAnimation) {
+                        layer.time = appState.time;
+                    } else {
+                        layer.update(deltaTime);
+                    }
+                    
+                    // Update layer if not synced
+                    if (!appState.crossLayerSettings.syncAnimation) {
+                        layer.update(deltaTime);
+                    }
+                }
+            });
+            
+            // Composite layers
+            appState.layers.forEach(layer => {
+                if (layer.visible && layer.opacity > 0) {
+                    compositeCtx.save();
+                    compositeCtx.globalAlpha = (layer.opacity / 100) * appState.masterOpacity;
+                    compositeCtx.globalCompositeOperation = layer.blendMode;
+                    compositeCtx.drawImage(layer.canvas, 0, 0, appState.canvasWidth, appState.canvasHeight);
+                    compositeCtx.restore();
+                }
+            });
+            
+            // Auto-evolve
+            if (appState.autoEvolve && Math.random() < 0.005) {
+                appState.layers.forEach(layer => {
+                    // Randomly adjust parameters
+                    layer.parameters.speed *= 0.95 + Math.random() * 0.1;
+                    layer.parameters.complexity = Math.max(10, Math.min(100, 
+                        layer.parameters.complexity + (Math.random() - 0.5) * 5));
+                });
+            }
+            
+            // Update FPS counter
+            if (appState.frameCount % 30 === 0) {
+                const fps = Math.round(1000 / (deltaTime || 1));
+                document.getElementById('fpsCounter').textContent = `FPS: ${fps}`;
+            }
+        }
+
+        // Window resize handler
+        window.addEventListener('resize', () => {
+            setupCanvas();
+            appState.layers.forEach(layer => {
+                if (layer.patternInstance && layer.patternInstance.init) {
+                    layer.patternInstance.init();
+                }
+            });
+        });
+
+        // Initialize app when DOM is ready
+        document.addEventListener('DOMContentLoaded', initializeApp);
+    </script>
+</body>
+</html>
