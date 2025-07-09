@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genshi Studio - Advanced Pattern Creation Demo</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        
+        .header p {
+            margin: 10px 0 0;
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .feature {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .feature h3 {
+            color: #667eea;
+            margin: 0 0 15px;
+            font-size: 1.4rem;
+        }
+        
+        .feature p {
+            line-height: 1.6;
+            color: #666;
+        }
+        
+        .feature ul {
+            color: #666;
+            line-height: 1.8;
+        }
+        
+        .demo-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+        
+        .demo-section h3 {
+            color: #333;
+            margin: 0 0 20px;
+            font-size: 1.3rem;
+        }
+        
+        .pattern-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .pattern-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .pattern-preview {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 8px;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+        }
+        
+        .pattern-name {
+            font-weight: 600;
+            color: #333;
+            margin: 0 0 5px;
+        }
+        
+        .pattern-description {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.4;
+        }
+        
+        .tech-stack {
+            background: #e8f2ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .tech-stack h4 {
+            color: #1e40af;
+            margin: 0 0 10px;
+        }
+        
+        .tech-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .tech-item {
+            background: #1e40af;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .code-example {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+        
+        .highlight {
+            color: #90cdf4;
+        }
+        
+        .string {
+            color: #68d391;
+        }
+        
+        .comment {
+            color: #718096;
+        }
+        
+        .cta {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            color: white;
+            margin: 40px 0;
+        }
+        
+        .cta h3 {
+            margin: 0 0 15px;
+            font-size: 1.8rem;
+        }
+        
+        .cta p {
+            margin: 0 0 25px;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 Genshi Studio</h1>
+            <p>Advanced Pattern Creation Tools</p>
+        </div>
+        
+        <div class="content">
+            <div class="features">
+                <div class="feature">
+                    <h3>🛠️ Custom Pattern Builder</h3>
+                    <p>Create variations of traditional patterns with an intuitive interface.</p>
+                    <ul>
+                        <li>Interactive parameter controls</li>
+                        <li>Real-time preview updates</li>
+                        <li>Traditional pattern variations</li>
+                        <li>Color and geometry customization</li>
+                    </ul>
+                </div>
+                
+                <div class="feature">
+                    <h3>🎬 Pattern Animation</h3>
+                    <p>Bring your patterns to life with smooth animations and keyframe controls.</p>
+                    <ul>
+                        <li>Timeline-based animation system</li>
+                        <li>Keyframe editor with interpolation</li>
+                        <li>Multiple easing functions</li>
+                        <li>Export as GIF or video</li>
+                    </ul>
+                </div>
+                
+                <div class="feature">
+                    <h3>🔄 Pattern Combination</h3>
+                    <p>Blend multiple patterns together to create complex compositions.</p>
+                    <ul>
+                        <li>Layer-based composition</li>
+                        <li>Multiple blend modes</li>
+                        <li>Transform controls per layer</li>
+                        <li>Real-time preview</li>
+                    </ul>
+                </div>
+                
+                <div class="feature">
+                    <h3>💾 Save & Share</h3>
+                    <p>Store your creations locally and share them with shareable URLs.</p>
+                    <ul>
+                        <li>Local storage persistence</li>
+                        <li>Pattern import/export</li>
+                        <li>Shareable URLs</li>
+                        <li>Search and tag system</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="demo-section">
+                <h3>🎯 Traditional Pattern Types</h3>
+                <div class="pattern-grid">
+                    <div class="pattern-card">
+                        <div class="pattern-preview">🌊</div>
+                        <div class="pattern-name">Seigaiha</div>
+                        <div class="pattern-description">Blue sea waves representing good fortune</div>
+                    </div>
+                    <div class="pattern-card">
+                        <div class="pattern-preview">⬡</div>
+                        <div class="pattern-name">Asanoha</div>
+                        <div class="pattern-description">Hemp leaf pattern for growth and protection</div>
+                    </div>
+                    <div class="pattern-card">
+                        <div class="pattern-preview">🔗</div>
+                        <div class="pattern-name">Celtic Knot</div>
+                        <div class="pattern-description">Interwoven patterns of eternity</div>
+                    </div>
+                    <div class="pattern-card">
+                        <div class="pattern-preview">✦</div>
+                        <div class="pattern-name">Islamic Geometric</div>
+                        <div class="pattern-description">Mathematical perfection patterns</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tech-stack">
+                <h4>🔧 Built With Modern Web Technologies</h4>
+                <div class="tech-list">
+                    <span class="tech-item">TypeScript</span>
+                    <span class="tech-item">React</span>
+                    <span class="tech-item">Canvas API</span>
+                    <span class="tech-item">OffscreenCanvas</span>
+                    <span class="tech-item">Web Workers</span>
+                    <span class="tech-item">localStorage</span>
+                    <span class="tech-item">Framer Motion</span>
+                    <span class="tech-item">Tailwind CSS</span>
+                </div>
+            </div>
+            
+            <div class="demo-section">
+                <h3>💻 Code Example</h3>
+                <div class="code-example">
+<span class="comment">// Create a custom pattern with animation</span>
+<span class="highlight">const</span> generator = <span class="highlight">new</span> AdvancedPatternGenerator();
+
+<span class="comment">// Generate animated pattern</span>
+generator.generateAnimatedPattern(
+  PatternType.Seigaiha,
+  <span class="string">400</span>, <span class="string">400</span>,
+  {
+    scale: <span class="string">1.5</span>,
+    rotation: <span class="string">0</span>,
+    color1: { r: <span class="string">0.2</span>, g: <span class="string">0.4</span>, b: <span class="string">0.8</span>, a: <span class="string">1</span> },
+    color2: { r: <span class="string">0.8</span>, g: <span class="string">0.9</span>, b: <span class="string">1</span>, a: <span class="string">1</span> }
+  },
+  {
+    enabled: <span class="highlight">true</span>,
+    duration: <span class="string">3</span>,
+    direction: <span class="string">'alternate'</span>,
+    easing: <span class="string">'ease-in-out'</span>,
+    animatedParams: [<span class="string">'rotation'</span>, <span class="string">'scale'</span>],
+    keyframes: [
+      { time: <span class="string">0</span>, parameters: { rotation: <span class="string">0</span>, scale: <span class="string">1</span> } },
+      { time: <span class="string">1</span>, parameters: { rotation: <span class="string">360</span>, scale: <span class="string">1.5</span> } }
+    ]
+  },
+  <span class="comment">// Callback for each frame</span>
+  (imageData) => {
+    ctx.putImageData(imageData, <span class="string">0</span>, <span class="string">0</span>);
+  }
+);
+
+<span class="comment">// Save custom pattern</span>
+<span class="highlight">const</span> customPattern = generator.createCustomVariation(
+  PatternType.Asanoha,
+  <span class="string">'My Custom Asanoha'</span>,
+  <span class="string">'A personalized hemp leaf pattern'</span>,
+  { lineWidth: <span class="string">3</span>, complexity: <span class="string">7</span> }
+);
+
+PatternStorageService.savePattern(customPattern);
+                </div>
+            </div>
+            
+            <div class="cta">
+                <h3>🚀 Ready to Create Amazing Patterns?</h3>
+                <p>Start building your custom patterns with our advanced tools</p>
+                <a href="#" class="btn">Launch Pattern Studio</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

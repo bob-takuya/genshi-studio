@@ -13,47 +13,127 @@ interface GalleryItem {
   pattern: string
 }
 
-// Mock gallery data
+// Mock gallery data showcasing cultural diversity
 const galleryItems: GalleryItem[] = [
   {
     id: '1',
-    title: 'Ocean Waves Pattern',
-    author: 'Sarah Chen',
+    title: 'Seigaiha - Blue Ocean Waves',
+    author: 'Hiroshi Tanaka',
     date: '2024-01-15',
     likes: 234,
     thumbnail: '🌊',
-    tags: ['japanese', 'seigaiha', 'blue'],
+    tags: ['japanese', 'seigaiha', 'blue', 'traditional'],
     pattern: 'seigaiha'
   },
   {
     id: '2',
-    title: 'Celtic Heart Knot',
-    author: 'Liam O\'Brien',
+    title: 'Ichimatsu - Checkered Pattern',
+    author: 'Yuki Sato',
     date: '2024-01-14',
     likes: 189,
-    thumbnail: '💚',
-    tags: ['celtic', 'knot', 'love'],
-    pattern: 'celtic-knot'
+    thumbnail: '⬜',
+    tags: ['japanese', 'ichimatsu', 'geometric', 'classic'],
+    pattern: 'ichimatsu'
   },
   {
     id: '3',
-    title: 'Islamic Star',
-    author: 'Fatima Al-Hassan',
+    title: 'Asanoha - Hemp Leaf Pattern',
+    author: 'Kenji Nakamura',
     date: '2024-01-13',
     likes: 312,
-    thumbnail: '⭐',
-    tags: ['islamic', 'geometric', 'gold'],
-    pattern: 'islamic-geometric'
+    thumbnail: '🍃',
+    tags: ['japanese', 'asanoha', 'green', 'nature'],
+    pattern: 'asanoha'
   },
   {
     id: '4',
-    title: 'Aztec Sun',
-    author: 'Carlos Mendoza',
+    title: 'Sakura - Cherry Blossom Dance',
+    author: 'Mei Yoshida',
     date: '2024-01-12',
     likes: 156,
+    thumbnail: '🌸',
+    tags: ['japanese', 'sakura', 'pink', 'spring'],
+    pattern: 'sakura'
+  },
+  {
+    id: '5',
+    title: 'Shippo - Seven Treasures',
+    author: 'Akira Fujimoto',
+    date: '2024-01-11',
+    likes: 278,
+    thumbnail: '💎',
+    tags: ['japanese', 'shippo', 'circular', 'prosperity'],
+    pattern: 'shippo'
+  },
+  {
+    id: '6',
+    title: 'Kumiko - Geometric Harmony',
+    author: 'Takeshi Yamamoto',
+    date: '2024-01-10',
+    likes: 195,
+    thumbnail: '⚪',
+    tags: ['japanese', 'kumiko', 'woodwork', 'craft'],
+    pattern: 'kumiko'
+  },
+  {
+    id: '7',
+    title: 'Celtic Knot - Eternal Bond',
+    author: 'Fiona O\'Connor',
+    date: '2024-01-09',
+    likes: 203,
+    thumbnail: '🔗',
+    tags: ['celtic', 'knot', 'green', 'eternity'],
+    pattern: 'celtic-knot'
+  },
+  {
+    id: '8',
+    title: 'Islamic Geometric - Star & Cross',
+    author: 'Amara Hassan',
+    date: '2024-01-08',
+    likes: 289,
+    thumbnail: '⭐',
+    tags: ['islamic', 'geometric', 'gold', 'sacred'],
+    pattern: 'islamic-geometric'
+  },
+  {
+    id: '9',
+    title: 'Aztec Sun - Solar Deity',
+    author: 'Carlos Mendoza',
+    date: '2024-01-07',
+    likes: 167,
     thumbnail: '☀️',
-    tags: ['aztec', 'sun', 'orange'],
-    pattern: 'aztec-step'
+    tags: ['aztec', 'sun', 'orange', 'ancient'],
+    pattern: 'aztec-sun'
+  },
+  {
+    id: '10',
+    title: 'Mandala - Cosmic Circle',
+    author: 'Priya Sharma',
+    date: '2024-01-06',
+    likes: 324,
+    thumbnail: '🕉️',
+    tags: ['mandala', 'cosmic', 'meditation', 'spiritual'],
+    pattern: 'mandala'
+  },
+  {
+    id: '11',
+    title: 'Nordic Runes - Ancient Script',
+    author: 'Erik Johansson',
+    date: '2024-01-05',
+    likes: 145,
+    thumbnail: '⚡',
+    tags: ['nordic', 'runes', 'ancient', 'mystical'],
+    pattern: 'nordic-runes'
+  },
+  {
+    id: '12',
+    title: 'African Kente - Royal Weave',
+    author: 'Kofi Asante',
+    date: '2024-01-04',
+    likes: 267,
+    thumbnail: '🎨',
+    tags: ['african', 'kente', 'colorful', 'royal'],
+    pattern: 'african-kente'
   }
 ]
 
@@ -87,9 +167,34 @@ export function GalleryPage() {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-4xl font-bold mb-2">Pattern Gallery</h1>
-        <p className="text-lg text-muted-foreground">
-          Explore creations from the Genshi Studio community
+        <p className="text-lg text-muted-foreground mb-4">
+          Explore cultural patterns from around the world, created by the Genshi Studio community
         </p>
+        <div className="bg-card border border-border rounded-lg p-4">
+          <h2 className="text-xl font-semibold mb-2">Featured Collections</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="text-center">
+              <div className="text-2xl mb-1">🇯🇵</div>
+              <div className="text-sm font-medium">Japanese Patterns</div>
+              <div className="text-xs text-muted-foreground">Traditional & Modern</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl mb-1">🕌</div>
+              <div className="text-sm font-medium">Islamic Geometry</div>
+              <div className="text-xs text-muted-foreground">Sacred Mathematics</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl mb-1">🍀</div>
+              <div className="text-sm font-medium">Celtic Designs</div>
+              <div className="text-xs text-muted-foreground">Eternal Knots</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl mb-1">🌍</div>
+              <div className="text-sm font-medium">World Cultures</div>
+              <div className="text-xs text-muted-foreground">Global Heritage</div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Search and filters */}

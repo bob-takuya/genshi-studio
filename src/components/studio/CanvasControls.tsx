@@ -8,7 +8,8 @@ import {
   Type,
   Trash2,
   Download,
-  MoreVertical
+  Palette,
+  Sparkles
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -16,18 +17,23 @@ interface CanvasControlsProps {
   onModeChange: (mode: 'select' | 'draw' | 'shape' | 'text') => void
   onAddShape: (type: 'rect' | 'circle' | 'triangle') => void
   onClear: () => void
-  onExport: (format: 'png' | 'svg' | 'json') => void
+  onExport: () => void
+  onTogglePatterns: () => void
+  showPatternLibrary: boolean
+  onGenerateTestPattern: () => void
 }
 
 export function CanvasControls({
   onModeChange,
   onAddShape,
   onClear,
-  onExport
+  onExport,
+  onTogglePatterns,
+  showPatternLibrary,
+  onGenerateTestPattern
 }: CanvasControlsProps) {
   const [activeMode, setActiveMode] = useState<'select' | 'draw' | 'shape' | 'text'>('select')
   const [showShapeMenu, setShowShapeMenu] = useState(false)
-  const [showExportMenu, setShowExportMenu] = useState(false)
 
   const handleModeChange = (mode: 'select' | 'draw' | 'shape' | 'text') => {
     setActiveMode(mode)
@@ -53,11 +59,6 @@ export function CanvasControls({
     { id: 'triangle', icon: Triangle, name: 'Triangle' }
   ]
 
-  const exportFormats = [
-    { id: 'png', name: 'PNG Image', description: 'High quality raster image' },
-    { id: 'svg', name: 'SVG Vector', description: 'Scalable vector graphics' },
-    { id: 'json', name: 'JSON Data', description: 'Editable project file' }
-  ]
 
   return (
     <>
@@ -103,9 +104,11 @@ export function CanvasControls({
           </div>
         </button>
         
+        <div className="w-px h-8 bg-border mx-1" />
+        
         {/* Export */}
         <button
-          onClick={() => setShowExportMenu(!showExportMenu)}
+          onClick={onExport}
           className="p-2.5 hover:bg-accent rounded-md transition-colors group"
           aria-label="Export"
         >
@@ -113,6 +116,36 @@ export function CanvasControls({
           
           <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-popover text-popover-foreground text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
             Export
+          </div>
+        </button>
+        
+        {/* Test Pattern */}
+        <button
+          onClick={onGenerateTestPattern}
+          className="p-2.5 hover:bg-accent rounded-md transition-colors group"
+          aria-label="Generate Test Pattern"
+        >
+          <Sparkles className="h-5 w-5" />
+          
+          <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-popover text-popover-foreground text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
+            Test Pattern
+          </div>
+        </button>
+        
+        {/* Pattern Library Toggle */}
+        <button
+          onClick={onTogglePatterns}
+          className={`p-2.5 rounded-md transition-colors group ${
+            showPatternLibrary 
+              ? 'bg-primary text-primary-foreground' 
+              : 'hover:bg-accent'
+          }`}
+          aria-label="Toggle Pattern Library"
+        >
+          <Palette className="h-5 w-5" />
+          
+          <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-popover text-popover-foreground text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
+            Patterns
           </div>
         </button>
       </div>
@@ -149,36 +182,6 @@ export function CanvasControls({
         )}
       </AnimatePresence>
 
-      {/* Export menu */}
-      <AnimatePresence>
-        {showExportMenu && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            className="absolute top-20 left-40 bg-card rounded-lg shadow-lg border border-border p-4 w-64"
-          >
-            <h3 className="font-semibold mb-3">Export Canvas</h3>
-            <div className="space-y-2">
-              {exportFormats.map((format) => (
-                <button
-                  key={format.id}
-                  onClick={() => {
-                    onExport(format.id as any)
-                    setShowExportMenu(false)
-                  }}
-                  className="w-full text-left px-3 py-2 hover:bg-accent rounded-md transition-colors"
-                >
-                  <div className="font-medium text-sm">{format.name}</div>
-                  <div className="text-xs text-muted-foreground">
-                    {format.description}
-                  </div>
-                </button>
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* Keyboard shortcuts hint */}
       <div className="absolute bottom-4 left-4 text-xs text-muted-foreground bg-card/80 backdrop-blur px-3 py-2 rounded-md">

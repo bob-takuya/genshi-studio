@@ -190,6 +190,142 @@
             display: block;
         }
 
+        /* Studio Section Styles */
+        .studio-section {
+            background: rgba(0, 0, 0, 0.1);
+            padding: 3rem 2rem;
+            margin-top: 3rem;
+            border-radius: 10px;
+            min-height: 100vh;
+        }
+
+        .studio-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .controls-panel {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 2rem;
+        }
+
+        .control-group {
+            margin-bottom: 2rem;
+        }
+
+        .control-group label {
+            display: block;
+            color: white;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .control-group input[type="range"] {
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .control-group input[type="color"] {
+            width: 100%;
+            height: 40px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .control-group select {
+            width: 100%;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+        }
+
+        .control-value {
+            color: #feca57;
+            font-weight: bold;
+            margin-left: 1rem;
+        }
+
+        .pattern-preview {
+            background: white;
+            border-radius: 10px;
+            padding: 1rem;
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .preview-canvas {
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .export-controls {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .export-btn {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .export-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .color-palette {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .color-swatch {
+            width: 30px;
+            height: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .color-swatch:hover {
+            transform: scale(1.1);
+        }
+
+        .color-swatch.active {
+            border-color: #feca57;
+            transform: scale(1.2);
+        }
+
+        .studio-title {
+            color: white;
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
         @media (max-width: 768px) {
             .hero h1 {
                 font-size: 2rem;
@@ -207,6 +343,20 @@
             .header {
                 flex-direction: column;
                 text-align: center;
+            }
+
+            .studio-container {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .controls-panel {
+                position: static;
+                margin-bottom: 1rem;
+            }
+
+            .export-controls {
+                flex-direction: column;
             }
         }
     </style>
@@ -264,12 +414,87 @@
         </div>
     </main>
 
+    <!-- Studio Section -->
+    <section id="studio" class="studio-section">
+        <h2 class="studio-title">Pattern Studio</h2>
+        <div class="studio-container">
+            <div class="controls-panel">
+                <div class="control-group">
+                    <label for="patternType">Pattern Type:</label>
+                    <select id="patternType">
+                        <option value="ichimatsu">Ichimatsu (市松)</option>
+                        <option value="seigaiha">Seigaiha (青海波)</option>
+                        <option value="asanoha">Asanoha (麻の葉)</option>
+                        <option value="shippo">Shippo (七宝)</option>
+                        <option value="yamaji">Yamaji (山路)</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label for="patternSize">Pattern Size: <span class="control-value" id="sizeValue">30</span></label>
+                    <input type="range" id="patternSize" min="10" max="100" value="30">
+                </div>
+
+                <div class="control-group">
+                    <label for="patternDensity">Pattern Density: <span class="control-value" id="densityValue">1.0</span></label>
+                    <input type="range" id="patternDensity" min="0.1" max="3.0" step="0.1" value="1.0">
+                </div>
+
+                <div class="control-group">
+                    <label for="primaryColor">Primary Color:</label>
+                    <input type="color" id="primaryColor" value="#4a90e2">
+                </div>
+
+                <div class="control-group">
+                    <label for="secondaryColor">Secondary Color:</label>
+                    <input type="color" id="secondaryColor" value="#f5f5f5">
+                </div>
+
+                <div class="control-group">
+                    <label for="accentColor">Accent Color:</label>
+                    <input type="color" id="accentColor" value="#feca57">
+                </div>
+
+                <div class="control-group">
+                    <label>Quick Color Palettes:</label>
+                    <div class="color-palette">
+                        <div class="color-swatch" style="background: #4a90e2;" data-colors='["#4a90e2", "#f5f5f5", "#feca57"]'></div>
+                        <div class="color-swatch" style="background: #e74c3c;" data-colors='["#e74c3c", "#ecf0f1", "#f39c12"]'></div>
+                        <div class="color-swatch" style="background: #2ecc71;" data-colors='["#2ecc71", "#ecf0f1", "#e67e22"]'></div>
+                        <div class="color-swatch" style="background: #9b59b6;" data-colors='["#9b59b6", "#ecf0f1", "#f1c40f"]'></div>
+                        <div class="color-swatch" style="background: #34495e;" data-colors='["#34495e", "#ecf0f1", "#e74c3c"]'></div>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="rotation">Rotation: <span class="control-value" id="rotationValue">0°</span></label>
+                    <input type="range" id="rotation" min="0" max="360" value="0">
+                </div>
+
+                <div class="control-group">
+                    <label for="opacity">Opacity: <span class="control-value" id="opacityValue">100%</span></label>
+                    <input type="range" id="opacity" min="10" max="100" value="100">
+                </div>
+
+                <div class="export-controls">
+                    <button class="export-btn" onclick="exportPattern('png')">Export PNG</button>
+                    <button class="export-btn" onclick="exportPattern('svg')">Export SVG</button>
+                    <button class="export-btn" onclick="randomizePattern()">Randomize</button>
+                </div>
+            </div>
+
+            <div class="pattern-preview">
+                <canvas id="studioCanvas" class="preview-canvas" width="600" height="600"></canvas>
+            </div>
+        </div>
+    </section>
+
     <footer class="footer">
         <p>&copy; 2025 Genshi Studio - AI Creative Team System | Bridging Traditional Art and Modern Technology</p>
     </footer>
 
     <script>
-        // Interactive pattern generation
+        // Interactive pattern generation for demo section
         const canvas = document.getElementById('patternCanvas');
         const ctx = canvas.getContext('2d');
 
@@ -358,19 +583,6 @@
         // Initialize with Ichimatsu pattern
         showPattern('ichimatsu');
 
-        // Smooth scrolling for navigation
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-
         // Add some interactivity to the canvas
         canvas.addEventListener('click', (e) => {
             const rect = canvas.getBoundingClientRect();
@@ -391,6 +603,360 @@
                     showPattern(activePattern.onclick.toString().match(/'([^']+)'/)[1]);
                 }
             }, 200);
+        });
+
+        // =========================
+        // STUDIO SECTION FUNCTIONALITY
+        // =========================
+
+        // Studio canvas and context
+        const studioCanvas = document.getElementById('studioCanvas');
+        const studioCtx = studioCanvas.getContext('2d');
+
+        // Pattern settings
+        let patternSettings = {
+            type: 'ichimatsu',
+            size: 30,
+            density: 1.0,
+            primaryColor: '#4a90e2',
+            secondaryColor: '#f5f5f5',
+            accentColor: '#feca57',
+            rotation: 0,
+            opacity: 100
+        };
+
+        // Control elements
+        const patternTypeSelect = document.getElementById('patternType');
+        const patternSizeRange = document.getElementById('patternSize');
+        const patternDensityRange = document.getElementById('patternDensity');
+        const primaryColorPicker = document.getElementById('primaryColor');
+        const secondaryColorPicker = document.getElementById('secondaryColor');
+        const accentColorPicker = document.getElementById('accentColor');
+        const rotationRange = document.getElementById('rotation');
+        const opacityRange = document.getElementById('opacity');
+
+        // Value display elements
+        const sizeValue = document.getElementById('sizeValue');
+        const densityValue = document.getElementById('densityValue');
+        const rotationValue = document.getElementById('rotationValue');
+        const opacityValue = document.getElementById('opacityValue');
+
+        // Event listeners for real-time updates
+        patternTypeSelect.addEventListener('change', (e) => {
+            patternSettings.type = e.target.value;
+            updateStudioPattern();
+        });
+
+        patternSizeRange.addEventListener('input', (e) => {
+            patternSettings.size = parseInt(e.target.value);
+            sizeValue.textContent = patternSettings.size;
+            updateStudioPattern();
+        });
+
+        patternDensityRange.addEventListener('input', (e) => {
+            patternSettings.density = parseFloat(e.target.value);
+            densityValue.textContent = patternSettings.density;
+            updateStudioPattern();
+        });
+
+        primaryColorPicker.addEventListener('input', (e) => {
+            patternSettings.primaryColor = e.target.value;
+            updateStudioPattern();
+        });
+
+        secondaryColorPicker.addEventListener('input', (e) => {
+            patternSettings.secondaryColor = e.target.value;
+            updateStudioPattern();
+        });
+
+        accentColorPicker.addEventListener('input', (e) => {
+            patternSettings.accentColor = e.target.value;
+            updateStudioPattern();
+        });
+
+        rotationRange.addEventListener('input', (e) => {
+            patternSettings.rotation = parseInt(e.target.value);
+            rotationValue.textContent = patternSettings.rotation + '°';
+            updateStudioPattern();
+        });
+
+        opacityRange.addEventListener('input', (e) => {
+            patternSettings.opacity = parseInt(e.target.value);
+            opacityValue.textContent = patternSettings.opacity + '%';
+            updateStudioPattern();
+        });
+
+        // Color palette functionality
+        document.querySelectorAll('.color-swatch').forEach(swatch => {
+            swatch.addEventListener('click', (e) => {
+                // Remove active class from all swatches
+                document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+                // Add active class to clicked swatch
+                e.target.classList.add('active');
+                
+                // Apply color palette
+                const colors = JSON.parse(e.target.dataset.colors);
+                patternSettings.primaryColor = colors[0];
+                patternSettings.secondaryColor = colors[1];
+                patternSettings.accentColor = colors[2];
+                
+                // Update color pickers
+                primaryColorPicker.value = colors[0];
+                secondaryColorPicker.value = colors[1];
+                accentColorPicker.value = colors[2];
+                
+                updateStudioPattern();
+            });
+        });
+
+        // Main pattern drawing function
+        function updateStudioPattern() {
+            studioCtx.clearRect(0, 0, studioCanvas.width, studioCanvas.height);
+            
+            // Save context for transformations
+            studioCtx.save();
+            
+            // Apply rotation
+            if (patternSettings.rotation !== 0) {
+                studioCtx.translate(studioCanvas.width / 2, studioCanvas.height / 2);
+                studioCtx.rotate(patternSettings.rotation * Math.PI / 180);
+                studioCtx.translate(-studioCanvas.width / 2, -studioCanvas.height / 2);
+            }
+            
+            // Apply global opacity
+            studioCtx.globalAlpha = patternSettings.opacity / 100;
+            
+            // Draw pattern based on type
+            switch(patternSettings.type) {
+                case 'ichimatsu':
+                    drawStudioIchimatsu();
+                    break;
+                case 'seigaiha':
+                    drawStudioSeigaiha();
+                    break;
+                case 'asanoha':
+                    drawStudioAsanoha();
+                    break;
+                case 'shippo':
+                    drawStudioShippo();
+                    break;
+                case 'yamaji':
+                    drawStudioYamaji();
+                    break;
+            }
+            
+            // Restore context
+            studioCtx.restore();
+        }
+
+        // Enhanced pattern drawing functions
+        function drawStudioIchimatsu() {
+            const size = patternSettings.size * patternSettings.density;
+            const colors = [patternSettings.primaryColor, patternSettings.secondaryColor];
+            
+            for (let x = -size; x < studioCanvas.width + size; x += size) {
+                for (let y = -size; y < studioCanvas.height + size; y += size) {
+                    const colorIndex = (Math.floor(x / size) + Math.floor(y / size)) % 2;
+                    studioCtx.fillStyle = colors[colorIndex];
+                    studioCtx.fillRect(x, y, size, size);
+                }
+            }
+        }
+
+        function drawStudioSeigaiha() {
+            const radius = patternSettings.size * patternSettings.density;
+            const spacing = radius * 2;
+            
+            studioCtx.strokeStyle = patternSettings.primaryColor;
+            studioCtx.lineWidth = 2;
+            
+            for (let x = -radius; x < studioCanvas.width + radius; x += spacing) {
+                for (let y = -radius; y < studioCanvas.height + radius; y += spacing) {
+                    for (let r = 5; r < radius; r += radius / 3) {
+                        studioCtx.beginPath();
+                        studioCtx.arc(x, y, r, 0, Math.PI);
+                        studioCtx.stroke();
+                    }
+                }
+            }
+        }
+
+        function drawStudioAsanoha() {
+            const size = patternSettings.size * patternSettings.density;
+            
+            studioCtx.strokeStyle = patternSettings.primaryColor;
+            studioCtx.lineWidth = 2;
+            
+            for (let x = -size; x < studioCanvas.width + size; x += size) {
+                for (let y = -size; y < studioCanvas.height + size; y += size) {
+                    // Draw hexagon
+                    studioCtx.beginPath();
+                    for (let i = 0; i < 6; i++) {
+                        const angle = (i * Math.PI) / 3;
+                        const px = x + size/2 + Math.cos(angle) * size/3;
+                        const py = y + size/2 + Math.sin(angle) * size/3;
+                        
+                        if (i === 0) {
+                            studioCtx.moveTo(px, py);
+                        } else {
+                            studioCtx.lineTo(px, py);
+                        }
+                    }
+                    studioCtx.closePath();
+                    studioCtx.stroke();
+                    
+                    // Draw inner lines
+                    studioCtx.beginPath();
+                    studioCtx.moveTo(x + size/2, y);
+                    studioCtx.lineTo(x + size/2, y + size);
+                    studioCtx.moveTo(x, y + size/2);
+                    studioCtx.lineTo(x + size, y + size/2);
+                    studioCtx.stroke();
+                }
+            }
+        }
+
+        function drawStudioShippo() {
+            const size = patternSettings.size * patternSettings.density;
+            const radius = size / 2;
+            
+            studioCtx.strokeStyle = patternSettings.primaryColor;
+            studioCtx.lineWidth = 2;
+            
+            for (let x = -size; x < studioCanvas.width + size; x += size) {
+                for (let y = -size; y < studioCanvas.height + size; y += size) {
+                    // Draw overlapping circles
+                    studioCtx.beginPath();
+                    studioCtx.arc(x + size/2, y + size/2, radius, 0, 2 * Math.PI);
+                    studioCtx.stroke();
+                    
+                    // Fill intersection with accent color
+                    studioCtx.fillStyle = patternSettings.accentColor;
+                    studioCtx.beginPath();
+                    studioCtx.arc(x + size/2, y + size/2, radius / 3, 0, 2 * Math.PI);
+                    studioCtx.fill();
+                }
+            }
+        }
+
+        function drawStudioYamaji() {
+            const size = patternSettings.size * patternSettings.density;
+            
+            studioCtx.strokeStyle = patternSettings.primaryColor;
+            studioCtx.lineWidth = 2;
+            
+            for (let x = -size; x < studioCanvas.width + size; x += size) {
+                for (let y = -size; y < studioCanvas.height + size; y += size) {
+                    // Draw diagonal lines creating mountain path pattern
+                    studioCtx.beginPath();
+                    studioCtx.moveTo(x, y);
+                    studioCtx.lineTo(x + size, y + size);
+                    studioCtx.moveTo(x + size, y);
+                    studioCtx.lineTo(x, y + size);
+                    studioCtx.stroke();
+                    
+                    // Add accent points
+                    studioCtx.fillStyle = patternSettings.accentColor;
+                    studioCtx.beginPath();
+                    studioCtx.arc(x + size/2, y + size/2, 2, 0, 2 * Math.PI);
+                    studioCtx.fill();
+                }
+            }
+        }
+
+        // Export functions
+        function exportPattern(format) {
+            if (format === 'png') {
+                const link = document.createElement('a');
+                link.download = `genshi-pattern-${patternSettings.type}-${Date.now()}.png`;
+                link.href = studioCanvas.toDataURL();
+                link.click();
+            } else if (format === 'svg') {
+                // Create SVG representation
+                const svg = createSVGPattern();
+                const blob = new Blob([svg], { type: 'image/svg+xml' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.download = `genshi-pattern-${patternSettings.type}-${Date.now()}.svg`;
+                link.href = url;
+                link.click();
+                URL.revokeObjectURL(url);
+            }
+        }
+
+        function createSVGPattern() {
+            const width = studioCanvas.width;
+            const height = studioCanvas.height;
+            
+            return `<?xml version="1.0" encoding="UTF-8"?>
+<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
+    <rect width="${width}" height="${height}" fill="${patternSettings.secondaryColor}"/>
+    <g opacity="${patternSettings.opacity / 100}" transform="rotate(${patternSettings.rotation} ${width/2} ${height/2})">
+        <!-- Pattern elements would be generated here based on pattern type -->
+        <rect x="0" y="0" width="${width}" height="${height}" fill="${patternSettings.primaryColor}" opacity="0.5"/>
+    </g>
+</svg>`;
+        }
+
+        // Randomize pattern
+        function randomizePattern() {
+            const patterns = ['ichimatsu', 'seigaiha', 'asanoha', 'shippo', 'yamaji'];
+            const colors = [
+                '#4a90e2', '#e74c3c', '#2ecc71', '#9b59b6', '#f39c12',
+                '#1abc9c', '#34495e', '#e67e22', '#3498db', '#95a5a6'
+            ];
+            
+            // Randomize settings
+            patternSettings.type = patterns[Math.floor(Math.random() * patterns.length)];
+            patternSettings.size = Math.floor(Math.random() * 80) + 20;
+            patternSettings.density = Math.random() * 2.5 + 0.5;
+            patternSettings.primaryColor = colors[Math.floor(Math.random() * colors.length)];
+            patternSettings.secondaryColor = colors[Math.floor(Math.random() * colors.length)];
+            patternSettings.accentColor = colors[Math.floor(Math.random() * colors.length)];
+            patternSettings.rotation = Math.floor(Math.random() * 360);
+            patternSettings.opacity = Math.floor(Math.random() * 90) + 10;
+            
+            // Update UI controls
+            patternTypeSelect.value = patternSettings.type;
+            patternSizeRange.value = patternSettings.size;
+            patternDensityRange.value = patternSettings.density;
+            primaryColorPicker.value = patternSettings.primaryColor;
+            secondaryColorPicker.value = patternSettings.secondaryColor;
+            accentColorPicker.value = patternSettings.accentColor;
+            rotationRange.value = patternSettings.rotation;
+            opacityRange.value = patternSettings.opacity;
+            
+            // Update value displays
+            sizeValue.textContent = patternSettings.size;
+            densityValue.textContent = patternSettings.density;
+            rotationValue.textContent = patternSettings.rotation + '°';
+            opacityValue.textContent = patternSettings.opacity + '%';
+            
+            // Update pattern
+            updateStudioPattern();
+        }
+
+        // Initialize studio
+        function initStudio() {
+            updateStudioPattern();
+        }
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Initialize everything when page loads
+        window.addEventListener('load', () => {
+            initStudio();
         });
     </script>
 </body>
