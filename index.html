@@ -475,12 +475,14 @@
             <!-- Pattern Selector -->
             <div class="pattern-selector">
                 <button class="pattern-btn active" data-pattern="flowfield" onclick="selectPattern('flowfield')">Flow Fields</button>
-                <button class="pattern-btn" data-pattern="lissajous" onclick="selectPattern('lissajous')">Lissajous</button>
-                <button class="pattern-btn" data-pattern="lorenz" onclick="selectPattern('lorenz')">Strange Attractor</button>
                 <button class="pattern-btn" data-pattern="waves" onclick="selectPattern('waves')">Wave Interference</button>
                 <button class="pattern-btn" data-pattern="growth" onclick="selectPattern('growth')">Differential Growth</button>
-                <button class="pattern-btn" data-pattern="particles" onclick="selectPattern('particles')">Particle Swarm</button>
                 <button class="pattern-btn" data-pattern="truchet" onclick="selectPattern('truchet')">Truchet Tiles ✨</button>
+                <button class="pattern-btn" data-pattern="reaction" onclick="selectPattern('reaction')">Reaction-Diffusion</button>
+                <button class="pattern-btn" data-pattern="voronoi" onclick="selectPattern('voronoi')">Voronoi Cells</button>
+                <button class="pattern-btn" data-pattern="maze" onclick="selectPattern('maze')">Maze Growth</button>
+                <button class="pattern-btn" data-pattern="lsystem" onclick="selectPattern('lsystem')">L-Systems</button>
+                <button class="pattern-btn" data-pattern="circles" onclick="selectPattern('circles')">Circle Packing</button>
             </div>
 
             <!-- Control Grid -->
@@ -866,35 +868,44 @@
                 }
             };
 
-            // Lissajous Curves
-            appState.patterns.lissajous = {
-                points: [],
+            // Reaction-Diffusion
+            appState.patterns.reaction = {
+                grid: [],
+                gridSize: 64,
                 init: function() {
-                    this.points = [];
-                    for (let i = 0; i < appState.parameters.complexity; i++) {
-                        this.points.push({
-                            a: 3 + Math.random() * 3,
-                            b: 2 + Math.random() * 4,
-                            delta: Math.random() * Math.PI * 2,
-                            trail: []
-                        });
+                    this.gridSize = Math.max(32, 96 - appState.parameters.complexity / 4);
+                    this.grid = [];
+                    for (let y = 0; y < this.gridSize; y++) {
+                        this.grid[y] = [];
+                        for (let x = 0; x < this.gridSize; x++) {
+                            this.grid[y][x] = {
+                                u: 1.0,
+                                v: x === this.gridSize / 2 && y === this.gridSize / 2 ? 0.5 : 0.0,
+                                newU: 1.0,
+                                newV: 0.0
+                            };
+                        }
                     }
                 }
             };
 
-            // Lorenz Attractor
-            appState.patterns.lorenz = {
-                points: [],
+            // Voronoi Cells
+            appState.patterns.voronoi = {
+                seeds: [],
+                cells: [],
                 init: function() {
-                    this.points = [];
-                    for (let i = 0; i < Math.max(3, appState.parameters.complexity / 10); i++) {
-                        this.points.push({
-                            x: (Math.random() - 0.5) * 20,
-                            y: (Math.random() - 0.5) * 20,
-                            z: Math.random() * 40,
-                            trail: []
+                    this.seeds = [];
+                    const numSeeds = Math.max(10, appState.parameters.complexity / 4);
+                    for (let i = 0; i < numSeeds; i++) {
+                        this.seeds.push({
+                            x: Math.random() * appState.canvasWidth,
+                            y: Math.random() * appState.canvasHeight,
+                            vx: (Math.random() - 0.5) * 0.5,
+                            vy: (Math.random() - 0.5) * 0.5,
+                            id: i
                         });
                     }
+                    this.cells = [];
                 }
             };
 
@@ -938,33 +949,151 @@
                 }
             };
 
-            // Particle Swarm
-            appState.patterns.particles = {
-                swarm: [],
-                attractors: [],
+            // Maze Growth
+            appState.patterns.maze = {
+                grid: [],
+                gridSize: 15,
+                walker: null,
+                stack: [],
                 init: function() {
-                    this.swarm = [];
-                    this.attractors = [];
+                    this.gridSize = Math.max(10, Math.min(30, Math.floor(appState.parameters.complexity / 6)));
+                    this.grid = [];
+                    this.stack = [];
                     
-                    // Create attractors
-                    for (let i = 0; i < 3; i++) {
-                        this.attractors.push({
-                            x: Math.random() * appState.canvasWidth,
-                            y: Math.random() * appState.canvasHeight,
-                            vx: (Math.random() - 0.5) * 2,
-                            vy: (Math.random() - 0.5) * 2
-                        });
+                    // Initialize grid
+                    for (let y = 0; y < this.gridSize; y++) {
+                        this.grid[y] = [];
+                        for (let x = 0; x < this.gridSize; x++) {
+                            this.grid[y][x] = {
+                                walls: { top: true, right: true, bottom: true, left: true },
+                                visited: false,
+                                x: x,
+                                y: y
+                            };
+                        }
                     }
                     
-                    // Create particles
-                    for (let i = 0; i < appState.parameters.complexity * 2; i++) {
-                        this.swarm.push({
-                            x: Math.random() * appState.canvasWidth,
-                            y: Math.random() * appState.canvasHeight,
-                            vx: 0,
-                            vy: 0,
-                            trail: []
-                        });
+                    // Start walker
+                    this.walker = { x: 0, y: 0 };
+                    this.grid[0][0].visited = true;
+                }
+            };
+
+            // L-System
+            appState.patterns.lsystem = {
+                axiom: 'F',
+                rules: { 'F': 'F+F-F-F+F' },
+                generation: 0,
+                string: 'F',
+                branches: [],
+                init: function() {
+                    this.generation = 0;
+                    this.string = this.axiom;
+                    this.branches = [];
+                    
+                    // Generate a few iterations
+                    const iterations = Math.max(2, Math.min(5, Math.floor(appState.parameters.complexity / 40)));
+                    for (let i = 0; i < iterations; i++) {
+                        this.evolve();
+                    }
+                    
+                    // Parse string into drawing commands
+                    this.branches = this.parseLSystem();
+                },
+                
+                evolve: function() {
+                    let newString = '';
+                    for (let char of this.string) {
+                        newString += this.rules[char] || char;
+                    }
+                    this.string = newString;
+                    this.generation++;
+                },
+                
+                parseLSystem: function() {
+                    const branches = [];
+                    let x = appState.canvasWidth / 2;
+                    let y = appState.canvasHeight * 0.8;
+                    let angle = -Math.PI / 2;
+                    const step = Math.max(3, 20 - this.generation * 3);
+                    const angleStep = Math.PI / 2;
+                    const stack = [];
+                    
+                    for (let char of this.string) {
+                        switch (char) {
+                            case 'F':
+                                const newX = x + Math.cos(angle) * step;
+                                const newY = y + Math.sin(angle) * step;
+                                branches.push({ x1: x, y1: y, x2: newX, y2: newY });
+                                x = newX;
+                                y = newY;
+                                break;
+                            case '+':
+                                angle += angleStep;
+                                break;
+                            case '-':
+                                angle -= angleStep;
+                                break;
+                            case '[':
+                                stack.push({ x, y, angle });
+                                break;
+                            case ']':
+                                const saved = stack.pop();
+                                if (saved) {
+                                    x = saved.x;
+                                    y = saved.y;
+                                    angle = saved.angle;
+                                }
+                                break;
+                        }
+                    }
+                    
+                    return branches;
+                }
+            };
+
+            // Circle Packing
+            appState.patterns.circles = {
+                circles: [],
+                init: function() {
+                    this.circles = [];
+                    const numCircles = Math.max(20, appState.parameters.complexity / 2);
+                    const attempts = 1000;
+                    
+                    for (let i = 0; i < numCircles; i++) {
+                        let placed = false;
+                        for (let attempt = 0; attempt < attempts; attempt++) {
+                            const x = Math.random() * appState.canvasWidth;
+                            const y = Math.random() * appState.canvasHeight;
+                            const radius = Math.random() * 30 + 5;
+                            
+                            let valid = true;
+                            for (let other of this.circles) {
+                                const dx = x - other.x;
+                                const dy = y - other.y;
+                                const distance = Math.sqrt(dx * dx + dy * dy);
+                                if (distance < radius + other.radius + 2) {
+                                    valid = false;
+                                    break;
+                                }
+                            }
+                            
+                            if (valid) {
+                                this.circles.push({
+                                    x: x,
+                                    y: y,
+                                    radius: radius,
+                                    growth: 0,
+                                    targetRadius: radius,
+                                    vx: (Math.random() - 0.5) * 0.1,
+                                    vy: (Math.random() - 0.5) * 0.1
+                                });
+                                placed = true;
+                                break;
+                            }
+                        }
+                        
+                        if (!placed) break;
                     }
                 }
             };
@@ -1049,87 +1178,167 @@
                 });
             },
 
-            lissajous: function() {
-                const pattern = appState.patterns.lissajous;
+            reaction: function() {
+                const pattern = appState.patterns.reaction;
                 const { speed, motionX, motionY, lineWeight } = appState.parameters;
-                const centerX = appState.canvasWidth / 2;
-                const centerY = appState.canvasHeight / 2;
-                const scale = Math.min(appState.canvasWidth, appState.canvasHeight) * 0.3;
+                const Du = 1.0;
+                const Dv = 0.5;
+                const f = 0.055 + motionX * 0.01;
+                const k = 0.062 + motionY * 0.01;
+                const dt = 0.8 * speed;
+                const cellSize = Math.min(appState.canvasWidth, appState.canvasHeight) / pattern.gridSize;
                 
-                pattern.points.forEach((point, i) => {
-                    const t = appState.time * 0.001 * speed + i * 0.1;
-                    const x = centerX + scale * Math.sin(point.a * t + point.delta + motionX * 0.1);
-                    const y = centerY + scale * Math.sin(point.b * t + motionY * 0.1);
-                    
-                    point.trail.push({ x, y });
-                    if (point.trail.length > 100) {
-                        point.trail.shift();
+                // Update reaction-diffusion
+                for (let y = 0; y < pattern.gridSize; y++) {
+                    for (let x = 0; x < pattern.gridSize; x++) {
+                        const cell = pattern.grid[y][x];
+                        const neighbors = [
+                            [x-1, y], [x+1, y], [x, y-1], [x, y+1]
+                        ];
+                        
+                        let laplaceU = -4 * cell.u;
+                        let laplaceV = -4 * cell.v;
+                        
+                        neighbors.forEach(([nx, ny]) => {
+                            const wrapped = pattern.grid[(ny + pattern.gridSize) % pattern.gridSize]
+                                                      [(nx + pattern.gridSize) % pattern.gridSize];
+                            laplaceU += wrapped.u;
+                            laplaceV += wrapped.v;
+                        });
+                        
+                        const uvv = cell.u * cell.v * cell.v;
+                        cell.newU = cell.u + dt * (Du * laplaceU - uvv + f * (1 - cell.u));
+                        cell.newV = cell.v + dt * (Dv * laplaceV + uvv - (f + k) * cell.v);
+                        
+                        cell.newU = Math.max(0, Math.min(1, cell.newU));
+                        cell.newV = Math.max(0, Math.min(1, cell.newV));
                     }
-                    
-                    // Draw trail with gradient
-                    ctx.beginPath();
-                    point.trail.forEach((p, idx) => {
-                        if (idx === 0) {
-                            ctx.moveTo(p.x, p.y);
-                        } else {
-                            ctx.lineTo(p.x, p.y);
+                }
+                
+                // Update and draw
+                for (let y = 0; y < pattern.gridSize; y++) {
+                    for (let x = 0; x < pattern.gridSize; x++) {
+                        const cell = pattern.grid[y][x];
+                        cell.u = cell.newU;
+                        cell.v = cell.newV;
+                        
+                        if (cell.v > 0.1) {
+                            const intensity = cell.v;
+                            const color = interpolateColor(
+                                appState.parameters.colors.primary,
+                                appState.parameters.colors.secondary,
+                                appState.parameters.colors.accent,
+                                intensity
+                            );
+                            
+                            ctx.strokeStyle = color;
+                            ctx.lineWidth = lineWeight * intensity;
+                            ctx.beginPath();
+                            
+                            // Draw contour lines
+                            const px = x * cellSize + cellSize / 2;
+                            const py = y * cellSize + cellSize / 2;
+                            
+                            // Draw organic patterns based on concentration
+                            if (intensity > 0.3) {
+                                ctx.arc(px, py, cellSize * intensity * 0.5, 0, Math.PI * 2);
+                                ctx.stroke();
+                            }
+                            
+                            if (intensity > 0.5) {
+                                const neighbors = [
+                                    [x-1, y], [x+1, y], [x, y-1], [x, y+1]
+                                ];
+                                
+                                neighbors.forEach(([nx, ny]) => {
+                                    if (nx >= 0 && nx < pattern.gridSize && ny >= 0 && ny < pattern.gridSize) {
+                                        const neighbor = pattern.grid[ny][nx];
+                                        if (neighbor.v > 0.3) {
+                                            ctx.beginPath();
+                                            ctx.moveTo(px, py);
+                                            ctx.lineTo(nx * cellSize + cellSize / 2, ny * cellSize + cellSize / 2);
+                                            ctx.stroke();
+                                        }
+                                    }
+                                });
+                            }
                         }
-                    });
-                    
-                    const gradient = ctx.createLinearGradient(
-                        point.trail[0]?.x || x, point.trail[0]?.y || y,
-                        x, y
-                    );
-                    gradient.addColorStop(0, appState.parameters.colors.primary + '00');
-                    gradient.addColorStop(0.5, appState.parameters.colors.secondary + '88');
-                    gradient.addColorStop(1, appState.parameters.colors.accent);
-                    
-                    ctx.strokeStyle = gradient;
-                    ctx.lineWidth = lineWeight;
-                    ctx.stroke();
-                });
+                    }
+                }
             },
 
-            lorenz: function() {
-                const pattern = appState.patterns.lorenz;
+            voronoi: function() {
+                const pattern = appState.patterns.voronoi;
                 const { speed, motionX, motionY, lineWeight } = appState.parameters;
-                const sigma = 10;
-                const rho = 28;
-                const beta = 8/3;
-                const dt = 0.01 * speed;
-                const scale = 5;
-                const centerX = appState.canvasWidth / 2;
-                const centerY = appState.canvasHeight / 2;
                 
-                pattern.points.forEach((point, i) => {
-                    // Lorenz equations
-                    const dx = sigma * (point.y - point.x) * dt;
-                    const dy = (point.x * (rho - point.z) - point.y) * dt;
-                    const dz = (point.x * point.y - beta * point.z) * dt;
+                // Update seed positions
+                pattern.seeds.forEach(seed => {
+                    seed.vx += (Math.random() - 0.5) * 0.01 * speed;
+                    seed.vy += (Math.random() - 0.5) * 0.01 * speed;
+                    seed.vx *= 0.99;
+                    seed.vy *= 0.99;
                     
-                    point.x += dx + motionX * 0.01;
-                    point.y += dy + motionY * 0.01;
-                    point.z += dz;
+                    seed.x += seed.vx + motionX * 0.5;
+                    seed.y += seed.vy + motionY * 0.5;
                     
-                    const screenX = centerX + point.x * scale;
-                    const screenY = centerY + point.y * scale;
-                    
-                    point.trail.push({ x: screenX, y: screenY, z: point.z });
-                    if (point.trail.length > 150) {
-                        point.trail.shift();
+                    // Wrap around edges
+                    if (seed.x < 0) seed.x = appState.canvasWidth;
+                    if (seed.x > appState.canvasWidth) seed.x = 0;
+                    if (seed.y < 0) seed.y = appState.canvasHeight;
+                    if (seed.y > appState.canvasHeight) seed.y = 0;
+                });
+                
+                // Generate Voronoi diagram using simplified approach
+                const step = 8; // Lower resolution for performance
+                const edges = new Set();
+                
+                for (let y = 0; y < appState.canvasHeight; y += step) {
+                    for (let x = 0; x < appState.canvasWidth; x += step) {
+                        let closestId = -1;
+                        let minDist = Infinity;
+                        
+                        pattern.seeds.forEach(seed => {
+                            const dx = x - seed.x;
+                            const dy = y - seed.y;
+                            const dist = dx * dx + dy * dy;
+                            if (dist < minDist) {
+                                minDist = dist;
+                                closestId = seed.id;
+                            }
+                        });
+                        
+                        // Check neighboring pixels for cell boundaries
+                        const neighbors = [
+                            [x + step, y], [x, y + step], [x + step, y + step]
+                        ];
+                        
+                        neighbors.forEach(([nx, ny]) => {
+                            if (nx < appState.canvasWidth && ny < appState.canvasHeight) {
+                                let neighborId = -1;
+                                let neighborMinDist = Infinity;
+                                
+                                pattern.seeds.forEach(seed => {
+                                    const dx = nx - seed.x;
+                                    const dy = ny - seed.y;
+                                    const dist = dx * dx + dy * dy;
+                                    if (dist < neighborMinDist) {
+                                        neighborMinDist = dist;
+                                        neighborId = seed.id;
+                                    }
+                                });
+                                
+                                if (neighborId !== closestId) {
+                                    edges.add(`${x},${y},${nx},${ny}`);
+                                }
+                            }
+                        });
                     }
-                    
-                    // Draw 3D-like trail
-                    ctx.beginPath();
-                    point.trail.forEach((p, idx) => {
-                        if (idx === 0) {
-                            ctx.moveTo(p.x, p.y);
-                        } else {
-                            ctx.lineTo(p.x, p.y);
-                        }
-                    });
-                    
-                    const progress = i / pattern.points.length;
+                }
+                
+                // Draw edges
+                edges.forEach(edge => {
+                    const [x1, y1, x2, y2] = edge.split(',').map(Number);
+                    const progress = (x1 + y1) / (appState.canvasWidth + appState.canvasHeight);
                     const color = interpolateColor(
                         appState.parameters.colors.primary,
                         appState.parameters.colors.secondary,
@@ -1138,8 +1347,27 @@
                     );
                     
                     ctx.strokeStyle = color;
-                    ctx.lineWidth = lineWeight * (0.5 + (point.z + 30) / 60);
+                    ctx.lineWidth = lineWeight * 0.8;
+                    ctx.beginPath();
+                    ctx.moveTo(x1, y1);
+                    ctx.lineTo(x2, y2);
                     ctx.stroke();
+                });
+                
+                // Draw seed points
+                pattern.seeds.forEach((seed, i) => {
+                    const progress = i / pattern.seeds.length;
+                    const color = interpolateColor(
+                        appState.parameters.colors.primary,
+                        appState.parameters.colors.secondary,
+                        appState.parameters.colors.accent,
+                        progress
+                    );
+                    
+                    ctx.fillStyle = color;
+                    ctx.beginPath();
+                    ctx.arc(seed.x, seed.y, 2, 0, Math.PI * 2);
+                    ctx.fill();
                 });
             },
 
@@ -1263,74 +1491,77 @@
                 ctx.stroke();
             },
 
-            particles: function() {
-                const pattern = appState.patterns.particles;
+            maze: function() {
+                const pattern = appState.patterns.maze;
                 const { speed, motionX, motionY, lineWeight } = appState.parameters;
+                const cellSize = Math.min(appState.canvasWidth, appState.canvasHeight) / pattern.gridSize;
                 
-                // Update attractors
-                pattern.attractors.forEach(attractor => {
-                    attractor.x += attractor.vx * speed;
-                    attractor.y += attractor.vy * speed;
+                // Generate maze using recursive backtracking
+                if (pattern.walker && Math.random() < 0.1 * speed) {
+                    const { x, y } = pattern.walker;
+                    const directions = [];
                     
-                    if (attractor.x < 0 || attractor.x > appState.canvasWidth) attractor.vx *= -1;
-                    if (attractor.y < 0 || attractor.y > appState.canvasHeight) attractor.vy *= -1;
-                    
-                    attractor.vx += motionX * 0.01;
-                    attractor.vy += motionY * 0.01;
-                });
-                
-                // Update particles
-                pattern.swarm.forEach((particle, i) => {
-                    particle.vx *= 0.98;
-                    particle.vy *= 0.98;
-                    
-                    // Attract to nearest attractor
-                    let nearestDist = Infinity;
-                    let nearestAttractor = null;
-                    
-                    pattern.attractors.forEach(attractor => {
-                        const dx = attractor.x - particle.x;
-                        const dy = attractor.y - particle.y;
-                        const dist = Math.sqrt(dx * dx + dy * dy);
+                    // Check all four directions
+                    [[0, -1], [1, 0], [0, 1], [-1, 0]].forEach(([dx, dy], dirIndex) => {
+                        const nx = x + dx;
+                        const ny = y + dy;
                         
-                        if (dist < nearestDist) {
-                            nearestDist = dist;
-                            nearestAttractor = { dx, dy, dist };
+                        if (nx >= 0 && nx < pattern.gridSize && ny >= 0 && ny < pattern.gridSize) {
+                            if (!pattern.grid[ny][nx].visited) {
+                                directions.push({ x: nx, y: ny, dir: dirIndex });
+                            }
                         }
                     });
                     
-                    if (nearestAttractor && nearestAttractor.dist > 10) {
-                        particle.vx += nearestAttractor.dx / nearestAttractor.dist * 0.5 * speed;
-                        particle.vy += nearestAttractor.dy / nearestAttractor.dist * 0.5 * speed;
-                    }
-                    
-                    particle.x += particle.vx;
-                    particle.y += particle.vy;
-                    
-                    // Wrap around
-                    if (particle.x < 0) particle.x = appState.canvasWidth;
-                    if (particle.x > appState.canvasWidth) particle.x = 0;
-                    if (particle.y < 0) particle.y = appState.canvasHeight;
-                    if (particle.y > appState.canvasHeight) particle.y = 0;
-                    
-                    // Update trail
-                    particle.trail.push({ x: particle.x, y: particle.y });
-                    if (particle.trail.length > 20) {
-                        particle.trail.shift();
-                    }
-                    
-                    // Draw trail
-                    if (particle.trail.length > 1) {
-                        ctx.beginPath();
-                        particle.trail.forEach((p, idx) => {
-                            if (idx === 0) {
-                                ctx.moveTo(p.x, p.y);
-                            } else {
-                                ctx.lineTo(p.x, p.y);
-                            }
-                        });
+                    if (directions.length > 0) {
+                        // Choose random direction
+                        const next = directions[Math.floor(Math.random() * directions.length)];
+                        const current = pattern.grid[y][x];
+                        const nextCell = pattern.grid[next.y][next.x];
                         
-                        const progress = i / pattern.swarm.length;
+                        // Remove walls between current and next cell
+                        switch (next.dir) {
+                            case 0: // North
+                                current.walls.top = false;
+                                nextCell.walls.bottom = false;
+                                break;
+                            case 1: // East
+                                current.walls.right = false;
+                                nextCell.walls.left = false;
+                                break;
+                            case 2: // South
+                                current.walls.bottom = false;
+                                nextCell.walls.top = false;
+                                break;
+                            case 3: // West
+                                current.walls.left = false;
+                                nextCell.walls.right = false;
+                                break;
+                        }
+                        
+                        nextCell.visited = true;
+                        pattern.stack.push({ x, y });
+                        pattern.walker = { x: next.x, y: next.y };
+                    } else if (pattern.stack.length > 0) {
+                        // Backtrack
+                        pattern.walker = pattern.stack.pop();
+                    }
+                }
+                
+                // Apply motion influence
+                if (Math.abs(motionX) > 0.3 || Math.abs(motionY) > 0.3) {
+                    const randomCell = pattern.grid[Math.floor(Math.random() * pattern.gridSize)][Math.floor(Math.random() * pattern.gridSize)];
+                    randomCell.visited = false;
+                    randomCell.walls = { top: true, right: true, bottom: true, left: true };
+                }
+                
+                // Draw maze
+                pattern.grid.forEach((row, y) => {
+                    row.forEach((cell, x) => {
+                        const px = x * cellSize;
+                        const py = y * cellSize;
+                        
+                        const progress = (x + y) / (pattern.gridSize * 2);
                         const color = interpolateColor(
                             appState.parameters.colors.primary,
                             appState.parameters.colors.secondary,
@@ -1338,11 +1569,167 @@
                             progress
                         );
                         
-                        ctx.strokeStyle = color + '66';
-                        ctx.lineWidth = lineWeight * 0.5;
+                        ctx.strokeStyle = color;
+                        ctx.lineWidth = lineWeight;
+                        ctx.beginPath();
+                        
+                        // Draw walls
+                        if (cell.walls.top) {
+                            ctx.moveTo(px, py);
+                            ctx.lineTo(px + cellSize, py);
+                        }
+                        if (cell.walls.right) {
+                            ctx.moveTo(px + cellSize, py);
+                            ctx.lineTo(px + cellSize, py + cellSize);
+                        }
+                        if (cell.walls.bottom) {
+                            ctx.moveTo(px + cellSize, py + cellSize);
+                            ctx.lineTo(px, py + cellSize);
+                        }
+                        if (cell.walls.left) {
+                            ctx.moveTo(px, py + cellSize);
+                            ctx.lineTo(px, py);
+                        }
+                        
                         ctx.stroke();
-                    }
+                        
+                        // Highlight current walker position
+                        if (pattern.walker && pattern.walker.x === x && pattern.walker.y === y) {
+                            ctx.fillStyle = color + '33';
+                            ctx.fillRect(px + 1, py + 1, cellSize - 2, cellSize - 2);
+                        }
+                    });
                 });
+            },
+
+            lsystem: function() {
+                const pattern = appState.patterns.lsystem;
+                const { speed, motionX, motionY, lineWeight } = appState.parameters;
+                
+                // Occasionally evolve the L-system
+                if (Math.random() < 0.005 * speed) {
+                    pattern.evolve();
+                    pattern.branches = pattern.parseLSystem();
+                }
+                
+                // Draw branches with animation
+                pattern.branches.forEach((branch, i) => {
+                    const progress = i / pattern.branches.length;
+                    const color = interpolateColor(
+                        appState.parameters.colors.primary,
+                        appState.parameters.colors.secondary,
+                        appState.parameters.colors.accent,
+                        progress
+                    );
+                    
+                    // Apply motion influence
+                    const offsetX = motionX * 20;
+                    const offsetY = motionY * 20;
+                    
+                    ctx.strokeStyle = color;
+                    ctx.lineWidth = lineWeight * (1 - progress * 0.5);
+                    ctx.beginPath();
+                    ctx.moveTo(branch.x1 + offsetX, branch.y1 + offsetY);
+                    ctx.lineTo(branch.x2 + offsetX, branch.y2 + offsetY);
+                    ctx.stroke();
+                });
+                
+                // Add organic growth variation
+                if (Math.random() < 0.01 * speed) {
+                    const rules = [
+                        { 'F': 'F+F-F-F+F' },
+                        { 'F': 'F-F+F+F-F' },
+                        { 'F': 'F+F-F+F-F' },
+                        { 'F': 'F-F++F-F' }
+                    ];
+                    pattern.rules = rules[Math.floor(Math.random() * rules.length)];
+                }
+            },
+
+            circles: function() {
+                const pattern = appState.patterns.circles;
+                const { speed, motionX, motionY, lineWeight } = appState.parameters;
+                
+                // Update circle positions and growth
+                pattern.circles.forEach(circle => {
+                    circle.x += circle.vx * speed + motionX * 0.5;
+                    circle.y += circle.vy * speed + motionY * 0.5;
+                    
+                    // Wrap around edges
+                    if (circle.x < -circle.radius) circle.x = appState.canvasWidth + circle.radius;
+                    if (circle.x > appState.canvasWidth + circle.radius) circle.x = -circle.radius;
+                    if (circle.y < -circle.radius) circle.y = appState.canvasHeight + circle.radius;
+                    if (circle.y > appState.canvasHeight + circle.radius) circle.y = -circle.radius;
+                    
+                    // Organic growth animation
+                    circle.growth += 0.02 * speed;
+                    circle.radius = circle.targetRadius + Math.sin(circle.growth) * 5;
+                });
+                
+                // Check for collisions and draw connections
+                pattern.circles.forEach((circle, i) => {
+                    const progress = i / pattern.circles.length;
+                    const color = interpolateColor(
+                        appState.parameters.colors.primary,
+                        appState.parameters.colors.secondary,
+                        appState.parameters.colors.accent,
+                        progress
+                    );
+                    
+                    ctx.strokeStyle = color;
+                    ctx.lineWidth = lineWeight;
+                    ctx.beginPath();
+                    ctx.arc(circle.x, circle.y, circle.radius, 0, Math.PI * 2);
+                    ctx.stroke();
+                    
+                    // Draw connections to nearby circles
+                    pattern.circles.forEach((other, j) => {
+                        if (i !== j) {
+                            const dx = other.x - circle.x;
+                            const dy = other.y - circle.y;
+                            const distance = Math.sqrt(dx * dx + dy * dy);
+                            const threshold = circle.radius + other.radius + 20;
+                            
+                            if (distance < threshold) {
+                                ctx.strokeStyle = color + '33';
+                                ctx.lineWidth = lineWeight * 0.3;
+                                ctx.beginPath();
+                                ctx.moveTo(circle.x, circle.y);
+                                ctx.lineTo(other.x, other.y);
+                                ctx.stroke();
+                            }
+                        }
+                    });
+                });
+                
+                // Occasionally add new circles
+                if (Math.random() < 0.001 * speed && pattern.circles.length < 100) {
+                    const newCircle = {
+                        x: Math.random() * appState.canvasWidth,
+                        y: Math.random() * appState.canvasHeight,
+                        radius: Math.random() * 20 + 5,
+                        growth: 0,
+                        targetRadius: Math.random() * 20 + 5,
+                        vx: (Math.random() - 0.5) * 0.2,
+                        vy: (Math.random() - 0.5) * 0.2
+                    };
+                    
+                    // Check if position is valid
+                    let valid = true;
+                    for (let other of pattern.circles) {
+                        const dx = newCircle.x - other.x;
+                        const dy = newCircle.y - other.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        if (distance < newCircle.radius + other.radius + 5) {
+                            valid = false;
+                            break;
+                        }
+                    }
+                    
+                    if (valid) {
+                        pattern.circles.push(newCircle);
+                    }
+                }
             },
 
             truchet: function() {
@@ -1686,12 +2073,14 @@
             // Update title
             const titles = {
                 flowfield: 'Flow Fields',
-                lissajous: 'Lissajous Curves',
-                lorenz: 'Strange Attractor',
                 waves: 'Wave Interference',
                 growth: 'Differential Growth',
-                particles: 'Particle Swarm',
-                truchet: 'Truchet Tiles ✨'
+                truchet: 'Truchet Tiles ✨',
+                reaction: 'Reaction-Diffusion',
+                voronoi: 'Voronoi Cells',
+                maze: 'Maze Growth',
+                lsystem: 'L-Systems',
+                circles: 'Circle Packing'
             };
             document.getElementById('patternTitle').textContent = titles[patternType];
             
