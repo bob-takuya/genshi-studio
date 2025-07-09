@@ -185,8 +185,8 @@
     }
   ],
   "stats": {
-    "startTime": "2025-07-09T04:05:17.481Z",
-    "duration": 120021,
+    "startTime": "2025-07-09T06:57:31.289Z",
+    "duration": 120018.838,
     "expected": 0,
     "skipped": 0,
     "unexpected": 0,
