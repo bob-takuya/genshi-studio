@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genshi Studio - Cultural Expression Through Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .nav a:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            color: white;
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .feature h3 {
+            margin-bottom: 1rem;
+            color: #feca57;
+        }
+
+        .demo-section {
+            background: rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-top: 3rem;
+            border-radius: 10px;
+        }
+
+        .pattern-demo {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .pattern-box {
+            width: 100px;
+            height: 100px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: white;
+        }
+
+        .pattern-box:hover {
+            transform: scale(1.1);
+            border-color: #feca57;
+        }
+
+        .ichimatsu {
+            background: repeating-conic-gradient(
+                #4a90e2 0deg 90deg,
+                #f5f5f5 90deg 180deg,
+                #4a90e2 180deg 270deg,
+                #f5f5f5 270deg 360deg
+            );
+            background-size: 20px 20px;
+        }
+
+        .seigaiha {
+            background: radial-gradient(circle at 50% 100%, transparent 30%, #4a90e2 30%, #4a90e2 35%, transparent 35%);
+            background-size: 40px 20px;
+        }
+
+        .asanoha {
+            background: linear-gradient(60deg, #4a90e2 25%, transparent 25%),
+                        linear-gradient(-60deg, #4a90e2 25%, transparent 25%),
+                        linear-gradient(60deg, transparent 75%, #4a90e2 75%),
+                        linear-gradient(-60deg, transparent 75%, #4a90e2 75%);
+            background-size: 30px 30px;
+        }
+
+        .footer {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1rem 2rem;
+            text-align: center;
+            color: white;
+            opacity: 0.7;
+        }
+
+        .canvas-demo {
+            width: 100%;
+            max-width: 600px;
+            height: 300px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            margin: 2rem auto;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .pattern-demo {
+                flex-wrap: wrap;
+            }
+            
+            .nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">Genshi Studio</div>
+        <nav class="nav">
+            <a href="#home">Home</a>
+            <a href="#studio">Studio</a>
+            <a href="#gallery">Gallery</a>
+            <a href="#about">About</a>
+        </nav>
+    </header>
+
+    <main class="main">
+        <div class="hero">
+            <h1>源始 Genshi Studio</h1>
+            <p>Where traditional Japanese aesthetics meet modern web technology. Create, explore, and express through cultural patterns and programmable creativity.</p>
+            
+            <a href="#studio" class="cta-button">Start Creating</a>
+            
+            <div class="features">
+                <div class="feature">
+                    <h3>Cultural Patterns</h3>
+                    <p>Explore traditional Japanese design patterns like Ichimatsu, Seigaiha, and Asanoha with modern interactive tools.</p>
+                </div>
+                <div class="feature">
+                    <h3>Hybrid Programming</h3>
+                    <p>Seamlessly blend visual design tools with code-based creation for unlimited creative possibilities.</p>
+                </div>
+                <div class="feature">
+                    <h3>Web-Native</h3>
+                    <p>Professional-grade graphics tools that run entirely in your browser with 60fps performance.</p>
+                </div>
+            </div>
+
+            <div class="demo-section">
+                <h2>Interactive Pattern Demo</h2>
+                <p>Click on the patterns below to explore traditional Japanese designs:</p>
+                <div class="pattern-demo">
+                    <div class="pattern-box ichimatsu" onclick="showPattern('ichimatsu')">
+                        Ichimatsu<br>市松
+                    </div>
+                    <div class="pattern-box seigaiha" onclick="showPattern('seigaiha')">
+                        Seigaiha<br>青海波
+                    </div>
+                    <div class="pattern-box asanoha" onclick="showPattern('asanoha')">
+                        Asanoha<br>麻の葉
+                    </div>
+                </div>
+                
+                <canvas class="canvas-demo" id="patternCanvas" width="600" height="300"></canvas>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 Genshi Studio - AI Creative Team System | Bridging Traditional Art and Modern Technology</p>
+    </footer>
+
+    <script>
+        // Interactive pattern generation
+        const canvas = document.getElementById('patternCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function showPattern(patternType) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            switch(patternType) {
+                case 'ichimatsu':
+                    drawIchimatsu();
+                    break;
+                case 'seigaiha':
+                    drawSeigaiha();
+                    break;
+                case 'asanoha':
+                    drawAsanoha();
+                    break;
+            }
+        }
+
+        function drawIchimatsu() {
+            const size = 30;
+            const colors = ['#4a90e2', '#f5f5f5'];
+            
+            for (let x = 0; x < canvas.width; x += size) {
+                for (let y = 0; y < canvas.height; y += size) {
+                    const colorIndex = (Math.floor(x / size) + Math.floor(y / size)) % 2;
+                    ctx.fillStyle = colors[colorIndex];
+                    ctx.fillRect(x, y, size, size);
+                }
+            }
+        }
+
+        function drawSeigaiha() {
+            ctx.strokeStyle = '#4a90e2';
+            ctx.lineWidth = 2;
+            
+            const radius = 40;
+            const spacing = 80;
+            
+            for (let x = -radius; x < canvas.width + radius; x += spacing) {
+                for (let y = -radius; y < canvas.height + radius; y += spacing) {
+                    for (let r = 10; r < radius; r += 15) {
+                        ctx.beginPath();
+                        ctx.arc(x, y, r, 0, Math.PI);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function drawAsanoha() {
+            ctx.strokeStyle = '#4a90e2';
+            ctx.lineWidth = 2;
+            
+            const size = 60;
+            
+            for (let x = 0; x < canvas.width; x += size) {
+                for (let y = 0; y < canvas.height; y += size) {
+                    // Draw hexagon
+                    ctx.beginPath();
+                    for (let i = 0; i < 6; i++) {
+                        const angle = (i * Math.PI) / 3;
+                        const px = x + size/2 + Math.cos(angle) * size/3;
+                        const py = y + size/2 + Math.sin(angle) * size/3;
+                        
+                        if (i === 0) {
+                            ctx.moveTo(px, py);
+                        } else {
+                            ctx.lineTo(px, py);
+                        }
+                    }
+                    ctx.closePath();
+                    ctx.stroke();
+                    
+                    // Draw inner lines
+                    ctx.beginPath();
+                    ctx.moveTo(x + size/2, y);
+                    ctx.lineTo(x + size/2, y + size);
+                    ctx.moveTo(x, y + size/2);
+                    ctx.lineTo(x + size, y + size/2);
+                    ctx.stroke();
+                }
+            }
+        }
+
+        // Initialize with Ichimatsu pattern
+        showPattern('ichimatsu');
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Add some interactivity to the canvas
+        canvas.addEventListener('click', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            // Add a small animation effect
+            ctx.beginPath();
+            ctx.arc(x, y, 10, 0, 2 * Math.PI);
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+            ctx.fill();
+            
+            setTimeout(() => {
+                // Redraw the current pattern after a short delay
+                const activePattern = document.querySelector('.pattern-box:hover') || 
+                                    document.querySelector('.pattern-box');
+                if (activePattern) {
+                    showPattern(activePattern.onclick.toString().match(/'([^']+)'/)[1]);
+                }
+            }, 200);
+        });
+    </script>
+</body>
+</html>
