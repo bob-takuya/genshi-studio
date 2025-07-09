@@ -27,7 +27,7 @@
 
 ## 🚀 Live Demo
 
-**[Visit Genshi Studio](https://YOUR_USERNAME.github.io/genshi-studio/)**
+**[Visit Genshi Studio](https://bob-takuya.github.io/genshi-studio/)**
 
 ## 🛠️ Technical Architecture
 
@@ -59,7 +59,7 @@ Hemp leaf pattern symbolizing growth and protection. Geometric implementation wi
 ### Local Development
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/genshi-studio.git
+git clone https://github.com/bob-takuya/genshi-studio.git
 
 # Navigate to project directory
 cd genshi-studio
@@ -156,9 +156,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🌐 Links
 
-- **Live Demo**: [https://YOUR_USERNAME.github.io/genshi-studio/](https://YOUR_USERNAME.github.io/genshi-studio/)
-- **GitHub Repository**: [https://github.com/YOUR_USERNAME/genshi-studio](https://github.com/YOUR_USERNAME/genshi-studio)
-- **Documentation**: [https://YOUR_USERNAME.github.io/genshi-studio/docs/](https://YOUR_USERNAME.github.io/genshi-studio/docs/)
+- **Live Demo**: [https://bob-takuya.github.io/genshi-studio/](https://bob-takuya.github.io/genshi-studio/)
+- **GitHub Repository**: [https://github.com/bob-takuya/genshi-studio](https://github.com/bob-takuya/genshi-studio)
+- **Documentation**: [https://bob-takuya.github.io/genshi-studio/docs/](https://bob-takuya.github.io/genshi-studio/docs/)
 
 ---
 
