@@ -696,6 +696,8 @@
             time: 0,
             deltaTime: 0,
             lastTime: 0,
+            canvasWidth: 800,  // Logical dimensions
+            canvasHeight: 800,
             parameters: {
                 speed: 1.0,
                 complexity: 50,
@@ -767,17 +769,27 @@
             const dpr = window.devicePixelRatio || 1;
             const rect = canvas.getBoundingClientRect();
             
+            // Store logical dimensions
+            appState.canvasWidth = rect.width;
+            appState.canvasHeight = rect.height;
+            
+            // Set canvas display size
             canvas.style.width = rect.width + 'px';
             canvas.style.height = rect.height + 'px';
             
+            // Set canvas buffer size
             canvas.width = rect.width * dpr;
             canvas.height = rect.height * dpr;
             
+            // Scale context to match device pixel ratio
             ctx.scale(dpr, dpr);
+            
+            // Save context state for restoration
+            ctx.save();
             
             // Black background
             ctx.fillStyle = '#000';
-            ctx.fillRect(0, 0, rect.width, rect.height);
+            ctx.fillRect(0, 0, appState.canvasWidth, appState.canvasHeight);
             
             // Motion canvas setup
             const motionRect = motionCanvas.getBoundingClientRect();
@@ -795,8 +807,8 @@
                     const numParticles = appState.parameters.complexity * 2;
                     for (let i = 0; i < numParticles; i++) {
                         this.particles.push({
-                            x: Math.random() * canvas.width,
-                            y: Math.random() * canvas.height,
+                            x: Math.random() * appState.canvasWidth,
+                            y: Math.random() * appState.canvasHeight,
                             vx: 0,
                             vy: 0,
                             age: 0,
@@ -846,8 +858,8 @@
                     const numSources = Math.min(5, Math.floor(appState.parameters.complexity / 10));
                     for (let i = 0; i < numSources; i++) {
                         this.sources.push({
-                            x: Math.random() * canvas.width,
-                            y: Math.random() * canvas.height,
+                            x: Math.random() * appState.canvasWidth,
+                            y: Math.random() * appState.canvasHeight,
                             frequency: 0.01 + Math.random() * 0.02,
                             amplitude: 50 + Math.random() * 100,
                             phase: Math.random() * Math.PI * 2
@@ -866,8 +878,8 @@
                     for (let i = 0; i < numNodes; i++) {
                         const angle = (i / numNodes) * Math.PI * 2;
                         this.nodes.push({
-                            x: canvas.width / 2 + radius * Math.cos(angle),
-                            y: canvas.height / 2 + radius * Math.sin(angle),
+                            x: appState.canvasWidth / 2 + radius * Math.cos(angle),
+                            y: appState.canvasHeight / 2 + radius * Math.sin(angle),
                             vx: 0,
                             vy: 0
                         });
@@ -886,8 +898,8 @@
                     // Create swarm
                     for (let i = 0; i < appState.parameters.complexity * 3; i++) {
                         this.swarm.push({
-                            x: Math.random() * canvas.width,
-                            y: Math.random() * canvas.height,
+                            x: Math.random() * appState.canvasWidth,
+                            y: Math.random() * appState.canvasHeight,
                             vx: (Math.random() - 0.5) * 2,
                             vy: (Math.random() - 0.5) * 2,
                             trail: []
@@ -897,8 +909,8 @@
                     // Create attractors
                     for (let i = 0; i < 3; i++) {
                         this.attractors.push({
-                            x: Math.random() * canvas.width,
-                            y: Math.random() * canvas.height,
+                            x: Math.random() * appState.canvasWidth,
+                            y: Math.random() * appState.canvasHeight,
                             strength: 50 + Math.random() * 100
                         });
                     }
@@ -930,10 +942,10 @@
                     particle.y += particle.vy;
                     
                     // Wrap around edges
-                    if (particle.x < 0) particle.x = canvas.width;
-                    if (particle.x > canvas.width) particle.x = 0;
-                    if (particle.y < 0) particle.y = canvas.height;
-                    if (particle.y > canvas.height) particle.y = 0;
+                    if (particle.x < 0) particle.x = appState.canvasWidth;
+                    if (particle.x > appState.canvasWidth) particle.x = 0;
+                    if (particle.y < 0) particle.y = appState.canvasHeight;
+                    if (particle.y > appState.canvasHeight) particle.y = 0;
                     
                     // Draw
                     const progress = particle.age / particle.maxAge;
@@ -954,8 +966,8 @@
                     // Age particle
                     particle.age++;
                     if (particle.age > particle.maxAge) {
-                        particle.x = Math.random() * canvas.width;
-                        particle.y = Math.random() * canvas.height;
+                        particle.x = Math.random() * appState.canvasWidth;
+                        particle.y = Math.random() * appState.canvasHeight;
                         particle.age = 0;
                     }
                 });
@@ -964,9 +976,9 @@
             lissajous: function() {
                 const pattern = appState.patterns.lissajous;
                 const { speed, motionX, motionY, lineWeight } = appState.parameters;
-                const centerX = canvas.width / 2;
-                const centerY = canvas.height / 2;
-                const scale = Math.min(canvas.width, canvas.height) * 0.3;
+                const centerX = appState.canvasWidth / 2;
+                const centerY = appState.canvasHeight / 2;
+                const scale = Math.min(appState.canvasWidth, appState.canvasHeight) * 0.3;
                 
                 pattern.points.forEach((point, i) => {
                     const t = appState.time * 0.001 * speed + i * 0.1;
@@ -1010,8 +1022,8 @@
                 const beta = 8/3;
                 const dt = 0.01 * speed;
                 const scale = 5;
-                const centerX = canvas.width / 2;
-                const centerY = canvas.height / 2;
+                const centerX = appState.canvasWidth / 2;
+                const centerY = appState.canvasHeight / 2;
                 
                 pattern.points.forEach((point, i) => {
                     // Lorenz equations
@@ -1060,9 +1072,9 @@
                 const { speed, motionX, motionY, lineWeight, complexity } = appState.parameters;
                 const resolution = Math.max(5, 50 - complexity / 4);
                 
-                for (let x = 0; x < canvas.width; x += resolution) {
+                for (let x = 0; x < appState.canvasWidth; x += resolution) {
                     ctx.beginPath();
-                    for (let y = 0; y < canvas.height; y += 2) {
+                    for (let y = 0; y < appState.canvasHeight; y += 2) {
                         let amplitude = 0;
                         
                         pattern.sources.forEach(source => {
@@ -1084,7 +1096,7 @@
                         }
                     }
                     
-                    const progress = x / canvas.width;
+                    const progress = x / appState.canvasWidth;
                     const color = interpolateColor(
                         appState.parameters.colors.primary,
                         appState.parameters.colors.secondary,
@@ -1103,8 +1115,8 @@
                 const { speed, motionX, motionY, lineWeight } = appState.parameters;
                 const repelDistance = 15;
                 const attractDistance = 25;
-                const centerX = canvas.width / 2 + motionX * 50;
-                const centerY = canvas.height / 2 + motionY * 50;
+                const centerX = appState.canvasWidth / 2 + motionX * 50;
+                const centerY = appState.canvasHeight / 2 + motionY * 50;
                 
                 // Update node positions
                 pattern.nodes.forEach((node, i) => {
@@ -1221,11 +1233,11 @@
                     particle.y += particle.vy;
                     
                     // Bounce off walls
-                    if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -0.9;
-                    if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -0.9;
+                    if (particle.x < 0 || particle.x > appState.canvasWidth) particle.vx *= -0.9;
+                    if (particle.y < 0 || particle.y > appState.canvasHeight) particle.vy *= -0.9;
                     
-                    particle.x = Math.max(0, Math.min(canvas.width, particle.x));
-                    particle.y = Math.max(0, Math.min(canvas.height, particle.y));
+                    particle.x = Math.max(0, Math.min(appState.canvasWidth, particle.x));
+                    particle.y = Math.max(0, Math.min(appState.canvasHeight, particle.y));
                     
                     // Update trail
                     particle.trail.push({ x: particle.x, y: particle.y });
@@ -1281,9 +1293,8 @@
             }
             
             // Clear with fade effect
-            const rect = canvas.getBoundingClientRect();
             ctx.fillStyle = `rgba(0, 0, 0, ${1 - appState.parameters.fade})`;
-            ctx.fillRect(0, 0, rect.width, rect.height);
+            ctx.fillRect(0, 0, appState.canvasWidth, appState.canvasHeight);
             
             // Render current pattern
             if (patternRenderers[appState.currentPattern]) {
@@ -1389,9 +1400,8 @@
             }
             
             // Clear canvas
-            const rect = canvas.getBoundingClientRect();
             ctx.fillStyle = '#000';
-            ctx.fillRect(0, 0, rect.width, rect.height);
+            ctx.fillRect(0, 0, appState.canvasWidth, appState.canvasHeight);
         }
 
         function toggleAnimation() {
