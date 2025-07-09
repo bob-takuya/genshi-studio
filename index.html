@@ -871,16 +871,26 @@
             // Reaction-Diffusion
             appState.patterns.reaction = {
                 grid: [],
-                gridSize: 64,
+                gridSizeX: 80,
+                gridSizeY: 60,
                 init: function() {
-                    this.gridSize = Math.max(32, 96 - appState.parameters.complexity / 4);
+                    // Make grid fill entire canvas, not just square
+                    const baseSize = Math.max(40, 120 - appState.parameters.complexity / 2);
+                    this.gridSizeX = Math.floor(baseSize * (appState.canvasWidth / appState.canvasHeight));
+                    this.gridSizeY = baseSize;
+                    
                     this.grid = [];
-                    for (let y = 0; y < this.gridSize; y++) {
+                    for (let y = 0; y < this.gridSizeY; y++) {
                         this.grid[y] = [];
-                        for (let x = 0; x < this.gridSize; x++) {
+                        for (let x = 0; x < this.gridSizeX; x++) {
+                            // Add multiple seed points across the canvas
+                            const isCenter1 = x === Math.floor(this.gridSizeX / 3) && y === Math.floor(this.gridSizeY / 3);
+                            const isCenter2 = x === Math.floor(this.gridSizeX * 2 / 3) && y === Math.floor(this.gridSizeY * 2 / 3);
+                            const isRandom = Math.random() < 0.01;
+                            
                             this.grid[y][x] = {
                                 u: 1.0,
-                                v: x === this.gridSize / 2 && y === this.gridSize / 2 ? 0.5 : 0.0,
+                                v: (isCenter1 || isCenter2 || isRandom) ? 0.5 + Math.random() * 0.3 : 0.0,
                                 newU: 1.0,
                                 newV: 0.0
                             };
@@ -930,21 +940,36 @@
             // Differential Growth
             appState.patterns.growth = {
                 nodes: [],
+                shapes: [],
                 init: function() {
                     this.nodes = [];
-                    const numNodes = Math.max(10, appState.parameters.complexity);
-                    const centerX = appState.canvasWidth / 2;
-                    const centerY = appState.canvasHeight / 2;
-                    const radius = Math.min(appState.canvasWidth, appState.canvasHeight) * 0.2;
+                    this.shapes = [];
                     
-                    for (let i = 0; i < numNodes; i++) {
-                        const angle = (i / numNodes) * Math.PI * 2;
-                        this.nodes.push({
-                            x: centerX + radius * Math.cos(angle),
-                            y: centerY + radius * Math.sin(angle),
-                            vx: 0,
-                            vy: 0
-                        });
+                    // Create multiple growing shapes across the canvas
+                    const numShapes = Math.max(2, Math.floor(appState.parameters.complexity / 25));
+                    
+                    for (let s = 0; s < numShapes; s++) {
+                        const centerX = (s + 0.5) * (appState.canvasWidth / numShapes) + (Math.random() - 0.5) * 100;
+                        const centerY = appState.canvasHeight * (0.2 + Math.random() * 0.6);
+                        const radius = Math.min(appState.canvasWidth, appState.canvasHeight) * (0.05 + Math.random() * 0.1);
+                        const numNodes = Math.max(8, Math.floor(appState.parameters.complexity / numShapes));
+                        
+                        const shape = { nodes: [], id: s };
+                        
+                        for (let i = 0; i < numNodes; i++) {
+                            const angle = (i / numNodes) * Math.PI * 2;
+                            shape.nodes.push({
+                                x: centerX + radius * Math.cos(angle),
+                                y: centerY + radius * Math.sin(angle),
+                                vx: 0,
+                                vy: 0,
+                                originalAngle: angle,
+                                shapeId: s
+                            });
+                        }
+                        
+                        this.shapes.push(shape);
+                        this.nodes.push(...shape.nodes);
                     }
                 }
             };
@@ -952,18 +977,23 @@
             // Maze Growth
             appState.patterns.maze = {
                 grid: [],
-                gridSize: 15,
+                gridSizeX: 25,
+                gridSizeY: 20,
                 walker: null,
                 stack: [],
                 init: function() {
-                    this.gridSize = Math.max(10, Math.min(30, Math.floor(appState.parameters.complexity / 6)));
+                    // Make maze fill entire canvas
+                    const complexity = Math.max(15, Math.min(40, Math.floor(appState.parameters.complexity / 4)));
+                    this.gridSizeX = Math.floor(complexity * (appState.canvasWidth / appState.canvasHeight));
+                    this.gridSizeY = complexity;
+                    
                     this.grid = [];
                     this.stack = [];
                     
                     // Initialize grid
-                    for (let y = 0; y < this.gridSize; y++) {
+                    for (let y = 0; y < this.gridSizeY; y++) {
                         this.grid[y] = [];
-                        for (let x = 0; x < this.gridSize; x++) {
+                        for (let x = 0; x < this.gridSizeX; x++) {
                             this.grid[y][x] = {
                                 walls: { top: true, right: true, bottom: true, left: true },
                                 visited: false,
@@ -973,9 +1003,16 @@
                         }
                     }
                     
-                    // Start walker
+                    // Start multiple walkers for more activity
                     this.walker = { x: 0, y: 0 };
                     this.grid[0][0].visited = true;
+                    
+                    // Add some random starting points
+                    for (let i = 0; i < 3; i++) {
+                        const rx = Math.floor(Math.random() * this.gridSizeX);
+                        const ry = Math.floor(Math.random() * this.gridSizeY);
+                        this.grid[ry][rx].visited = true;
+                    }
                 }
             };
 
@@ -986,19 +1023,36 @@
                 generation: 0,
                 string: 'F',
                 branches: [],
+                systems: [],
                 init: function() {
                     this.generation = 0;
                     this.string = this.axiom;
                     this.branches = [];
+                    this.systems = [];
                     
-                    // Generate a few iterations
+                    // Create multiple L-systems across the canvas
+                    const numSystems = Math.max(3, Math.floor(appState.parameters.complexity / 30));
+                    for (let i = 0; i < numSystems; i++) {
+                        this.systems.push({
+                            x: (i + 0.5) * (appState.canvasWidth / numSystems),
+                            y: appState.canvasHeight * (0.2 + Math.random() * 0.6),
+                            angle: Math.random() * Math.PI * 2,
+                            string: this.axiom,
+                            generation: 0,
+                            branches: []
+                        });
+                    }
+                    
+                    // Generate iterations for all systems
                     const iterations = Math.max(2, Math.min(5, Math.floor(appState.parameters.complexity / 40)));
                     for (let i = 0; i < iterations; i++) {
                         this.evolve();
                     }
                     
-                    // Parse string into drawing commands
-                    this.branches = this.parseLSystem();
+                    // Parse all systems
+                    this.systems.forEach(system => {
+                        system.branches = this.parseLSystem(system);
+                    });
                 },
                 
                 evolve: function() {
@@ -1008,18 +1062,35 @@
                     }
                     this.string = newString;
                     this.generation++;
+                    
+                    // Update all systems
+                    this.systems.forEach(system => {
+                        let systemNewString = '';
+                        for (let char of system.string) {
+                            systemNewString += this.rules[char] || char;
+                        }
+                        system.string = systemNewString;
+                        system.generation++;
+                    });
                 },
                 
-                parseLSystem: function() {
+                parseLSystem: function(system = null) {
                     const branches = [];
-                    let x = appState.canvasWidth / 2;
-                    let y = appState.canvasHeight * 0.8;
-                    let angle = -Math.PI / 2;
-                    const step = Math.max(3, 20 - this.generation * 3);
-                    const angleStep = Math.PI / 2;
+                    const sourceSystem = system || { 
+                        x: appState.canvasWidth / 2, 
+                        y: appState.canvasHeight / 2, 
+                        angle: 0, 
+                        string: this.string 
+                    };
+                    
+                    let x = sourceSystem.x;
+                    let y = sourceSystem.y;
+                    let angle = sourceSystem.angle;
+                    const step = Math.max(2, Math.min(15, appState.canvasWidth / 50));
+                    const angleStep = Math.PI / 3 + Math.random() * Math.PI / 6;
                     const stack = [];
                     
-                    for (let char of this.string) {
+                    for (let char of sourceSystem.string) {
                         switch (char) {
                             case 'F':
                                 const newX = x + Math.cos(angle) * step;
@@ -1101,16 +1172,18 @@
             // Truchet Tiles
             appState.patterns.truchet = {
                 grid: [],
-                gridSize: 30,
+                gridSizeX: 25,
+                gridSizeY: 20,
                 init: function() {
-                    this.gridSize = Math.max(20, 100 - appState.parameters.complexity);
-                    const cols = Math.ceil(appState.canvasWidth / this.gridSize);
-                    const rows = Math.ceil(appState.canvasHeight / this.gridSize);
+                    // Calculate grid to fill entire canvas
+                    const baseSize = Math.max(15, 50 - appState.parameters.complexity / 4);
+                    this.gridSizeX = Math.ceil(appState.canvasWidth / baseSize);
+                    this.gridSizeY = Math.ceil(appState.canvasHeight / baseSize);
                     
                     this.grid = [];
-                    for (let y = 0; y < rows; y++) {
+                    for (let y = 0; y < this.gridSizeY; y++) {
                         this.grid[y] = [];
-                        for (let x = 0; x < cols; x++) {
+                        for (let x = 0; x < this.gridSizeX; x++) {
                             this.grid[y][x] = {
                                 type: Math.floor(Math.random() * 4), // 4 different tile types
                                 rotation: Math.floor(Math.random() * 4) * 90, // 0, 90, 180, 270
@@ -1186,11 +1259,19 @@
                 const f = 0.055 + motionX * 0.01;
                 const k = 0.062 + motionY * 0.01;
                 const dt = 0.8 * speed;
-                const cellSize = Math.min(appState.canvasWidth, appState.canvasHeight) / pattern.gridSize;
+                const cellSizeX = appState.canvasWidth / pattern.gridSizeX;
+                const cellSizeY = appState.canvasHeight / pattern.gridSizeY;
+                
+                // Add random seeds occasionally for continuous activity
+                if (Math.random() < 0.002 * speed) {
+                    const rx = Math.floor(Math.random() * pattern.gridSizeX);
+                    const ry = Math.floor(Math.random() * pattern.gridSizeY);
+                    pattern.grid[ry][rx].v = 0.5 + Math.random() * 0.3;
+                }
                 
                 // Update reaction-diffusion
-                for (let y = 0; y < pattern.gridSize; y++) {
-                    for (let x = 0; x < pattern.gridSize; x++) {
+                for (let y = 0; y < pattern.gridSizeY; y++) {
+                    for (let x = 0; x < pattern.gridSizeX; x++) {
                         const cell = pattern.grid[y][x];
                         const neighbors = [
                             [x-1, y], [x+1, y], [x, y-1], [x, y+1]
@@ -1200,8 +1281,9 @@
                         let laplaceV = -4 * cell.v;
                         
                         neighbors.forEach(([nx, ny]) => {
-                            const wrapped = pattern.grid[(ny + pattern.gridSize) % pattern.gridSize]
-                                                      [(nx + pattern.gridSize) % pattern.gridSize];
+                            const wrappedX = (nx + pattern.gridSizeX) % pattern.gridSizeX;
+                            const wrappedY = (ny + pattern.gridSizeY) % pattern.gridSizeY;
+                            const wrapped = pattern.grid[wrappedY][wrappedX];
                             laplaceU += wrapped.u;
                             laplaceV += wrapped.v;
                         });
@@ -1216,8 +1298,8 @@
                 }
                 
                 // Update and draw
-                for (let y = 0; y < pattern.gridSize; y++) {
-                    for (let x = 0; x < pattern.gridSize; x++) {
+                for (let y = 0; y < pattern.gridSizeY; y++) {
+                    for (let x = 0; x < pattern.gridSizeX; x++) {
                         const cell = pattern.grid[y][x];
                         cell.u = cell.newU;
                         cell.v = cell.newV;
@@ -1236,12 +1318,12 @@
                             ctx.beginPath();
                             
                             // Draw contour lines
-                            const px = x * cellSize + cellSize / 2;
-                            const py = y * cellSize + cellSize / 2;
+                            const px = x * cellSizeX + cellSizeX / 2;
+                            const py = y * cellSizeY + cellSizeY / 2;
                             
                             // Draw organic patterns based on concentration
                             if (intensity > 0.3) {
-                                ctx.arc(px, py, cellSize * intensity * 0.5, 0, Math.PI * 2);
+                                ctx.arc(px, py, Math.min(cellSizeX, cellSizeY) * intensity * 0.5, 0, Math.PI * 2);
                                 ctx.stroke();
                             }
                             
@@ -1251,12 +1333,12 @@
                                 ];
                                 
                                 neighbors.forEach(([nx, ny]) => {
-                                    if (nx >= 0 && nx < pattern.gridSize && ny >= 0 && ny < pattern.gridSize) {
+                                    if (nx >= 0 && nx < pattern.gridSizeX && ny >= 0 && ny < pattern.gridSizeY) {
                                         const neighbor = pattern.grid[ny][nx];
                                         if (neighbor.v > 0.3) {
                                             ctx.beginPath();
                                             ctx.moveTo(px, py);
-                                            ctx.lineTo(nx * cellSize + cellSize / 2, ny * cellSize + cellSize / 2);
+                                            ctx.lineTo(nx * cellSizeX + cellSizeX / 2, ny * cellSizeY + cellSizeY / 2);
                                             ctx.stroke();
                                         }
                                     }
@@ -1374,20 +1456,37 @@
             waves: function() {
                 const pattern = appState.patterns.waves;
                 const { speed, motionX, motionY, lineWeight, complexity } = appState.parameters;
-                const resolution = Math.max(5, 50 - complexity / 4);
+                const resolution = Math.max(3, 30 - complexity / 8);
                 
+                // Update wave sources to move around the canvas
+                pattern.sources.forEach(source => {
+                    source.x += Math.sin(appState.time * 0.0005 + source.phase) * speed * 0.5;
+                    source.y += Math.cos(appState.time * 0.0007 + source.phase) * speed * 0.3;
+                    
+                    // Wrap around canvas
+                    if (source.x < 0) source.x = appState.canvasWidth;
+                    if (source.x > appState.canvasWidth) source.x = 0;
+                    if (source.y < 0) source.y = appState.canvasHeight;
+                    if (source.y > appState.canvasHeight) source.y = 0;
+                    
+                    source.frequency += motionX * 0.0001;
+                    source.amplitude += motionY * 0.1;
+                    source.amplitude = Math.max(10, Math.min(50, source.amplitude));
+                });
+                
+                // Draw horizontal waves
                 for (let x = 0; x < appState.canvasWidth; x += resolution) {
                     ctx.beginPath();
                     for (let y = 0; y < appState.canvasHeight; y += 2) {
                         let amplitude = 0;
                         
                         pattern.sources.forEach(source => {
-                            const dx = x - source.x + motionX * 10;
-                            const dy = y - source.y + motionY * 10;
+                            const dx = x - source.x;
+                            const dy = y - source.y;
                             const distance = Math.sqrt(dx * dx + dy * dy);
                             amplitude += source.amplitude * Math.sin(
                                 distance * source.frequency - appState.time * 0.001 * speed + source.phase
-                            ) / (1 + distance * 0.01);
+                            ) / (1 + distance * 0.005);
                         });
                         
                         const offsetX = x + amplitude;
@@ -1407,8 +1506,45 @@
                         progress
                     );
                     
+                    ctx.strokeStyle = color + '66';
+                    ctx.lineWidth = lineWeight * 0.6;
+                    ctx.stroke();
+                }
+                
+                // Draw vertical waves for more coverage
+                for (let y = 0; y < appState.canvasHeight; y += resolution * 2) {
+                    ctx.beginPath();
+                    for (let x = 0; x < appState.canvasWidth; x += 2) {
+                        let amplitude = 0;
+                        
+                        pattern.sources.forEach(source => {
+                            const dx = x - source.x;
+                            const dy = y - source.y;
+                            const distance = Math.sqrt(dx * dx + dy * dy);
+                            amplitude += source.amplitude * Math.cos(
+                                distance * source.frequency - appState.time * 0.001 * speed + source.phase
+                            ) / (1 + distance * 0.005);
+                        });
+                        
+                        const offsetY = y + amplitude * 0.5;
+                        
+                        if (x === 0) {
+                            ctx.moveTo(x, offsetY);
+                        } else {
+                            ctx.lineTo(x, offsetY);
+                        }
+                    }
+                    
+                    const progress = y / appState.canvasHeight;
+                    const color = interpolateColor(
+                        appState.parameters.colors.secondary,
+                        appState.parameters.colors.accent,
+                        appState.parameters.colors.primary,
+                        progress
+                    );
+                    
                     ctx.strokeStyle = color + '44';
-                    ctx.lineWidth = lineWeight * 0.5;
+                    ctx.lineWidth = lineWeight * 0.4;
                     ctx.stroke();
                 }
             },
@@ -1416,85 +1552,123 @@
             growth: function() {
                 const pattern = appState.patterns.growth;
                 const { speed, motionX, motionY, lineWeight } = appState.parameters;
-                const repelRadius = 30;
-                const splitDistance = 40;
+                const repelRadius = 25;
                 
-                // Update node positions
-                pattern.nodes.forEach((node, i) => {
-                    node.vx *= 0.95;
-                    node.vy *= 0.95;
-                    
-                    pattern.nodes.forEach((other, j) => {
-                        if (i !== j) {
-                            const dx = other.x - node.x;
-                            const dy = other.y - node.y;
-                            const dist = Math.sqrt(dx * dx + dy * dy);
-                            
-                            if (dist < repelRadius && dist > 0) {
-                                const force = (repelRadius - dist) / repelRadius * 0.5 * speed;
-                                node.vx -= dx / dist * force;
-                                node.vy -= dy / dist * force;
+                // Update all shapes
+                pattern.shapes.forEach((shape, shapeIndex) => {
+                    // Update node positions within each shape
+                    shape.nodes.forEach((node, i) => {
+                        node.vx *= 0.95;
+                        node.vy *= 0.95;
+                        
+                        // Repel from other nodes in the same shape
+                        shape.nodes.forEach((other, j) => {
+                            if (i !== j) {
+                                const dx = other.x - node.x;
+                                const dy = other.y - node.y;
+                                const dist = Math.sqrt(dx * dx + dy * dy);
+                                
+                                if (dist < repelRadius && dist > 0) {
+                                    const force = (repelRadius - dist) / repelRadius * 0.3 * speed;
+                                    node.vx -= dx / dist * force;
+                                    node.vy -= dy / dist * force;
+                                }
                             }
-                        }
+                        });
+                        
+                        // Add motion influence
+                        node.vx += motionX * 0.1;
+                        node.vy += motionY * 0.1;
+                        
+                        // Add organic growth outward
+                        const growthForce = 0.05 * speed;
+                        node.vx += Math.cos(node.originalAngle + appState.time * 0.001) * growthForce;
+                        node.vy += Math.sin(node.originalAngle + appState.time * 0.001) * growthForce;
+                        
+                        // Update position
+                        node.x += node.vx;
+                        node.y += node.vy;
+                        
+                        // Keep within bounds with wrapping
+                        if (node.x < 0) node.x = appState.canvasWidth;
+                        if (node.x > appState.canvasWidth) node.x = 0;
+                        if (node.y < 0) node.y = appState.canvasHeight;
+                        if (node.y > appState.canvasHeight) node.y = 0;
                     });
                     
-                    // Add motion influence
-                    node.vx += motionX * 0.1;
-                    node.vy += motionY * 0.1;
+                    // Split nodes if needed for this shape
+                    if (shape.nodes.length < 50 && Math.random() < 0.005 * speed) {
+                        const idx = Math.floor(Math.random() * shape.nodes.length);
+                        const node = shape.nodes[idx];
+                        const nextIdx = (idx + 1) % shape.nodes.length;
+                        const nextNode = shape.nodes[nextIdx];
+                        
+                        const newNode = {
+                            x: (node.x + nextNode.x) / 2,
+                            y: (node.y + nextNode.y) / 2,
+                            vx: (node.vx + nextNode.vx) / 2,
+                            vy: (node.vy + nextNode.vy) / 2,
+                            originalAngle: (node.originalAngle + nextNode.originalAngle) / 2,
+                            shapeId: shapeIndex
+                        };
+                        
+                        shape.nodes.splice(idx + 1, 0, newNode);
+                    }
                     
-                    // Update position
-                    node.x += node.vx;
-                    node.y += node.vy;
-                    
-                    // Keep within bounds
-                    const margin = 50;
-                    if (node.x < margin) node.vx += 0.5;
-                    if (node.x > appState.canvasWidth - margin) node.vx -= 0.5;
-                    if (node.y < margin) node.vy += 0.5;
-                    if (node.y > appState.canvasHeight - margin) node.vy -= 0.5;
-                });
-                
-                // Split nodes if needed
-                if (pattern.nodes.length < appState.parameters.complexity && Math.random() < 0.01) {
-                    const idx = Math.floor(Math.random() * pattern.nodes.length);
-                    const node = pattern.nodes[idx];
-                    const angle = Math.random() * Math.PI * 2;
-                    pattern.nodes.splice(idx + 1, 0, {
-                        x: node.x + Math.cos(angle) * 10,
-                        y: node.y + Math.sin(angle) * 10,
-                        vx: Math.cos(angle) * 2,
-                        vy: Math.sin(angle) * 2
-                    });
-                }
-                
-                // Draw closed shape
-                ctx.beginPath();
-                pattern.nodes.forEach((node, i) => {
-                    if (i === 0) {
-                        ctx.moveTo(node.x, node.y);
-                    } else {
-                        ctx.lineTo(node.x, node.y);
+                    // Draw shape
+                    if (shape.nodes.length > 2) {
+                        ctx.beginPath();
+                        shape.nodes.forEach((node, i) => {
+                            if (i === 0) {
+                                ctx.moveTo(node.x, node.y);
+                            } else {
+                                ctx.lineTo(node.x, node.y);
+                            }
+                        });
+                        ctx.closePath();
+                        
+                        const progress = shapeIndex / pattern.shapes.length;
+                        const color = interpolateColor(
+                            appState.parameters.colors.primary,
+                            appState.parameters.colors.secondary,
+                            appState.parameters.colors.accent,
+                            progress
+                        );
+                        
+                        ctx.strokeStyle = color;
+                        ctx.lineWidth = lineWeight * (1 + shapeIndex * 0.2);
+                        ctx.stroke();
+                        
+                        // Add connecting lines between nearby shapes
+                        pattern.shapes.forEach((otherShape, otherIndex) => {
+                            if (otherIndex !== shapeIndex) {
+                                shape.nodes.forEach(node => {
+                                    otherShape.nodes.forEach(otherNode => {
+                                        const dx = otherNode.x - node.x;
+                                        const dy = otherNode.y - node.y;
+                                        const dist = Math.sqrt(dx * dx + dy * dy);
+                                        
+                                        if (dist < 80 && Math.random() < 0.01) {
+                                            ctx.strokeStyle = color + '22';
+                                            ctx.lineWidth = lineWeight * 0.3;
+                                            ctx.beginPath();
+                                            ctx.moveTo(node.x, node.y);
+                                            ctx.lineTo(otherNode.x, otherNode.y);
+                                            ctx.stroke();
+                                        }
+                                    });
+                                });
+                            }
+                        });
                     }
                 });
-                ctx.closePath();
-                
-                const gradient = ctx.createRadialGradient(
-                    appState.canvasWidth / 2, appState.canvasHeight / 2, 0,
-                    appState.canvasWidth / 2, appState.canvasHeight / 2, Math.min(appState.canvasWidth, appState.canvasHeight) / 2
-                );
-                gradient.addColorStop(0, appState.parameters.colors.primary);
-                gradient.addColorStop(0.5, appState.parameters.colors.secondary);
-                gradient.addColorStop(1, appState.parameters.colors.accent);
-                
-                ctx.strokeStyle = gradient;
-                ctx.lineWidth = lineWeight;
-                ctx.stroke();
             },
 
             maze: function() {
                 const pattern = appState.patterns.maze;
                 const { speed, motionX, motionY, lineWeight } = appState.parameters;
-                const cellSize = Math.min(appState.canvasWidth, appState.canvasHeight) / pattern.gridSize;
+                const cellSizeX = appState.canvasWidth / pattern.gridSizeX;
+                const cellSizeY = appState.canvasHeight / pattern.gridSizeY;
                 
                 // Generate maze using recursive backtracking
                 if (pattern.walker && Math.random() < 0.1 * speed) {
@@ -1506,7 +1680,7 @@
                         const nx = x + dx;
                         const ny = y + dy;
                         
-                        if (nx >= 0 && nx < pattern.gridSize && ny >= 0 && ny < pattern.gridSize) {
+                        if (nx >= 0 && nx < pattern.gridSizeX && ny >= 0 && ny < pattern.gridSizeY) {
                             if (!pattern.grid[ny][nx].visited) {
                                 directions.push({ x: nx, y: ny, dir: dirIndex });
                             }
@@ -1548,20 +1722,22 @@
                     }
                 }
                 
-                // Apply motion influence
+                // Apply motion influence - create disturbances throughout the maze
                 if (Math.abs(motionX) > 0.3 || Math.abs(motionY) > 0.3) {
-                    const randomCell = pattern.grid[Math.floor(Math.random() * pattern.gridSize)][Math.floor(Math.random() * pattern.gridSize)];
-                    randomCell.visited = false;
-                    randomCell.walls = { top: true, right: true, bottom: true, left: true };
+                    for (let i = 0; i < 3; i++) {
+                        const randomCell = pattern.grid[Math.floor(Math.random() * pattern.gridSizeY)][Math.floor(Math.random() * pattern.gridSizeX)];
+                        randomCell.visited = false;
+                        randomCell.walls = { top: true, right: true, bottom: true, left: true };
+                    }
                 }
                 
                 // Draw maze
                 pattern.grid.forEach((row, y) => {
                     row.forEach((cell, x) => {
-                        const px = x * cellSize;
-                        const py = y * cellSize;
+                        const px = x * cellSizeX;
+                        const py = y * cellSizeY;
                         
-                        const progress = (x + y) / (pattern.gridSize * 2);
+                        const progress = (x + y) / (pattern.gridSizeX + pattern.gridSizeY);
                         const color = interpolateColor(
                             appState.parameters.colors.primary,
                             appState.parameters.colors.secondary,
@@ -1576,18 +1752,18 @@
                         // Draw walls
                         if (cell.walls.top) {
                             ctx.moveTo(px, py);
-                            ctx.lineTo(px + cellSize, py);
+                            ctx.lineTo(px + cellSizeX, py);
                         }
                         if (cell.walls.right) {
-                            ctx.moveTo(px + cellSize, py);
-                            ctx.lineTo(px + cellSize, py + cellSize);
+                            ctx.moveTo(px + cellSizeX, py);
+                            ctx.lineTo(px + cellSizeX, py + cellSizeY);
                         }
                         if (cell.walls.bottom) {
-                            ctx.moveTo(px + cellSize, py + cellSize);
-                            ctx.lineTo(px, py + cellSize);
+                            ctx.moveTo(px + cellSizeX, py + cellSizeY);
+                            ctx.lineTo(px, py + cellSizeY);
                         }
                         if (cell.walls.left) {
-                            ctx.moveTo(px, py + cellSize);
+                            ctx.moveTo(px, py + cellSizeY);
                             ctx.lineTo(px, py);
                         }
                         
@@ -1596,7 +1772,7 @@
                         // Highlight current walker position
                         if (pattern.walker && pattern.walker.x === x && pattern.walker.y === y) {
                             ctx.fillStyle = color + '33';
-                            ctx.fillRect(px + 1, py + 1, cellSize - 2, cellSize - 2);
+                            ctx.fillRect(px + 1, py + 1, cellSizeX - 2, cellSizeY - 2);
                         }
                     });
                 });
@@ -1606,32 +1782,36 @@
                 const pattern = appState.patterns.lsystem;
                 const { speed, motionX, motionY, lineWeight } = appState.parameters;
                 
-                // Occasionally evolve the L-system
+                // Occasionally evolve the L-systems
                 if (Math.random() < 0.005 * speed) {
                     pattern.evolve();
-                    pattern.branches = pattern.parseLSystem();
+                    pattern.systems.forEach(system => {
+                        system.branches = pattern.parseLSystem(system);
+                    });
                 }
                 
-                // Draw branches with animation
-                pattern.branches.forEach((branch, i) => {
-                    const progress = i / pattern.branches.length;
-                    const color = interpolateColor(
-                        appState.parameters.colors.primary,
-                        appState.parameters.colors.secondary,
-                        appState.parameters.colors.accent,
-                        progress
-                    );
-                    
-                    // Apply motion influence
-                    const offsetX = motionX * 20;
-                    const offsetY = motionY * 20;
-                    
-                    ctx.strokeStyle = color;
-                    ctx.lineWidth = lineWeight * (1 - progress * 0.5);
-                    ctx.beginPath();
-                    ctx.moveTo(branch.x1 + offsetX, branch.y1 + offsetY);
-                    ctx.lineTo(branch.x2 + offsetX, branch.y2 + offsetY);
-                    ctx.stroke();
+                // Draw all L-systems
+                pattern.systems.forEach((system, systemIndex) => {
+                    system.branches.forEach((branch, i) => {
+                        const progress = (i + systemIndex * 100) / (pattern.systems.length * 100);
+                        const color = interpolateColor(
+                            appState.parameters.colors.primary,
+                            appState.parameters.colors.secondary,
+                            appState.parameters.colors.accent,
+                            progress
+                        );
+                        
+                        // Apply motion influence
+                        const offsetX = motionX * 20;
+                        const offsetY = motionY * 20;
+                        
+                        ctx.strokeStyle = color;
+                        ctx.lineWidth = lineWeight * (1 - (i / system.branches.length) * 0.5);
+                        ctx.beginPath();
+                        ctx.moveTo(branch.x1 + offsetX, branch.y1 + offsetY);
+                        ctx.lineTo(branch.x2 + offsetX, branch.y2 + offsetY);
+                        ctx.stroke();
+                    });
                 });
                 
                 // Add organic growth variation
@@ -1735,7 +1915,9 @@
             truchet: function() {
                 const pattern = appState.patterns.truchet;
                 const { speed, motionX, motionY, lineWeight } = appState.parameters;
-                const gridSize = pattern.gridSize;
+                const cellSizeX = appState.canvasWidth / pattern.gridSizeX;
+                const cellSizeY = appState.canvasHeight / pattern.gridSizeY;
+                const tileSize = Math.min(cellSizeX, cellSizeY);
                 
                 pattern.grid.forEach((row, y) => {
                     row.forEach((tile, x) => {
@@ -1750,10 +1932,10 @@
                         
                         // Draw tile
                         ctx.save();
-                        ctx.translate(x * gridSize + gridSize/2, y * gridSize + gridSize/2);
+                        ctx.translate(x * cellSizeX + cellSizeX/2, y * cellSizeY + cellSizeY/2);
                         ctx.rotate(tile.rotation * Math.PI / 180);
                         
-                        const progress = (x + y) / (pattern.grid.length + row.length);
+                        const progress = (x + y) / (pattern.gridSizeX + pattern.gridSizeY);
                         const color = interpolateColor(
                             appState.parameters.colors.primary,
                             appState.parameters.colors.secondary,
@@ -1768,28 +1950,28 @@
                         // Different tile patterns
                         switch(tile.type) {
                             case 0: // Quarter circles in opposite corners
-                                ctx.arc(-gridSize/2, -gridSize/2, gridSize/2, 0, Math.PI/2);
-                                ctx.moveTo(gridSize/2, gridSize/2);
-                                ctx.arc(gridSize/2, gridSize/2, gridSize/2, Math.PI, Math.PI * 1.5);
+                                ctx.arc(-tileSize/2, -tileSize/2, tileSize/2, 0, Math.PI/2);
+                                ctx.moveTo(tileSize/2, tileSize/2);
+                                ctx.arc(tileSize/2, tileSize/2, tileSize/2, Math.PI, Math.PI * 1.5);
                                 break;
                             
                             case 1: // Diagonal line
-                                ctx.moveTo(-gridSize/2, -gridSize/2);
-                                ctx.lineTo(gridSize/2, gridSize/2);
+                                ctx.moveTo(-tileSize/2, -tileSize/2);
+                                ctx.lineTo(tileSize/2, tileSize/2);
                                 break;
                             
                             case 2: // S-curve
-                                ctx.moveTo(-gridSize/2, 0);
-                                ctx.quadraticCurveTo(0, -gridSize/4, 0, 0);
-                                ctx.quadraticCurveTo(0, gridSize/4, gridSize/2, 0);
+                                ctx.moveTo(-tileSize/2, 0);
+                                ctx.quadraticCurveTo(0, -tileSize/4, 0, 0);
+                                ctx.quadraticCurveTo(0, tileSize/4, tileSize/2, 0);
                                 break;
                             
                             case 3: // Circle with cross
-                                ctx.arc(0, 0, gridSize/3, 0, Math.PI * 2);
-                                ctx.moveTo(-gridSize/2, 0);
-                                ctx.lineTo(gridSize/2, 0);
-                                ctx.moveTo(0, -gridSize/2);
-                                ctx.lineTo(0, gridSize/2);
+                                ctx.arc(0, 0, tileSize/3, 0, Math.PI * 2);
+                                ctx.moveTo(-tileSize/2, 0);
+                                ctx.lineTo(tileSize/2, 0);
+                                ctx.moveTo(0, -tileSize/2);
+                                ctx.lineTo(0, tileSize/2);
                                 break;
                         }
                         
@@ -1798,15 +1980,15 @@
                     });
                 });
                 
-                // Add motion influence by shifting pattern
+                // Add motion influence by shifting pattern across the whole canvas
                 if (Math.abs(motionX) > 0.5 || Math.abs(motionY) > 0.5) {
-                    pattern.grid.forEach((row, y) => {
-                        row.forEach((tile, x) => {
-                            if (Math.random() < 0.01) {
-                                tile.type = Math.floor(Math.random() * 4);
-                            }
-                        });
-                    });
+                    for (let i = 0; i < 5; i++) {
+                        const rx = Math.floor(Math.random() * pattern.gridSizeX);
+                        const ry = Math.floor(Math.random() * pattern.gridSizeY);
+                        if (pattern.grid[ry] && pattern.grid[ry][rx]) {
+                            pattern.grid[ry][rx].type = Math.floor(Math.random() * 4);
+                        }
+                    }
                 }
             }
         };
