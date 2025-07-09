@@ -1,5 +1,5 @@
 import React from 'react'
-import { fabric } from 'fabric'
+import { Rect, Circle, Triangle, Polygon, Path } from 'fabric'
 import { 
   Grid, 
   Waves, 
