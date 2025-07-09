@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Genshi Studio 2.0 - Ultimate Creative Experience</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background: #000;
+            color: white;
+            overflow: hidden;
+            height: 100vh;
+            touch-action: none;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            position: relative;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(0, 0, 0, 0.9);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-size: 18px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4, #45B7D1);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .pattern-title {
+            font-size: 14px;
+            opacity: 0.8;
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .header-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: white;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .header-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .header-btn:active {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(0.95);
+        }
+
+        .header-btn.active {
+            background: rgba(78, 205, 196, 0.3);
+            box-shadow: 0 0 10px rgba(78, 205, 196, 0.5);
+        }
+
+        /* FPS Counter */
+        .fps-counter {
+            font-size: 10px;
+            opacity: 0.6;
+            margin-left: 8px;
+        }
+
+        /* Main Canvas Area */
+        .main-canvas-container {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            background: #000;
+            min-height: 0;
+        }
+
+        #patternCanvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            background: #000;
+        }
+
+        /* Layer Canvas */
+        .layer-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        /* Auto-evolve Indicator */
+        .auto-evolve-indicator {
+            position: fixed;
+            top: 60px;
+            right: 20px;
+            background: rgba(78, 205, 196, 0.2);
+            border: 1px solid rgba(78, 205, 196, 0.4);
+            border-radius: 20px;
+            padding: 8px 12px;
+            font-size: 12px;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            z-index: 90;
+        }
+
+        .auto-evolve-indicator.active {
+            display: flex;
+        }
+
+        .pulse {
+            width: 8px;
+            height: 8px;
+            background: #4ECDC4;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(1.2); }
+        }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border-left: 3px solid #4ECDC4;
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            max-width: 300px;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.error {
+            border-left-color: #FF6B6B;
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+        }
+
+        .loading-overlay.show {
+            display: flex;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(78, 205, 196, 0.3);
+            border-top: 3px solid #4ECDC4;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Floating Tooltip */
+        .floating-tooltip {
+            position: fixed;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            z-index: 1000;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .floating-tooltip.show {
+            opacity: 1;
+        }
+
+        /* Pattern Preview */
+        .pattern-preview {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: #111;
+            border: 2px solid #4ECDC4;
+            border-radius: 8px;
+            z-index: 1000;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.2s ease;
+            pointer-events: none;
+        }
+
+        .pattern-preview.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .pattern-preview canvas {
+            width: 100%;
+            height: 100%;
+            border-radius: 6px;
+        }
+
+        /* Bottom Controls */
+        .bottom-controls {
+            background: rgba(0, 0, 0, 0.95);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            position: relative;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
+
+        .bottom-controls.hidden {
+            transform: translateY(100%);
+        }
+
+        .bottom-controls.minimized {
+            transform: translateY(calc(100% - 40px));
+        }
+
+        /* Pattern Selector */
+        .pattern-selector {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .pattern-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: white;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pattern-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 15px rgba(78, 205, 196, 0.3);
+        }
+
+        .pattern-btn:active {
+            transform: scale(0.95);
+        }
+
+        .pattern-btn.active {
+            background: rgba(78, 205, 196, 0.3);
+            box-shadow: 0 0 15px rgba(78, 205, 196, 0.5);
+        }
+
+        /* Ripple Effect */
+        .pattern-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.3s ease, height 0.3s ease;
+        }
+
+        .pattern-btn:active::after {
+            width: 100px;
+            height: 100px;
+        }
+
+        /* Control Grid */
+        .control-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            align-items: start;
+        }
+
+        .control-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .control-section h3 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #4ECDC4;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Sliders */
+        .slider-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .slider-label {
+            font-size: 12px;
+            min-width: 70px;
+            opacity: 0.8;
+        }
+
+        .slider {
+            flex: 1;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            outline: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #4ECDC4;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(78, 205, 196, 0.5);
+            transition: all 0.2s ease;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 15px rgba(78, 205, 196, 0.8);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: #4ECDC4;
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 0 10px rgba(78, 205, 196, 0.5);
+            transition: all 0.2s ease;
+        }
+
+        .slider-value {
+            font-size: 11px;
+            min-width: 35px;
+            text-align: right;
+            opacity: 0.7;
+        }
+
+        /* Motion Control */
+        .motion-control {
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            position: relative;
+            cursor: grab;
+            margin: 0 auto;
+            touch-action: none;
+        }
+
+        .motion-control:active {
+            cursor: grabbing;
+        }
+
+        .motion-control-handle {
+            width: 16px;
+            height: 16px;
+            background: #4ECDC4;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px rgba(78, 205, 196, 0.5);
+            transition: box-shadow 0.2s ease;
+        }
+
+        .motion-control-handle:hover {
+            box-shadow: 0 0 15px rgba(78, 205, 196, 0.8);
+        }
+
+        /* Color Controls */
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .color-input-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .color-input {
+            width: 40px;
+            height: 40px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: none;
+            cursor: pointer;
+            -webkit-appearance: none;
+            appearance: none;
+            transition: all 0.2s ease;
+        }
+
+        .color-input:hover {
+            border-color: #4ECDC4;
+            box-shadow: 0 0 10px rgba(78, 205, 196, 0.3);
+        }
+
+        .color-input::-webkit-color-swatch-wrapper {
+            padding: 0;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .color-input::-webkit-color-swatch {
+            border: none;
+            border-radius: 6px;
+        }
+
+        .color-label {
+            font-size: 10px;
+            opacity: 0.7;
+            text-align: center;
+        }
+
+        /* Layers Panel */
+        .layers-panel {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .layer-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 8px;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .layer-item.active {
+            border-color: #4ECDC4;
+            box-shadow: 0 0 10px rgba(78, 205, 196, 0.2);
+        }
+
+        .layer-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .layer-thumbnail {
+            width: 30px;
+            height: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            background: #111;
+        }
+
+        .layer-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .layer-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            color: white;
+            font-size: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .layer-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .layer-select {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            padding: 4px 8px;
+            color: white;
+            font-size: 11px;
+            min-width: 100px;
+        }
+
+        /* Presets */
+        .preset-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .preset-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: white;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .preset-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 10px rgba(78, 205, 196, 0.3);
+        }
+
+        /* DNA & Export */
+        .dna-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .dna-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            padding: 8px;
+            color: white;
+            font-size: 11px;
+            font-family: monospace;
+        }
+
+        .dna-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 4px;
+        }
+
+        .btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 4px;
+            padding: 6px 10px;
+            color: white;
+            font-size: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex: 1;
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn.primary {
+            background: rgba(78, 205, 196, 0.3);
+        }
+
+        .btn.primary:hover {
+            background: rgba(78, 205, 196, 0.5);
+        }
+
+        /* Bookmarks */
+        .bookmarks-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            max-height: 120px;
+            overflow-y: auto;
+        }
+
+        .bookmark-item {
+            aspect-ratio: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .bookmark-item:hover {
+            border-color: #4ECDC4;
+            box-shadow: 0 0 10px rgba(78, 205, 196, 0.3);
+        }
+
+        .bookmark-item.active {
+            border-color: #4ECDC4;
+            box-shadow: 0 0 15px rgba(78, 205, 196, 0.5);
+        }
+
+        .bookmark-delete {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: rgba(255, 107, 107, 0.8);
+            border: none;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            color: white;
+            font-size: 10px;
+            cursor: pointer;
+            display: none;
+        }
+
+        .bookmark-item:hover .bookmark-delete {
+            display: block;
+        }
+
+        /* Help Overlay */
+        .help-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .help-overlay.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .help-content {
+            background: rgba(0, 0, 0, 0.95);
+            border: 1px solid rgba(78, 205, 196, 0.3);
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .help-content h2 {
+            color: #4ECDC4;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .help-sections {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .help-section h3 {
+            color: #4ECDC4;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .help-section p {
+            font-size: 12px;
+            line-height: 1.4;
+            margin-bottom: 8px;
+            opacity: 0.8;
+        }
+
+        .help-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0.7;
+        }
+
+        .help-close:hover {
+            opacity: 1;
+        }
+
+        /* History Timeline */
+        .history-timeline {
+            display: flex;
+            gap: 4px;
+            padding: 8px 0;
+            overflow-x: auto;
+            max-width: 100%;
+        }
+
+        .history-item {
+            width: 40px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .history-item:hover {
+            border-color: #4ECDC4;
+        }
+
+        .history-item.current {
+            border-color: #4ECDC4;
+            box-shadow: 0 0 10px rgba(78, 205, 196, 0.5);
+        }
+
+        /* Fullscreen Mode */
+        .fullscreen-mode .bottom-controls {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .fullscreen-mode .bottom-controls:hover {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .fullscreen-mode .header {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .zen-mode .bottom-controls,
+        .zen-mode .header,
+        .zen-mode .auto-evolve-indicator {
+            display: none !important;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .control-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .pattern-selector {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 6px;
+            }
+
+            .pattern-btn {
+                font-size: 10px;
+                padding: 6px 8px;
+            }
+
+            .help-sections {
+                grid-template-columns: 1fr;
+            }
+
+            .help-content {
+                margin: 20px;
+                padding: 20px;
+            }
+
+            .control-section {
+                padding: 12px;
+            }
+
+            .slider::-webkit-slider-thumb {
+                width: 24px;
+                height: 24px;
+            }
+
+            .motion-control {
+                width: 120px;
+                height: 120px;
+            }
+
+            .bookmarks-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            /* Mobile swipe hint */
+            .mobile-hint {
+                position: fixed;
+                bottom: 100px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(0, 0, 0, 0.8);
+                padding: 8px 12px;
+                border-radius: 12px;
+                font-size: 11px;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+                z-index: 50;
+            }
+
+            .mobile-hint.show {
+                opacity: 1;
+                animation: fadeInOut 3s ease;
+            }
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; }
+            20%, 80% { opacity: 1; }
+        }
+
+        /* Minimize controls button */
+        .minimize-controls {
+            position: absolute;
+            top: -30px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px 8px 0 0;
+            padding: 6px 12px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .minimize-controls:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Export Progress */
+        .export-progress {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid rgba(78, 205, 196, 0.3);
+            border-radius: 8px;
+            padding: 20px;
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .export-progress.show {
+            display: flex;
+        }
+
+        .progress-bar {
+            width: 200px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #4ECDC4;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">Genshi Studio 2.0</div>
+            <div class="pattern-title" id="patternTitle">Flow Fields</div>
+            <div class="header-controls">
+                <button class="header-btn" id="playPauseBtn" onclick="toggleAnimation()" title="Play/Pause (P)">⏸️</button>
+                <button class="header-btn" id="autoEvolveBtn" onclick="toggleAutoEvolve()" title="Auto-Evolve (E)">🧬</button>
+                <button class="header-btn" onclick="toggleLayers()" title="Toggle Layers (L)">🎨</button>
+                <button class="header-btn" onclick="exportScreenshot()" title="Screenshot (S)">📷</button>
+                <button class="header-btn" onclick="toggleFullscreen()" title="Fullscreen (F)">⛶</button>
+                <button class="header-btn" onclick="showHelp()" title="Help (?)">❓</button>
+                <div class="fps-counter" id="fpsCounter">60 FPS</div>
+            </div>
+        </div>
+
+        <!-- Main Canvas -->
+        <div class="main-canvas-container" id="canvasContainer">
+            <canvas id="patternCanvas"></canvas>
+            <div class="loading-overlay" id="loadingOverlay">
+                <div class="spinner"></div>
+            </div>
+        </div>
+
+        <!-- Auto-evolve Indicator -->
+        <div class="auto-evolve-indicator" id="autoEvolveIndicator">
+            <span class="pulse"></span>
+            <span>Auto-evolving</span>
+        </div>
+
+        <!-- Mobile Hint -->
+        <div class="mobile-hint" id="mobileHint">
+            Swipe left/right to change patterns
+        </div>
+
+        <!-- Bottom Controls -->
+        <div class="bottom-controls" id="bottomControls">
+            <div class="minimize-controls" onclick="toggleMinimize()">
+                <span id="minimizeText">⌄ Minimize</span>
+            </div>
+
+            <!-- Pattern Selector -->
+            <div class="pattern-selector">
+                <button class="pattern-btn active" data-pattern="flowfield" onclick="selectPattern('flowfield')">Flow Fields</button>
+                <button class="pattern-btn" data-pattern="waves" onclick="selectPattern('waves')">Wave Interference</button>
+                <button class="pattern-btn" data-pattern="growth" onclick="selectPattern('growth')">Differential Growth</button>
+                <button class="pattern-btn" data-pattern="truchet" onclick="selectPattern('truchet')">Truchet Tiles ✨</button>
+                <button class="pattern-btn" data-pattern="reaction" onclick="selectPattern('reaction')">Reaction-Diffusion</button>
+                <button class="pattern-btn" data-pattern="voronoi" onclick="selectPattern('voronoi')">Voronoi Cells</button>
+                <button class="pattern-btn" data-pattern="maze" onclick="selectPattern('maze')">Maze Growth</button>
+                <button class="pattern-btn" data-pattern="lsystem" onclick="selectPattern('lsystem')">L-Systems</button>
+                <button class="pattern-btn" data-pattern="circles" onclick="selectPattern('circles')">Circle Packing</button>
+            </div>
+
+            <!-- Control Grid -->
+            <div class="control-grid">
+                <!-- Parameters -->
+                <div class="control-section">
+                    <h3>⚙️ Parameters</h3>
+                    <div class="slider-group">
+                        <div class="slider-container">
+                            <span class="slider-label">Speed</span>
+                            <input type="range" class="slider" id="speedSlider" min="0.1" max="5" step="0.1" value="1">
+                            <span class="slider-value" id="speedValue">1.0</span>
+                        </div>
+                        <div class="slider-container">
+                            <span class="slider-label">Complexity</span>
+                            <input type="range" class="slider" id="complexitySlider" min="10" max="200" step="5" value="50">
+                            <span class="slider-value" id="complexityValue">50</span>
+                        </div>
+                        <div class="slider-container">
+                            <span class="slider-label">Line Weight</span>
+                            <input type="range" class="slider" id="lineWeightSlider" min="0.1" max="3" step="0.1" value="1">
+                            <span class="slider-value" id="lineWeightValue">1.0</span>
+                        </div>
+                        <div class="slider-container">
+                            <span class="slider-label">Fade Trails</span>
+                            <input type="range" class="slider" id="fadeSlider" min="0" max="1" step="0.01" value="0.95">
+                            <span class="slider-value" id="fadeValue">0.95</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Motion Control -->
+                <div class="control-section">
+                    <h3>🎮 Motion Control</h3>
+                    <div class="motion-control" id="motionControl">
+                        <div class="motion-control-handle" id="motionHandle"></div>
+                    </div>
+                </div>
+
+                <!-- Colors -->
+                <div class="control-section">
+                    <h3>🎨 Colors</h3>
+                    <div class="color-grid">
+                        <div class="color-input-container">
+                            <input type="color" class="color-input" id="primaryColor" value="#4ECDC4">
+                            <span class="color-label">Primary</span>
+                        </div>
+                        <div class="color-input-container">
+                            <input type="color" class="color-input" id="secondaryColor" value="#45B7D1">
+                            <span class="color-label">Secondary</span>
+                        </div>
+                        <div class="color-input-container">
+                            <input type="color" class="color-input" id="accentColor" value="#FF6B6B">
+                            <span class="color-label">Accent</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Presets -->
+                <div class="control-section">
+                    <h3>🎯 Presets</h3>
+                    <div class="preset-grid">
+                        <button class="preset-btn" onclick="loadPreset('zen')">🧘 Zen Garden</button>
+                        <button class="preset-btn" onclick="loadPreset('electric')">⚡ Electric Dreams</button>
+                        <button class="preset-btn" onclick="loadPreset('ocean')">🌊 Ocean Waves</button>
+                        <button class="preset-btn" onclick="loadPreset('cosmic')">🌌 Cosmic Flow</button>
+                        <button class="preset-btn" onclick="loadPreset('neon')">🌃 Neon City</button>
+                        <button class="preset-btn" onclick="loadPreset('crystal')">💎 Crystal Cave</button>
+                        <button class="preset-btn" onclick="loadPreset('fireflies')">✨ Fireflies</button>
+                        <button class="preset-btn" onclick="loadPreset('aurora')">🌌 Aurora</button>
+                    </div>
+                </div>
+
+                <!-- Layers -->
+                <div class="control-section" id="layersSection" style="display: none;">
+                    <h3>🎭 Layers</h3>
+                    <div class="layers-panel" id="layersPanel">
+                        <!-- Layer items will be dynamically added -->
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn" onclick="addLayer()">+ Add Layer</button>
+                        <button class="btn" onclick="clearLayers()">Clear All</button>
+                    </div>
+                </div>
+
+                <!-- Pattern DNA -->
+                <div class="control-section">
+                    <h3>🧬 Pattern DNA</h3>
+                    <div class="dna-controls">
+                        <input type="text" class="dna-input" id="dnaInput" placeholder="Paste pattern DNA here...">
+                        <div class="btn-group">
+                            <button class="btn primary" onclick="copyDNA()">Copy DNA</button>
+                            <button class="btn" onclick="loadDNA()">Load DNA</button>
+                            <button class="btn" onclick="shareURL()">Share URL</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bookmarks -->
+                <div class="control-section">
+                    <h3>📌 Bookmarks <small>(Space to save)</small></h3>
+                    <div class="bookmarks-grid" id="bookmarksGrid">
+                        <!-- Bookmark items will be dynamically added -->
+                    </div>
+                </div>
+
+                <!-- History -->
+                <div class="control-section">
+                    <h3>⏮️ History</h3>
+                    <div class="history-timeline" id="historyTimeline">
+                        <!-- History items will be dynamically added -->
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn" onclick="undo()" title="Ctrl+Z">⏪ Undo</button>
+                        <button class="btn" onclick="redo()" title="Ctrl+Y">⏩ Redo</button>
+                        <button class="btn" onclick="clearHistory()">🗑️ Clear</button>
+                    </div>
+                </div>
+
+                <!-- Export -->
+                <div class="control-section">
+                    <h3>💾 Export</h3>
+                    <div class="btn-group">
+                        <button class="btn primary" onclick="exportScreenshot()">📷 Screenshot</button>
+                        <button class="btn" onclick="exportVideo()">🎬 Video</button>
+                        <button class="btn" onclick="exportGIF()">🖼️ GIF</button>
+                    </div>
+                    <div class="btn-group" style="margin-top: 8px;">
+                        <select class="btn" id="exportResolution">
+                            <option value="1">Current</option>
+                            <option value="2">2x HD</option>
+                            <option value="4">4x Ultra</option>
+                        </select>
+                        <select class="btn" id="exportFormat">
+                            <option value="png">PNG</option>
+                            <option value="jpg">JPG</option>
+                            <option value="webp">WebP</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Tooltip -->
+    <div class="floating-tooltip" id="floatingTooltip"></div>
+
+    <!-- Pattern Preview -->
+    <div class="pattern-preview" id="patternPreview">
+        <canvas width="150" height="150"></canvas>
+    </div>
+
+    <!-- Help Overlay -->
+    <div class="help-overlay" id="helpOverlay">
+        <div class="help-content">
+            <button class="help-close" onclick="hideHelp()">×</button>
+            <h2>Genshi Studio 2.0 - Keyboard Shortcuts</h2>
+            <div class="help-sections">
+                <div class="help-section">
+                    <h3>Navigation</h3>
+                    <p><strong>1-9:</strong> Switch patterns</p>
+                    <p><strong>←→:</strong> Navigate patterns</p>
+                    <p><strong>↑↓:</strong> Navigate presets</p>
+                    <p><strong>Shift + arrows:</strong> Fine control</p>
+                </div>
+                <div class="help-section">
+                    <h3>Animation</h3>
+                    <p><strong>P:</strong> Play/Pause</p>
+                    <p><strong>E:</strong> Auto-evolve</p>
+                    <p><strong>R:</strong> Randomize</p>
+                    <p><strong>M:</strong> Morph pattern</p>
+                </div>
+                <div class="help-section">
+                    <h3>Bookmarks</h3>
+                    <p><strong>Space:</strong> Bookmark current</p>
+                    <p><strong>B:</strong> Toggle bookmarks</p>
+                    <p><strong>Ctrl+Z:</strong> Undo</p>
+                    <p><strong>Ctrl+Y:</strong> Redo</p>
+                </div>
+                <div class="help-section">
+                    <h3>View</h3>
+                    <p><strong>F:</strong> Fullscreen</p>
+                    <p><strong>Z:</strong> Zen mode</p>
+                    <p><strong>H:</strong> Hide controls</p>
+                    <p><strong>S:</strong> Screenshot</p>
+                </div>
+                <div class="help-section">
+                    <h3>Layers</h3>
+                    <p><strong>L:</strong> Toggle layers</p>
+                    <p><strong>Ctrl+L:</strong> Add layer</p>
+                    <p><strong>Del:</strong> Remove layer</p>
+                </div>
+                <div class="help-section">
+                    <h3>Other</h3>
+                    <p><strong>?:</strong> Show this help</p>
+                    <p><strong>Esc:</strong> Close overlays</p>
+                    <p><strong>Alt+R:</strong> Reset all</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Progress -->
+    <div class="export-progress" id="exportProgress">
+        <h3>Exporting...</h3>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <p id="exportStatus">Preparing export...</p>
+    </div>
+
+    <script>
+        // Global state and utilities will be implemented here
+        console.log('Genshi Studio 2.0 - Ultimate Creative Experience loaded!');
+        
+        // Basic implementation structure
+        const appState = {
+            currentPattern: 'flowfield',
+            isAnimating: true,
+            autoEvolve: false,
+            time: 0,
+            frameCount: 0,
+            lastFrameTime: performance.now(),
+            canvasWidth: 0,
+            canvasHeight: 0,
+            parameters: {
+                speed: 1.0,
+                complexity: 50,
+                lineWeight: 1.0,
+                fade: 0.95,
+                motionX: 0,
+                motionY: 0,
+                colors: {
+                    primary: '#4ECDC4',
+                    secondary: '#45B7D1',
+                    accent: '#FF6B6B'
+                }
+            },
+            patterns: {},
+            layers: [],
+            bookmarks: [],
+            history: [],
+            historyIndex: -1,
+            layersEnabled: false
+        };
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            showToast('Genshi Studio 2.0 loaded! Press ? for help');
+            // Full implementation would continue here...
+        });
+
+        // Toast notification system
+        function showToast(message, isError = false) {
+            const toast = document.createElement('div');
+            toast.className = `toast ${isError ? 'error' : ''}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => toast.classList.add('show'), 10);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => document.body.removeChild(toast), 300);
+            }, 3000);
+        }
+
+        // Placeholder functions - full implementation would go here
+        function toggleAnimation() { console.log('Toggle animation'); }
+        function toggleAutoEvolve() { console.log('Toggle auto-evolve'); }
+        function toggleLayers() { console.log('Toggle layers'); }
+        function exportScreenshot() { console.log('Export screenshot'); }
+        function toggleFullscreen() { console.log('Toggle fullscreen'); }
+        function showHelp() { document.getElementById('helpOverlay').classList.add('show'); }
+        function hideHelp() { document.getElementById('helpOverlay').classList.remove('show'); }
+        function selectPattern(pattern) { console.log('Select pattern:', pattern); }
+        function loadPreset(preset) { console.log('Load preset:', preset); }
+        function copyDNA() { console.log('Copy DNA'); }
+        function loadDNA() { console.log('Load DNA'); }
+        function shareURL() { console.log('Share URL'); }
+        function addLayer() { console.log('Add layer'); }
+        function clearLayers() { console.log('Clear layers'); }
+        function undo() { console.log('Undo'); }
+        function redo() { console.log('Redo'); }
+        function clearHistory() { console.log('Clear history'); }
+        function exportVideo() { console.log('Export video'); }
+        function exportGIF() { console.log('Export GIF'); }
+        function toggleMinimize() { console.log('Toggle minimize'); }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Don't trigger shortcuts when typing in inputs
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            
+            switch(e.key) {
+                case '?': showHelp(); break;
+                case 'Escape': hideHelp(); break;
+                case 'p': case 'P': toggleAnimation(); break;
+                case 'e': case 'E': toggleAutoEvolve(); break;
+                case 'f': case 'F': toggleFullscreen(); break;
+                case 's': case 'S': exportScreenshot(); break;
+                case 'l': case 'L': toggleLayers(); break;
+                case 'r': case 'R': console.log('Randomize'); break;
+                case ' ': 
+                    e.preventDefault();
+                    console.log('Bookmark current state');
+                    break;
+                case '1': case '2': case '3': case '4': case '5':
+                case '6': case '7': case '8': case '9':
+                    console.log('Quick pattern switch:', e.key);
+                    break;
+            }
+        });
+
+        console.log('🎨 Genshi Studio 2.0 Ultimate - Ready to create!');
+        console.log('Press ? for keyboard shortcuts');
+    </script>
+</body>
+</html>
