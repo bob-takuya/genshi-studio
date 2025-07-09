@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { fabric } from 'fabric'
+import { Canvas, FabricObject } from 'fabric'
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd'
 import {
   Layers,
@@ -19,13 +19,13 @@ import {
 } from 'lucide-react'
 
 interface LayersPanelProps {
-  canvas: fabric.Canvas | null
-  selectedObject: fabric.Object | null
+  canvas: Canvas | null
+  selectedObject: FabricObject | null
 }
 
 interface Layer {
   id: string
-  object: fabric.Object
+  object: FabricObject
   type: string
   name: string
   visible: boolean

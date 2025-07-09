@@ -5,6 +5,7 @@ import path from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  base: '/genshi-studio/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
@@ -22,7 +23,7 @@ export default defineConfig({
       output: {
         manualChunks: {
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'graphics-vendor': ['three', '@react-three/fiber', '@react-three/drei', 'fabric'],
+          'graphics-vendor': ['three', 'fabric'],
           'ui-vendor': ['framer-motion', 'zustand', 'lucide-react']
         }
       }
