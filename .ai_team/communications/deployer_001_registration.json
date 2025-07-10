@@ -1,0 +1,18 @@
+{
+  "agent_id": "DEPLOYER_001",
+  "agent_type": "DEPLOYER",
+  "role": "Infrastructure & Deployment Specialist",
+  "status": "active",
+  "registration_timestamp": "2025-07-11T01:23:31.676130",
+  "capabilities": [
+    "Production build generation",
+    "GitHub Pages deployment",
+    "CI/CD pipeline management",
+    "Asset optimization",
+    "Performance monitoring",
+    "Infrastructure automation"
+  ],
+  "current_task": "Deploy Genshi Studio to GitHub Pages",
+  "project": "genshi-studio",
+  "priority": "high"
+}

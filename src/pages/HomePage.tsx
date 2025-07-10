@@ -78,7 +78,7 @@ export function HomePage() {
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
             <Link
-              to="/studio"
+              to="/"
               className="inline-flex items-center gap-2 px-8 py-4 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-colors"
             >
               Open Studio
@@ -174,7 +174,7 @@ export function HomePage() {
                 <h3 className="text-xl font-semibold mb-2">{pattern.name}</h3>
                 <p className="text-muted-foreground mb-4">{pattern.description}</p>
                 <Link
-                  to="/studio"
+                  to="/"
                   className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors"
                 >
                   Try this pattern
@@ -197,7 +197,7 @@ export function HomePage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              to="/studio"
+              to="/"
               className="inline-flex items-center gap-2 px-8 py-4 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-colors"
             >
               Start Creating

@@ -2,14 +2,11 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Growth Button Check', () => {
   test('should show Growth button on Studio page', async ({ page }) => {
-    // Navigate to the homepage first
+    // Navigate directly to studio (now at root)
     await page.goto('/');
     
-    // Click on Studio link in navigation
-    await page.getByRole('link', { name: 'Studio', exact: true }).click();
-    
-    // Wait for navigation
-    await page.waitForURL('**/studio');
+    // Wait for page load
+    await page.waitForLoadState('networkidle');
     
     // Take screenshot for debugging
     await page.screenshot({ path: 'studio-page-loaded.png' });

@@ -8,8 +8,7 @@ export function Header() {
   const { theme, setTheme, setSidebarOpen } = useAppStore()
 
   const navigation = [
-    { name: 'Home', href: '/' },
-    { name: 'Studio', href: '/studio' },
+    { name: 'Studio', href: '/' },
     { name: 'Gallery', href: '/gallery' },
     { name: 'About', href: '/about' }
   ]
