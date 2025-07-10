@@ -1,0 +1,58 @@
+# Page snapshot
+
+```yaml
+- complementary:
+  - heading "Tools" [level=2]
+  - button "Layers"
+  - button "Color Palette"
+  - button "Patterns"
+  - button "Code Editor"
+  - button "Properties"
+  - heading "Layers" [level=3]
+  - checkbox [checked]
+  - text: Layer 1
+- banner:
+  - link "G Genshi Studio":
+    - /url: /genshi-studio
+  - navigation "Main navigation":
+    - link "Home":
+      - /url: /genshi-studio
+    - link "Studio":
+      - /url: /genshi-studio/studio
+    - link "Gallery":
+      - /url: /genshi-studio/gallery
+    - link "About":
+      - /url: /genshi-studio/about
+  - button "Toggle theme"
+  - button "Settings"
+  - button "User menu"
+- main:
+  - button "Select": Select (V)
+  - button "Pen": Pen (P)
+  - button "Brush": Brush (B)
+  - button "Shapes": Shapes (R)
+  - button "Text": Text (T)
+  - button "Eraser": Eraser (E)
+  - button "Pattern": Pattern (Shift+P)
+  - button "Draw"
+  - button "Parametric"
+  - button "Code"
+  - button "Growth"
+  - button "Undo": Undo (⌘Z)
+  - button "Redo": Redo (⌘⇧Z)
+  - button "Presets": Presets (F)
+  - button "Bookmarks"
+  - button "Import"
+  - button "Export": Export (E)
+  - button "Toggle Grid"
+  - button "Preview"
+  - button "Zoom out"
+  - text: 100%
+  - button "Zoom in"
+  - button "Pause"
+  - button "Reset"
+  - button "Export Image"
+  - button "Settings"
+  - text: "Generation: 0 Points: 0 Click to add growth seeds"
+- contentinfo: "Connected Zoom: 100% ⌘K Commands"
+```

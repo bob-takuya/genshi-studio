@@ -56,7 +56,7 @@ export function PatternLibrary({ canvas, onClose }: PatternLibraryProps) {
     {
       id: 'circles',
       name: 'Circle Grid',
-      icon: Circle,
+      icon: LucideCircle,
       description: 'Grid of circles',
       generate: (canvas) => {
         const spacing = 60
@@ -178,7 +178,7 @@ export function PatternLibrary({ canvas, onClose }: PatternLibraryProps) {
     {
       id: 'dots',
       name: 'Dot Pattern',
-      icon: Circle,
+      icon: LucideCircle,
       description: 'Simple dot pattern',
       generate: (canvas) => {
         const spacing = 40

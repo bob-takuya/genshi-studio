@@ -85,8 +85,11 @@ export const Canvas = React.forwardRef<any, {}>((props, ref) => {
   useEffect(() => {
     if (!fabricRef.current) return
     
-    fabricRef.current.freeDrawingBrush.color = activeColor
-    fabricRef.current.freeDrawingBrush.width = 2
+    // Ensure freeDrawingBrush exists before setting properties
+    if (fabricRef.current.freeDrawingBrush) {
+      fabricRef.current.freeDrawingBrush.color = activeColor
+      fabricRef.current.freeDrawingBrush.width = 2
+    }
   }, [activeColor])
 
   // Handle zoom changes
