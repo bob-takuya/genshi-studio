@@ -18,7 +18,8 @@ import {
   Code2,
   Star,
   Bookmark,
-  Sparkles
+  Sparkles,
+  Zap
 } from 'lucide-react'
 import { useAppStore } from '../../hooks/useAppStore'
 
@@ -125,6 +126,18 @@ export function Toolbar() {
           >
             <Code2 className="h-4 w-4" />
             <span className="text-sm">Code</span>
+          </button>
+          <button
+            onClick={() => setCanvasMode('growth')}
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-md transition-colors ${
+              canvasMode === 'growth' 
+                ? 'bg-primary text-primary-foreground' 
+                : 'hover:bg-accent'
+            }`}
+            title="Interactive Growth Studio"
+          >
+            <Zap className="h-4 w-4" />
+            <span className="text-sm">Growth</span>
           </button>
         </div>
       </div>

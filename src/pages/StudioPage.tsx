@@ -4,6 +4,7 @@ import { Toolbar } from '../components/studio/Toolbar'
 import { CodeEditor } from '../components/studio/CodeEditor'
 import { PatternSelector } from '../components/studio/PatternSelector'
 import { ParametricPatternEditor } from '../components/studio/ParametricPatternEditor'
+import { InteractiveGrowthStudio } from '../components/studio/InteractiveGrowthStudio'
 import { ExportDialog } from '../components/studio/ExportDialog'
 import { PresetDialog } from '../components/studio/PresetDialog'
 import { BookmarkDialog } from '../components/studio/BookmarkDialog'
@@ -44,9 +45,12 @@ export function StudioPage() {
         ) : canvasMode === 'code' ? (
           /* Code editor mode */
           <CodeEditor />
-        ) : (
+        ) : canvasMode === 'parametric' ? (
           /* Parametric pattern editor mode */
           <ParametricPatternEditor />
+        ) : (
+          /* Interactive growth studio mode */
+          <InteractiveGrowthStudio />
         )}
       </div>
       
