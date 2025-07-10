@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/genshi-studio/genshi-logo.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Genshi Studio - Digital Art & Cultural Pattern Generator</title>
+    <meta name="description" content="WebGL-based graphics engine for cultural expression and digital art creation" />
+    <meta name="keywords" content="webgl, graphics, drawing, art, canvas, cultural-patterns, ichimatsu, japanese-patterns" />
+    <meta name="author" content="AI Creative Team" />
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/genshi-studio/manifest.json" />
+    <meta name="theme-color" content="#6366f1" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Genshi Studio" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://homeserver.github.io/genshi-studio/" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://homeserver.github.io/genshi-studio/" />
+    <meta property="og:title" content="Genshi Studio - Digital Art & Cultural Pattern Generator" />
+    <meta property="og:description" content="WebGL-based graphics engine for cultural expression and digital art creation" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://homeserver.github.io/genshi-studio/" />
+    <meta property="twitter:title" content="Genshi Studio - Digital Art & Cultural Pattern Generator" />
+    <meta property="twitter:description" content="WebGL-based graphics engine for cultural expression and digital art creation" />
+    
+    <!-- Prevent viewport zoom on mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    
+    <!-- Optimize for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Theme initialization script -->
+    <script type="text/javascript">
+      // Apply theme from localStorage immediately to prevent flash
+      (function() {
+        try {
+          const stored = localStorage.getItem('genshi-studio-storage');
+          if (stored) {
+            const data = JSON.parse(stored);
+            if (data.state && data.state.theme === 'dark') {
+              document.documentElement.classList.add('dark');
+            }
+          }
+        } catch (e) {
+          // Ignore errors if localStorage is not available
+        }
+      })();
+    </script>
+    
+    <!-- GitHub Pages SPA Script -->
+    <script type="text/javascript">
+      // Single Page Apps for GitHub Pages
+      // MIT License
+      // https://github.com/rafgraph/spa-github-pages
+      // This script checks to see if a redirect is present in the query string,
+      // converts it back into the correct url and adds it to the
+      // browser's history using window.history.replaceState(...)
+      (function(l) {
+        if (l.search[1] === '/' ) {
+          var decoded = l.search.slice(1).split('&').map(function(s) { 
+            return s.replace(/~and~/g, '&')
+          }).join('?');
+          window.history.replaceState(null, null,
+              l.pathname.slice(0, -1) + decoded + l.hash
+          );
+        }
+      }(window.location))
+    </script>
+    <script type="module" crossorigin src="/genshi-studio/assets/index-BsO99E2R.js"></script>
+    <link rel="modulepreload" crossorigin href="/genshi-studio/assets/react-vendor-DNnMuxeJ.js">
+    <link rel="modulepreload" crossorigin href="/genshi-studio/assets/ui-vendor-9PHu_9BA.js">
+    <link rel="modulepreload" crossorigin href="/genshi-studio/assets/graphics-vendor-DAoeaLwZ.js">
+    <link rel="stylesheet" crossorigin href="/genshi-studio/assets/index-xr4WWcbu.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "agent_id": "ANALYST_001",
+  "agent_type": "ANALYST",
+  "timestamp": "2025-07-11T01:22:56.291398",
+  "status": "active",
+  "capabilities": [
+    "usage_pattern_analysis",
+    "performance_metrics",
+    "user_behavior_analysis",
+    "feature_adoption_tracking",
+    "error_rate_analysis"
+  ]
+}
