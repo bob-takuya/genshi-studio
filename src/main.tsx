@@ -8,8 +8,8 @@ import './styles/index.css'
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', async () => {
     try {
-      const registration = await navigator.serviceWorker.register('/sw.js', {
-        scope: '/'
+      const registration = await navigator.serviceWorker.register('/genshi-studio/sw.js', {
+        scope: '/genshi-studio/'
       })
       
       console.log('Service Worker registered successfully:', registration)
@@ -35,7 +35,7 @@ if ('serviceWorker' in navigator) {
 // Create root element and render the app
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename="/genshi-studio">
       <App />
     </BrowserRouter>
   </React.StrictMode>
