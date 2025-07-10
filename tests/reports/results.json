@@ -2,7 +2,7 @@
   "config": {
     "configFile": "/Users/homeserver/ai-creative-team/projects/genshi-studio/playwright.config.ts",
     "rootDir": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e",
-    "forbidOnly": true,
+    "forbidOnly": false,
     "fullyParallel": true,
     "globalSetup": null,
     "globalTeardown": null,
@@ -52,7 +52,7 @@
       {
         "outputDir": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results",
         "repeatEach": 1,
-        "retries": 2,
+        "retries": 1,
         "metadata": {
           "actualWorkers": 1
         },
@@ -63,12 +63,12 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 60000
+        "timeout": 15000
       },
       {
         "outputDir": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results",
         "repeatEach": 1,
-        "retries": 2,
+        "retries": 1,
         "metadata": {
           "actualWorkers": 1
         },
@@ -79,12 +79,12 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 60000
+        "timeout": 15000
       },
       {
         "outputDir": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results",
         "repeatEach": 1,
-        "retries": 2,
+        "retries": 1,
         "metadata": {
           "actualWorkers": 1
         },
@@ -95,12 +95,12 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 60000
+        "timeout": 15000
       },
       {
         "outputDir": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results",
         "repeatEach": 1,
-        "retries": 2,
+        "retries": 1,
         "metadata": {
           "actualWorkers": 1
         },
@@ -111,12 +111,12 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 60000
+        "timeout": 15000
       },
       {
         "outputDir": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results",
         "repeatEach": 1,
-        "retries": 2,
+        "retries": 1,
         "metadata": {
           "actualWorkers": 1
         },
@@ -127,12 +127,12 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 60000
+        "timeout": 15000
       },
       {
         "outputDir": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results",
         "repeatEach": 1,
-        "retries": 2,
+        "retries": 1,
         "metadata": {
           "actualWorkers": 1
         },
@@ -143,12 +143,12 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 60000
+        "timeout": 15000
       },
       {
         "outputDir": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results",
         "repeatEach": 1,
-        "retries": 2,
+        "retries": 1,
         "metadata": {
           "actualWorkers": 1
         },
@@ -159,12 +159,12 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 60000
+        "timeout": 15000
       },
       {
         "outputDir": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results",
         "repeatEach": 1,
-        "retries": 2,
+        "retries": 1,
         "metadata": {
           "actualWorkers": 1
         },
@@ -175,37 +175,47 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 60000
+        "timeout": 15000
       }
     ],
     "shard": null,
     "updateSnapshots": "missing",
     "updateSourceMethod": "patch",
     "version": "1.53.2",
-    "workers": 1,
-    "webServer": null
+    "workers": 5,
+    "webServer": {
+      "command": "npm run dev",
+      "port": 3001,
+      "timeout": 120000,
+      "reuseExistingServer": true,
+      "stdout": "pipe",
+      "stderr": "pipe",
+      "env": {
+        "NODE_ENV": "test"
+      }
+    }
   },
   "suites": [
     {
-      "title": "homepage.spec.ts",
-      "file": "homepage.spec.ts",
+      "title": "specs/12-growth-button-check.spec.ts",
+      "file": "specs/12-growth-button-check.spec.ts",
       "column": 0,
       "line": 0,
       "specs": [],
       "suites": [
         {
-          "title": "Homepage",
-          "file": "homepage.spec.ts",
+          "title": "Growth Button Check",
+          "file": "specs/12-growth-button-check.spec.ts",
           "line": 3,
           "column": 6,
           "specs": [
             {
-              "title": "should display the homepage with correct title",
-              "ok": false,
+              "title": "should show Growth button on Studio page",
+              "ok": true,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 60000,
+                  "timeout": 15000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
@@ -214,653 +224,32 @@
                     {
                       "workerIndex": 0,
                       "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 10587,
-                      "error": {
-                        "message": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected string: \u001b[32m\"Genshi Studio - Digital Art & Cultural Pattern Generator\"\u001b[39m\nReceived string: \u001b[31m\"\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m    14 × locator resolved to <html>…</html>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n",
-                        "stack": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected string: \u001b[32m\"Genshi Studio - Digital Art & Cultural Pattern Generator\"\u001b[39m\nReceived string: \u001b[31m\"\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m    14 × locator resolved to <html>…</html>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:8:24",
-                        "location": {
-                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts",
-                          "column": 24,
-                          "line": 8
-                        },
-                        "snippet": "\u001b[0m \u001b[90m  6 |\u001b[39m     \n \u001b[90m  7 |\u001b[39m     \u001b[90m// Check page title\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  8 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[32m'Genshi Studio - Digital Art & Cultural Pattern Generator'\u001b[39m)\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m  9 |\u001b[39m     \n \u001b[90m 10 |\u001b[39m     \u001b[90m// Check main heading is visible\u001b[39m\n \u001b[90m 11 |\u001b[39m     \u001b[36mconst\u001b[39m heading \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'h1'\u001b[39m)\u001b[0m"
-                      },
-                      "errors": [
+                      "status": "passed",
+                      "duration": 1315,
+                      "errors": [],
+                      "stdout": [
                         {
-                          "location": {
-                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts",
-                            "column": 24,
-                            "line": 8
-                          },
-                          "message": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected string: \u001b[32m\"Genshi Studio - Digital Art & Cultural Pattern Generator\"\u001b[39m\nReceived string: \u001b[31m\"\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m    14 × locator resolved to <html>…</html>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n\n   6 |     \n   7 |     // Check page title\n>  8 |     await expect(page).toHaveTitle('Genshi Studio - Digital Art & Cultural Pattern Generator')\n     |                        ^\n   9 |     \n  10 |     // Check main heading is visible\n  11 |     const heading = page.locator('h1')\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:8:24"
+                          "text": "Current URL: http://localhost:3001/genshi-studio/\n"
+                        },
+                        {
+                          "text": "Toolbar buttons: [\n  \u001b[32m'Select (V)'\u001b[39m,        \u001b[32m'Pen (P)'\u001b[39m,\n  \u001b[32m'Brush (B)'\u001b[39m,         \u001b[32m'Shapes (R)'\u001b[39m,\n  \u001b[32m'Text (T)'\u001b[39m,          \u001b[32m'Eraser (E)'\u001b[39m,\n  \u001b[32m'Pattern (Shift+P)'\u001b[39m, \u001b[32m'Draw'\u001b[39m,\n  \u001b[32m'Parametric'\u001b[39m,        \u001b[32m'Code'\u001b[39m,\n  \u001b[32m'Growth'\u001b[39m,            \u001b[32m'Undo (⌘Z)'\u001b[39m,\n  \u001b[32m'Redo (⌘⇧Z)'\u001b[39m,        \u001b[32m'Presets (F)'\u001b[39m,\n  \u001b[32m'Bookmarks '\u001b[39m,        \u001b[32m'Import '\u001b[39m,\n  \u001b[32m'Export (E)'\u001b[39m,        \u001b[32m''\u001b[39m,\n  \u001b[32m''\u001b[39m,                  \u001b[32m''\u001b[39m,\n  \u001b[32m''\u001b[39m\n]\n"
+                        },
+                        {
+                          "text": "Growth button count: \u001b[33m1\u001b[39m\n"
                         }
                       ],
-                      "stdout": [],
-                      "stderr": [
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m=> browserType.launch started \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m<= browserType.launch succeeded \u001b[38;5;45m+537ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m=> browser.newContext started \u001b[38;5;45m+2ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m<= browser.newContext succeeded \u001b[38;5;45m+30ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m=> browserContext.newPage started \u001b[38;5;45m+2ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m<= browserContext.newPage succeeded \u001b[38;5;45m+249ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m=> page.goto started \u001b[38;5;45m+3ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0mnavigating to \"http://localhost:3001/genshi-studio\", waiting until \"load\" \u001b[38;5;45m+1ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  \"commit\" event fired \u001b[38;5;45m+12ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  navigated to \"http://localhost:3001/genshi-studio\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  \"domcontentloaded\" event fired \u001b[38;5;45m+7ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  \"load\" event fired \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m<= page.goto succeeded \u001b[38;5;45m+1ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m=> expect.toHaveTitle started \u001b[38;5;45m+5ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0mExpect \"toHaveTitle\" with timeout 10000ms \u001b[38;5;45m+3ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0mwaiting for locator(':root') \u001b[38;5;45m+1ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+19ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+1ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+101ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+251ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+1ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  \"networkidle\" event fired \u001b[38;5;45m+112ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+389ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+1s\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+1s\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+1s\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+1s\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+1s\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+1s\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+1s\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+1s\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+1s\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m<= expect.toHaveTitle succeeded \u001b[38;5;45m+102ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m=> page.screenshot started \u001b[38;5;45m+3ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0mtaking page screenshot \u001b[38;5;45m+1ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0mwaiting for fonts to load... \u001b[38;5;45m+1ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0mfonts loaded \u001b[38;5;45m+1ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m<= page.screenshot succeeded \u001b[38;5;45m+35ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0mwaiting for locator('body') \u001b[38;5;45m+4ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <body>…</body> \u001b[38;5;45m+2ms\u001b[0m\n"
-                        }
-                      ],
+                      "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-07-10T14:06:01.391Z",
+                      "startTime": "2025-07-10T16:11:45.594Z",
                       "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts",
-                        "column": 24,
-                        "line": 8
-                      }
-                    },
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 10492,
-                      "error": {
-                        "message": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected string: \u001b[32m\"Genshi Studio - Digital Art & Cultural Pattern Generator\"\u001b[39m\nReceived string: \u001b[31m\"\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m    14 × locator resolved to <html>…</html>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n",
-                        "stack": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected string: \u001b[32m\"Genshi Studio - Digital Art & Cultural Pattern Generator\"\u001b[39m\nReceived string: \u001b[31m\"\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m    14 × locator resolved to <html>…</html>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:8:24",
-                        "location": {
-                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts",
-                          "column": 24,
-                          "line": 8
-                        },
-                        "snippet": "\u001b[0m \u001b[90m  6 |\u001b[39m     \n \u001b[90m  7 |\u001b[39m     \u001b[90m// Check page title\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  8 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[32m'Genshi Studio - Digital Art & Cultural Pattern Generator'\u001b[39m)\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m  9 |\u001b[39m     \n \u001b[90m 10 |\u001b[39m     \u001b[90m// Check main heading is visible\u001b[39m\n \u001b[90m 11 |\u001b[39m     \u001b[36mconst\u001b[39m heading \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'h1'\u001b[39m)\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts",
-                            "column": 24,
-                            "line": 8
-                          },
-                          "message": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected string: \u001b[32m\"Genshi Studio - Digital Art & Cultural Pattern Generator\"\u001b[39m\nReceived string: \u001b[31m\"\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m    14 × locator resolved to <html>…</html>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n\n   6 |     \n   7 |     // Check page title\n>  8 |     await expect(page).toHaveTitle('Genshi Studio - Digital Art & Cultural Pattern Generator')\n     |                        ^\n   9 |     \n  10 |     // Check main heading is visible\n  11 |     const heading = page.locator('h1')\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:8:24"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m=> browserType.launch started \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m<= browserType.launch succeeded \u001b[38;5;45m+214ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m=> browser.newContext started \u001b[38;5;45m+3ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m<= browser.newContext succeeded \u001b[38;5;45m+7ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m=> browserContext.newPage started \u001b[38;5;45m+5ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m<= browserContext.newPage succeeded \u001b[38;5;45m+188ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m=> page.goto started \u001b[38;5;45m+2ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0mnavigating to \"http://localhost:3001/genshi-studio\", waiting until \"load\" \u001b[38;5;45m+4ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  \"commit\" event fired \u001b[38;5;45m+8ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  navigated to \"http://localhost:3001/genshi-studio\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  \"domcontentloaded\" event fired \u001b[38;5;45m+3ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  \"load\" event fired \u001b[38;5;45m+1ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m<= page.goto succeeded \u001b[38;5;45m+5ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m=> expect.toHaveTitle started \u001b[38;5;45m+3ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0mExpect \"toHaveTitle\" with timeout 10000ms \u001b[38;5;45m+2ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0mwaiting for locator(':root') \u001b[38;5;45m+1ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+10ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+1ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+101ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+252ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  \"networkidle\" event fired \u001b[38;5;45m+125ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+378ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+1s\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+1s\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+1s\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+1s\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+1s\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+1s\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+1s\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+1s\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+1s\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m<= expect.toHaveTitle succeeded \u001b[38;5;45m+120ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m=> page.screenshot started \u001b[38;5;45m+2ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0mtaking page screenshot \u001b[38;5;45m+1ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0mwaiting for fonts to load... \u001b[38;5;45m+1ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0mfonts loaded \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m<= page.screenshot succeeded \u001b[38;5;45m+29ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0mwaiting for locator('body') \u001b[38;5;45m+16ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <body>…</body> \u001b[38;5;45m+1ms\u001b[0m\n"
-                        }
-                      ],
-                      "retry": 1,
-                      "startTime": "2025-07-10T14:06:12.914Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium-retry1/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium-retry1/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium-retry1/error-context.md"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium-retry1/trace.zip"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts",
-                        "column": 24,
-                        "line": 8
-                      }
-                    },
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 10395,
-                      "error": {
-                        "message": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected string: \u001b[32m\"Genshi Studio - Digital Art & Cultural Pattern Generator\"\u001b[39m\nReceived string: \u001b[31m\"\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m    14 × locator resolved to <html>…</html>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n",
-                        "stack": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected string: \u001b[32m\"Genshi Studio - Digital Art & Cultural Pattern Generator\"\u001b[39m\nReceived string: \u001b[31m\"\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m    14 × locator resolved to <html>…</html>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:8:24",
-                        "location": {
-                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts",
-                          "column": 24,
-                          "line": 8
-                        },
-                        "snippet": "\u001b[0m \u001b[90m  6 |\u001b[39m     \n \u001b[90m  7 |\u001b[39m     \u001b[90m// Check page title\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  8 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[32m'Genshi Studio - Digital Art & Cultural Pattern Generator'\u001b[39m)\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m  9 |\u001b[39m     \n \u001b[90m 10 |\u001b[39m     \u001b[90m// Check main heading is visible\u001b[39m\n \u001b[90m 11 |\u001b[39m     \u001b[36mconst\u001b[39m heading \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'h1'\u001b[39m)\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts",
-                            "column": 24,
-                            "line": 8
-                          },
-                          "message": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected string: \u001b[32m\"Genshi Studio - Digital Art & Cultural Pattern Generator\"\u001b[39m\nReceived string: \u001b[31m\"\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m    14 × locator resolved to <html>…</html>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n\n   6 |     \n   7 |     // Check page title\n>  8 |     await expect(page).toHaveTitle('Genshi Studio - Digital Art & Cultural Pattern Generator')\n     |                        ^\n   9 |     \n  10 |     // Check main heading is visible\n  11 |     const heading = page.locator('h1')\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:8:24"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m=> browserType.launch started \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m<= browserType.launch succeeded \u001b[38;5;45m+209ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m=> browser.newContext started \u001b[38;5;45m+4ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m<= browser.newContext succeeded \u001b[38;5;45m+7ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m=> browserContext.newPage started \u001b[38;5;45m+1ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m<= browserContext.newPage succeeded \u001b[38;5;45m+103ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m=> page.goto started \u001b[38;5;45m+3ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0mnavigating to \"http://localhost:3001/genshi-studio\", waiting until \"load\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  \"commit\" event fired \u001b[38;5;45m+6ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  navigated to \"http://localhost:3001/genshi-studio\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  \"domcontentloaded\" event fired \u001b[38;5;45m+2ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  \"load\" event fired \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m<= page.goto succeeded \u001b[38;5;45m+1ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m=> expect.toHaveTitle started \u001b[38;5;45m+4ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0mExpect \"toHaveTitle\" with timeout 10000ms \u001b[38;5;45m+1ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0mwaiting for locator(':root') \u001b[38;5;45m+1ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+15ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+1ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+102ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+251ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  \"networkidle\" event fired \u001b[38;5;45m+125ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+378ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+1s\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+1s\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+1s\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+1s\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+1s\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+1s\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+1s\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+1s\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <html>…</html> \u001b[38;5;45m+1s\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  unexpected value \"\" \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m<= expect.toHaveTitle succeeded \u001b[38;5;45m+113ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m=> page.screenshot started \u001b[38;5;45m+3ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0mtaking page screenshot \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0mwaiting for fonts to load... \u001b[38;5;45m+1ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0mfonts loaded \u001b[38;5;45m+0ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m<= page.screenshot succeeded \u001b[38;5;45m+30ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0mwaiting for locator('body') \u001b[38;5;45m+4ms\u001b[0m\n"
-                        },
-                        {
-                          "text": "  \u001b[38;5;45;1mpw:api \u001b[0m  locator resolved to <body>…</body> \u001b[38;5;45m+2ms\u001b[0m\n"
-                        }
-                      ],
-                      "retry": 2,
-                      "startTime": "2025-07-10T14:06:24.055Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium-retry2/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium-retry2/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium-retry2/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts",
-                        "column": 24,
-                        "line": 8
-                      }
+                      "attachments": []
                     }
                   ],
-                  "status": "unexpected"
+                  "status": "expected"
                 }
               ],
-              "id": "84e7eb052e8cbae1c9f0-e38ae967161ac243ecf5",
-              "file": "homepage.spec.ts",
+              "id": "428c360eb8a3566fc86a-4effa7b382cec14f3781",
+              "file": "specs/12-growth-button-check.spec.ts",
               "line": 4,
               "column": 3
             }
@@ -871,11 +260,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-07-10T14:06:01.080Z",
-    "duration": 33666.556000000004,
-    "expected": 0,
+    "startTime": "2025-07-10T16:11:44.736Z",
+    "duration": 2571.174,
+    "expected": 1,
     "skipped": 0,
-    "unexpected": 1,
+    "unexpected": 0,
     "flaky": 0
   }
 }
