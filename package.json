@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "type": "module",
   "description": "WebGL-based graphics engine for cultural expression and digital art",
+  "homepage": "https://bob-takuya.github.io/genshi-studio/",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -12,7 +13,8 @@
     "test": "jest",
     "test:webgl": "open tests/graphics/test-webgl.html",
     "lint": "eslint src --ext .ts,.tsx",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "deploy": "gh-pages -d dist"
   },
   "keywords": [
     "webgl",
