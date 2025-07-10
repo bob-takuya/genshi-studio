@@ -3,6 +3,7 @@ import { Canvas } from '../components/studio/Canvas'
 import { Toolbar } from '../components/studio/Toolbar'
 import { CodeEditor } from '../components/studio/CodeEditor'
 import { PatternSelector } from '../components/studio/PatternSelector'
+import { ParametricPatternEditor } from '../components/studio/ParametricPatternEditor'
 import { ExportDialog } from '../components/studio/ExportDialog'
 import { PresetDialog } from '../components/studio/PresetDialog'
 import { BookmarkDialog } from '../components/studio/BookmarkDialog'
@@ -40,9 +41,12 @@ export function StudioPage() {
             {/* Pattern selector overlay */}
             <PatternSelector />
           </>
-        ) : (
+        ) : canvasMode === 'code' ? (
           /* Code editor mode */
           <CodeEditor />
+        ) : (
+          /* Parametric pattern editor mode */
+          <ParametricPatternEditor />
         )}
       </div>
       
