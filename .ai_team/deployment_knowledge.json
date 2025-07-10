@@ -1,0 +1,73 @@
+{
+  "id": "genshi_studio_github_pages_deployment",
+  "type": "deployment_knowledge",
+  "timestamp": "2025-07-11T01:27:19.779514",
+  "agent_id": "DEPLOYER_001",
+  "project": "genshi-studio",
+  "deployment_method": "GitHub Pages via gh-pages",
+  "configuration": {
+    "build_tool": "Vite",
+    "base_path": "/genshi-studio/",
+    "deploy_package": "gh-pages",
+    "target_branch": "gh-pages",
+    "build_command": "npm run build",
+    "deploy_command": "npm run deploy"
+  },
+  "optimizations": {
+    "code_splitting": "Manual chunks for vendor libraries",
+    "compression": "Gzip enabled",
+    "source_maps": "Generated for debugging",
+    "asset_optimization": "Automatic via Vite"
+  },
+  "lessons_learned": [
+    "Vite base path must match GitHub Pages repository name",
+    "Package.json homepage field ensures proper asset paths",
+    "gh-pages package handles branch creation automatically",
+    "Build optimization reduces main bundle to manageable size",
+    "Monaco Editor includes many language modules increasing bundle size"
+  ],
+  "performance_metrics": {
+    "build_time": "~21 seconds",
+    "total_bundle_size": "~4.1 MB",
+    "compressed_size": "~1.1 MB",
+    "asset_count": 93
+  },
+  "reusable_patterns": {
+    "vite_config_github_pages": {
+      "base": "/repository-name/",
+      "build": {
+        "outDir": "dist",
+        "sourcemap": true,
+        "rollupOptions": {
+          "output": {
+            "manualChunks": {
+              "react-vendor": [
+                "react",
+                "react-dom",
+                "react-router-dom"
+              ],
+              "graphics-vendor": [
+                "three",
+                "fabric"
+              ],
+              "ui-vendor": [
+                "framer-motion",
+                "zustand",
+                "lucide-react"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "package_json_deploy": {
+      "homepage": "https://username.github.io/repository-name/",
+      "scripts": {
+        "deploy": "gh-pages -d dist"
+      },
+      "devDependencies": {
+        "gh-pages": "^latest"
+      }
+    }
+  }
+}
