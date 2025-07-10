@@ -1,6 +1,7 @@
 {
   "name": "genshi-studio",
   "version": "0.1.0",
+  "type": "module",
   "description": "WebGL-based graphics engine for cultural expression and digital art",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
