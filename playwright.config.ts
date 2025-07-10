@@ -27,7 +27,7 @@ export default defineConfig({
   // Global test settings
   use: {
     // Base URL for testing
-    baseURL: process.env.BASE_URL || 'http://localhost:5173',
+    baseURL: process.env.BASE_URL || 'http://localhost:3001/genshi-studio/',
     
     // Artifact collection
     trace: 'on-first-retry',
@@ -146,7 +146,7 @@ export default defineConfig({
   // Local dev server configuration
   webServer: process.env.CI ? undefined : {
     command: 'npm run dev',
-    port: 5173,
+    port: 3001,
     timeout: 120000,
     reuseExistingServer: !process.env.CI,
     stdout: 'pipe',

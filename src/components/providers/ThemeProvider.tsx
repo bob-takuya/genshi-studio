@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useLayoutEffect } from 'react'
 
 interface ThemeProviderProps {
   theme: 'light' | 'dark'
@@ -6,7 +6,8 @@ interface ThemeProviderProps {
 }
 
 export function ThemeProvider({ theme, children }: ThemeProviderProps) {
-  useEffect(() => {
+  // Use useLayoutEffect to apply theme before paint to avoid flash
+  useLayoutEffect(() => {
     const root = document.documentElement
     
     if (theme === 'dark') {

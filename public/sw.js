@@ -6,10 +6,10 @@ const STATIC_CACHE_NAME = 'genshi-studio-static-v1'
 
 // Assets to cache on install
 const STATIC_ASSETS = [
-  '/',
-  '/manifest.json',
-  '/favicon.ico',
-  '/index.html'
+  '/genshi-studio/',
+  '/genshi-studio/manifest.json',
+  '/genshi-studio/favicon.ico',
+  '/genshi-studio/index.html'
 ]
 
 // Install event - cache static assets
@@ -105,7 +105,7 @@ self.addEventListener('fetch', (event) => {
             // If we're trying to fetch the main page and we're offline,
             // return a cached version or a simple offline page
             if (event.request.destination === 'document') {
-              return caches.match('/') || caches.match('/index.html')
+              return caches.match('/genshi-studio/') || caches.match('/genshi-studio/index.html')
             }
             
             // For other requests, just throw the error
@@ -164,7 +164,7 @@ if ('showNotification' in self.registration) {
     
     // Handle notification click - could open a specific pattern or page
     event.waitUntil(
-      clients.openWindow('/')
+      clients.openWindow('/genshi-studio/')
     )
   })
 }

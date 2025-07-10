@@ -279,7 +279,7 @@ export const Canvas = React.forwardRef<any, {}>((props, ref) => {
       {/* Canvas container */}
       <div className="flex-1 relative">
         {/* Canvas element */}
-        <canvas ref={canvasRef} id="drawing-canvas" />
+        <canvas ref={canvasRef} id="drawing-canvas" data-testid="drawing-canvas" />
         
         {/* Canvas controls */}
         <CanvasControls
