@@ -38,6 +38,24 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
+    <!-- Theme initialization script -->
+    <script type="text/javascript">
+      // Apply theme from localStorage immediately to prevent flash
+      (function() {
+        try {
+          const stored = localStorage.getItem('genshi-studio-storage');
+          if (stored) {
+            const data = JSON.parse(stored);
+            if (data.state && data.state.theme === 'dark') {
+              document.documentElement.classList.add('dark');
+            }
+          }
+        } catch (e) {
+          // Ignore errors if localStorage is not available
+        }
+      })();
+    </script>
+    
     <!-- GitHub Pages SPA Script -->
     <script type="text/javascript">
       // Single Page Apps for GitHub Pages

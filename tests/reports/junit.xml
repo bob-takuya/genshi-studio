@@ -1,26 +1,29 @@
-<testsuites id="" name="" tests="3" failures="2" skipped="0" errors="0" time="37.7571">
-<testsuite name="homepage.spec.ts" timestamp="2025-07-10T13:31:18.390Z" hostname="chromium" tests="3" failures="2" skipped="0" time="34.686" errors="0">
-<testcase name="Homepage › should display the homepage with correct title" classname="homepage.spec.ts" time="1.381">
+<testsuites id="" name="" tests="1" failures="1" skipped="0" errors="0" time="33.66655600000001">
+<testsuite name="homepage.spec.ts" timestamp="2025-07-10T14:06:01.097Z" hostname="chromium" tests="1" failures="1" skipped="0" time="31.474" errors="0">
+<testcase name="Homepage › should display the homepage with correct title" classname="homepage.spec.ts" time="31.474">
 <failure message="homepage.spec.ts:4:3 should display the homepage with correct title" type="FAILURE">
 <![CDATA[  [chromium] › homepage.spec.ts:4:3 › Homepage › should display the homepage with correct title ────
 
-    Error: expect.toBeVisible: Error: strict mode violation: locator('text=View Gallery') resolved to 2 elements:
-        1) <a data-discover="true" href="/genshi-studio/gallery" class="inline-flex items-center gap-2 px-8 py-4 bg-secondary text-secondary-foreground rounded-lg font-semibold hover:bg-secondary/90 transition-colors">View Gallery</a> aka getByTestId('hero-section').getByRole('link', { name: 'View Gallery' })
-        2) <a data-discover="true" href="/genshi-studio/gallery" class="inline-flex items-center gap-2 px-8 py-4 bg-secondary text-secondary-foreground rounded-lg font-semibold hover:bg-secondary/90 transition-colors">…</a> aka getByRole('link', { name: 'View Gallery' }).nth(1)
+    Error: Timed out 10000ms waiting for expect(page).toHaveTitle(expected)
 
+    Locator: locator(':root')
+    Expected string: "Genshi Studio - Digital Art & Cultural Pattern Generator"
+    Received string: ""
     Call log:
-      - Expect "toBeVisible" with timeout 10000ms
-      - waiting for locator('text=View Gallery')
+      - Expect "toHaveTitle" with timeout 10000ms
+      - waiting for locator(':root')
+        14 × locator resolved to <html>…</html>
+           - unexpected value ""
 
 
-      21 |     // Check CTA buttons
-      22 |     await expect(page.locator('text=Open Studio')).toBeVisible()
-    > 23 |     await expect(page.locator('text=View Gallery')).toBeVisible()
-         |                                                     ^
-      24 |   })
-      25 |
-      26 |   test('should navigate to Studio page', async ({ page }) => {
-        at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:23:53
+       6 |     
+       7 |     // Check page title
+    >  8 |     await expect(page).toHaveTitle('Genshi Studio - Digital Art & Cultural Pattern Generator')
+         |                        ^
+       9 |     
+      10 |     // Check main heading is visible
+      11 |     const heading = page.locator('h1')
+        at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:8:24
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     tests/results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium/test-failed-1.png
@@ -34,23 +37,26 @@
 
     Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
 
-    Error: expect.toBeVisible: Error: strict mode violation: locator('text=View Gallery') resolved to 2 elements:
-        1) <a data-discover="true" href="/genshi-studio/gallery" class="inline-flex items-center gap-2 px-8 py-4 bg-secondary text-secondary-foreground rounded-lg font-semibold hover:bg-secondary/90 transition-colors">View Gallery</a> aka getByTestId('hero-section').getByRole('link', { name: 'View Gallery' })
-        2) <a data-discover="true" href="/genshi-studio/gallery" class="inline-flex items-center gap-2 px-8 py-4 bg-secondary text-secondary-foreground rounded-lg font-semibold hover:bg-secondary/90 transition-colors">…</a> aka getByRole('link', { name: 'View Gallery' }).nth(1)
+    Error: Timed out 10000ms waiting for expect(page).toHaveTitle(expected)
 
+    Locator: locator(':root')
+    Expected string: "Genshi Studio - Digital Art & Cultural Pattern Generator"
+    Received string: ""
     Call log:
-      - Expect "toBeVisible" with timeout 10000ms
-      - waiting for locator('text=View Gallery')
+      - Expect "toHaveTitle" with timeout 10000ms
+      - waiting for locator(':root')
+        14 × locator resolved to <html>…</html>
+           - unexpected value ""
 
 
-      21 |     // Check CTA buttons
-      22 |     await expect(page.locator('text=Open Studio')).toBeVisible()
-    > 23 |     await expect(page.locator('text=View Gallery')).toBeVisible()
-         |                                                     ^
-      24 |   })
-      25 |
-      26 |   test('should navigate to Studio page', async ({ page }) => {
-        at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:23:53
+       6 |     
+       7 |     // Check page title
+    >  8 |     await expect(page).toHaveTitle('Genshi Studio - Digital Art & Cultural Pattern Generator')
+         |                        ^
+       9 |     
+      10 |     // Check main heading is visible
+      11 |     const heading = page.locator('h1')
+        at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:8:24
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     tests/results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium-retry1/test-failed-1.png
@@ -72,23 +78,26 @@
 
     Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
 
-    Error: expect.toBeVisible: Error: strict mode violation: locator('text=View Gallery') resolved to 2 elements:
-        1) <a data-discover="true" href="/genshi-studio/gallery" class="inline-flex items-center gap-2 px-8 py-4 bg-secondary text-secondary-foreground rounded-lg font-semibold hover:bg-secondary/90 transition-colors">View Gallery</a> aka getByTestId('hero-section').getByRole('link', { name: 'View Gallery' })
-        2) <a data-discover="true" href="/genshi-studio/gallery" class="inline-flex items-center gap-2 px-8 py-4 bg-secondary text-secondary-foreground rounded-lg font-semibold hover:bg-secondary/90 transition-colors">…</a> aka getByRole('link', { name: 'View Gallery' }).nth(1)
+    Error: Timed out 10000ms waiting for expect(page).toHaveTitle(expected)
 
+    Locator: locator(':root')
+    Expected string: "Genshi Studio - Digital Art & Cultural Pattern Generator"
+    Received string: ""
     Call log:
-      - Expect "toBeVisible" with timeout 10000ms
-      - waiting for locator('text=View Gallery')
+      - Expect "toHaveTitle" with timeout 10000ms
+      - waiting for locator(':root')
+        14 × locator resolved to <html>…</html>
+           - unexpected value ""
 
 
-      21 |     // Check CTA buttons
-      22 |     await expect(page.locator('text=Open Studio')).toBeVisible()
-    > 23 |     await expect(page.locator('text=View Gallery')).toBeVisible()
-         |                                                     ^
-      24 |   })
-      25 |
-      26 |   test('should navigate to Studio page', async ({ page }) => {
-        at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:23:53
+       6 |     
+       7 |     // Check page title
+    >  8 |     await expect(page).toHaveTitle('Genshi Studio - Digital Art & Cultural Pattern Generator')
+         |                        ^
+       9 |     
+      10 |     // Check main heading is visible
+      11 |     const heading = page.locator('h1')
+        at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:8:24
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     tests/results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium-retry2/test-failed-1.png
@@ -124,124 +133,168 @@
 [[ATTACHMENT|../results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium-retry2/error-context.md]]
 ]]>
 </system-out>
-</testcase>
-<testcase name="Homepage › should navigate to Studio page" classname="homepage.spec.ts" time="32.859">
-<failure message="homepage.spec.ts:26:3 should navigate to Studio page" type="FAILURE">
-<![CDATA[  [chromium] › homepage.spec.ts:26:3 › Homepage › should navigate to Studio page ───────────────────
-
-    Error: Timed out 10000ms waiting for expect(locator).toBeVisible()
-
-    Locator: locator('canvas')
-    Expected: visible
-    Received: <element(s) not found>
-    Call log:
-      - Expect "toBeVisible" with timeout 10000ms
-      - waiting for locator('canvas')
-
-
-      34 |     
-      35 |     // Verify canvas is present
-    > 36 |     await expect(page.locator('canvas')).toBeVisible()
-         |                                          ^
-      37 |   })
-      38 |
-      39 |   test('should toggle theme', async ({ page }) => {
-        at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:36:42
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    tests/results/homepage-Homepage-should-navigate-to-Studio-page-chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    tests/results/homepage-Homepage-should-navigate-to-Studio-page-chromium/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
-
-    Error: Timed out 10000ms waiting for expect(locator).toBeVisible()
-
-    Locator: locator('canvas')
-    Expected: visible
-    Received: <element(s) not found>
-    Call log:
-      - Expect "toBeVisible" with timeout 10000ms
-      - waiting for locator('canvas')
-
-
-      34 |     
-      35 |     // Verify canvas is present
-    > 36 |     await expect(page.locator('canvas')).toBeVisible()
-         |                                          ^
-      37 |   })
-      38 |
-      39 |   test('should toggle theme', async ({ page }) => {
-        at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:36:42
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    tests/results/homepage-Homepage-should-navigate-to-Studio-page-chromium-retry1/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    tests/results/homepage-Homepage-should-navigate-to-Studio-page-chromium-retry1/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
-    tests/results/homepage-Homepage-should-navigate-to-Studio-page-chromium-retry1/trace.zip
-    Usage:
-
-        npx playwright show-trace tests/results/homepage-Homepage-should-navigate-to-Studio-page-chromium-retry1/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
-
-    Error: Timed out 10000ms waiting for expect(locator).toBeVisible()
-
-    Locator: locator('canvas')
-    Expected: visible
-    Received: <element(s) not found>
-    Call log:
-      - Expect "toBeVisible" with timeout 10000ms
-      - waiting for locator('canvas')
-
-
-      34 |     
-      35 |     // Verify canvas is present
-    > 36 |     await expect(page.locator('canvas')).toBeVisible()
-         |                                          ^
-      37 |   })
-      38 |
-      39 |   test('should toggle theme', async ({ page }) => {
-        at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:36:42
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    tests/results/homepage-Homepage-should-navigate-to-Studio-page-chromium-retry2/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    tests/results/homepage-Homepage-should-navigate-to-Studio-page-chromium-retry2/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
+<system-err>
+<![CDATA[  [38;5;45;1mpw:api [0m=> browserType.launch started [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m<= browserType.launch succeeded [38;5;45m+537ms[0m
+  [38;5;45;1mpw:api [0m=> browser.newContext started [38;5;45m+2ms[0m
+  [38;5;45;1mpw:api [0m<= browser.newContext succeeded [38;5;45m+30ms[0m
+  [38;5;45;1mpw:api [0m=> browserContext.newPage started [38;5;45m+2ms[0m
+  [38;5;45;1mpw:api [0m<= browserContext.newPage succeeded [38;5;45m+249ms[0m
+  [38;5;45;1mpw:api [0m=> page.goto started [38;5;45m+3ms[0m
+  [38;5;45;1mpw:api [0mnavigating to "http://localhost:3001/genshi-studio", waiting until "load" [38;5;45m+1ms[0m
+  [38;5;45;1mpw:api [0m  "commit" event fired [38;5;45m+12ms[0m
+  [38;5;45;1mpw:api [0m  navigated to "http://localhost:3001/genshi-studio" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  "domcontentloaded" event fired [38;5;45m+7ms[0m
+  [38;5;45;1mpw:api [0m  "load" event fired [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m<= page.goto succeeded [38;5;45m+1ms[0m
+  [38;5;45;1mpw:api [0m=> expect.toHaveTitle started [38;5;45m+5ms[0m
+  [38;5;45;1mpw:api [0mExpect "toHaveTitle" with timeout 10000ms [38;5;45m+3ms[0m
+  [38;5;45;1mpw:api [0mwaiting for locator(':root') [38;5;45m+1ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+19ms[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+1ms[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+101ms[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+251ms[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+1ms[0m
+  [38;5;45;1mpw:api [0m  "networkidle" event fired [38;5;45m+112ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+389ms[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+1s[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+1s[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+1s[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+1s[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+1s[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+1s[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+1s[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+1s[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+1s[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m<= expect.toHaveTitle succeeded [38;5;45m+102ms[0m
+  [38;5;45;1mpw:api [0m=> page.screenshot started [38;5;45m+3ms[0m
+  [38;5;45;1mpw:api [0mtaking page screenshot [38;5;45m+1ms[0m
+  [38;5;45;1mpw:api [0mwaiting for fonts to load... [38;5;45m+1ms[0m
+  [38;5;45;1mpw:api [0mfonts loaded [38;5;45m+1ms[0m
+  [38;5;45;1mpw:api [0m<= page.screenshot succeeded [38;5;45m+35ms[0m
+  [38;5;45;1mpw:api [0mwaiting for locator('body') [38;5;45m+4ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <body>…</body> [38;5;45m+2ms[0m
+  [38;5;45;1mpw:api [0m=> browserType.launch started [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m<= browserType.launch succeeded [38;5;45m+214ms[0m
+  [38;5;45;1mpw:api [0m=> browser.newContext started [38;5;45m+3ms[0m
+  [38;5;45;1mpw:api [0m<= browser.newContext succeeded [38;5;45m+7ms[0m
+  [38;5;45;1mpw:api [0m=> browserContext.newPage started [38;5;45m+5ms[0m
+  [38;5;45;1mpw:api [0m<= browserContext.newPage succeeded [38;5;45m+188ms[0m
+  [38;5;45;1mpw:api [0m=> page.goto started [38;5;45m+2ms[0m
+  [38;5;45;1mpw:api [0mnavigating to "http://localhost:3001/genshi-studio", waiting until "load" [38;5;45m+4ms[0m
+  [38;5;45;1mpw:api [0m  "commit" event fired [38;5;45m+8ms[0m
+  [38;5;45;1mpw:api [0m  navigated to "http://localhost:3001/genshi-studio" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  "domcontentloaded" event fired [38;5;45m+3ms[0m
+  [38;5;45;1mpw:api [0m  "load" event fired [38;5;45m+1ms[0m
+  [38;5;45;1mpw:api [0m<= page.goto succeeded [38;5;45m+5ms[0m
+  [38;5;45;1mpw:api [0m=> expect.toHaveTitle started [38;5;45m+3ms[0m
+  [38;5;45;1mpw:api [0mExpect "toHaveTitle" with timeout 10000ms [38;5;45m+2ms[0m
+  [38;5;45;1mpw:api [0mwaiting for locator(':root') [38;5;45m+1ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+10ms[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+1ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+101ms[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+252ms[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  "networkidle" event fired [38;5;45m+125ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+378ms[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+1s[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+1s[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+1s[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+1s[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+1s[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+1s[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+1s[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+1s[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+1s[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m<= expect.toHaveTitle succeeded [38;5;45m+120ms[0m
+  [38;5;45;1mpw:api [0m=> page.screenshot started [38;5;45m+2ms[0m
+  [38;5;45;1mpw:api [0mtaking page screenshot [38;5;45m+1ms[0m
+  [38;5;45;1mpw:api [0mwaiting for fonts to load... [38;5;45m+1ms[0m
+  [38;5;45;1mpw:api [0mfonts loaded [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m<= page.screenshot succeeded [38;5;45m+29ms[0m
+  [38;5;45;1mpw:api [0mwaiting for locator('body') [38;5;45m+16ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <body>…</body> [38;5;45m+1ms[0m
+  [38;5;45;1mpw:api [0m=> browserType.launch started [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m<= browserType.launch succeeded [38;5;45m+209ms[0m
+  [38;5;45;1mpw:api [0m=> browser.newContext started [38;5;45m+4ms[0m
+  [38;5;45;1mpw:api [0m<= browser.newContext succeeded [38;5;45m+7ms[0m
+  [38;5;45;1mpw:api [0m=> browserContext.newPage started [38;5;45m+1ms[0m
+  [38;5;45;1mpw:api [0m<= browserContext.newPage succeeded [38;5;45m+103ms[0m
+  [38;5;45;1mpw:api [0m=> page.goto started [38;5;45m+3ms[0m
+  [38;5;45;1mpw:api [0mnavigating to "http://localhost:3001/genshi-studio", waiting until "load" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  "commit" event fired [38;5;45m+6ms[0m
+  [38;5;45;1mpw:api [0m  navigated to "http://localhost:3001/genshi-studio" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  "domcontentloaded" event fired [38;5;45m+2ms[0m
+  [38;5;45;1mpw:api [0m  "load" event fired [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m<= page.goto succeeded [38;5;45m+1ms[0m
+  [38;5;45;1mpw:api [0m=> expect.toHaveTitle started [38;5;45m+4ms[0m
+  [38;5;45;1mpw:api [0mExpect "toHaveTitle" with timeout 10000ms [38;5;45m+1ms[0m
+  [38;5;45;1mpw:api [0mwaiting for locator(':root') [38;5;45m+1ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+15ms[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+1ms[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+102ms[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+251ms[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  "networkidle" event fired [38;5;45m+125ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+378ms[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+1s[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+1s[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+1s[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+1s[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+1s[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+1s[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+1s[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+1s[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <html>…</html> [38;5;45m+1s[0m
+  [38;5;45;1mpw:api [0m  unexpected value "" [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m<= expect.toHaveTitle succeeded [38;5;45m+113ms[0m
+  [38;5;45;1mpw:api [0m=> page.screenshot started [38;5;45m+3ms[0m
+  [38;5;45;1mpw:api [0mtaking page screenshot [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0mwaiting for fonts to load... [38;5;45m+1ms[0m
+  [38;5;45;1mpw:api [0mfonts loaded [38;5;45m+0ms[0m
+  [38;5;45;1mpw:api [0m<= page.screenshot succeeded [38;5;45m+30ms[0m
+  [38;5;45;1mpw:api [0mwaiting for locator('body') [38;5;45m+4ms[0m
+  [38;5;45;1mpw:api [0m  locator resolved to <body>…</body> [38;5;45m+2ms[0m
 ]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|../results/homepage-Homepage-should-navigate-to-Studio-page-chromium/test-failed-1.png]]
-
-[[ATTACHMENT|../results/homepage-Homepage-should-navigate-to-Studio-page-chromium/video.webm]]
-
-[[ATTACHMENT|../results/homepage-Homepage-should-navigate-to-Studio-page-chromium-retry1/test-failed-1.png]]
-
-[[ATTACHMENT|../results/homepage-Homepage-should-navigate-to-Studio-page-chromium-retry1/video.webm]]
-
-[[ATTACHMENT|../results/homepage-Homepage-should-navigate-to-Studio-page-chromium-retry1/trace.zip]]
-
-[[ATTACHMENT|../results/homepage-Homepage-should-navigate-to-Studio-page-chromium-retry2/test-failed-1.png]]
-
-[[ATTACHMENT|../results/homepage-Homepage-should-navigate-to-Studio-page-chromium-retry2/video.webm]]
-]]>
-</system-out>
-</testcase>
-<testcase name="Homepage › should toggle theme" classname="homepage.spec.ts" time="0.446">
+</system-err>
 </testcase>
 </testsuite>
 </testsuites>

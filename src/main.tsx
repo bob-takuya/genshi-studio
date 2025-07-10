@@ -14,6 +14,10 @@ if ('serviceWorker' in navigator) {
       
       console.log('Service Worker registered successfully:', registration)
       
+      // Wait for the service worker to be ready and controlling the page
+      await navigator.serviceWorker.ready
+      console.log('Service Worker is ready and controlling the page')
+      
       // Listen for updates
       registration.addEventListener('updatefound', () => {
         const newWorker = registration.installing
@@ -25,6 +29,11 @@ if ('serviceWorker' in navigator) {
             }
           })
         }
+      })
+      
+      // Handle controller change (when SW takes control)
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        console.log('Service Worker controller changed')
       })
     } catch (error) {
       console.error('Service Worker registration failed:', error)

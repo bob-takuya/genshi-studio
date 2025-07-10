@@ -7,7 +7,7 @@ import { GalleryPage } from './pages/GalleryPage'
 import AboutPage from './pages/AboutPage'
 import { useAppStore } from './hooks/useAppStore'
 import { ThemeProvider } from './components/providers/ThemeProvider'
-import { OfflineIndicator, CachedContentIndicator } from './components/OfflineIndicator'
+import { OfflineIndicator } from './components/OfflineIndicator'
 
 function App() {
   const { theme } = useAppStore()
@@ -26,7 +26,6 @@ function App() {
         
         {/* PWA and offline functionality */}
         <OfflineIndicator />
-        <CachedContentIndicator />
       </div>
     </ThemeProvider>
   )

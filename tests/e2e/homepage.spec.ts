@@ -32,11 +32,15 @@ test.describe('Homepage', () => {
     // Verify URL changed
     await expect(page).toHaveURL(/.*\/studio/)
     
-    // Wait for Studio page to load and canvas to be created
-    await page.waitForTimeout(2000)
+    // Wait for canvas to be visible with proper timeout and testid
+    const canvas = page.locator('canvas[data-testid="drawing-canvas"]')
+    await expect(canvas).toBeVisible({ timeout: 10000 })
     
-    // Verify canvas is present
-    await expect(page.locator('canvas')).toBeVisible()
+    // Verify canvas has proper dimensions
+    const box = await canvas.boundingBox()
+    expect(box).toBeTruthy()
+    expect(box!.width).toBeGreaterThan(0)
+    expect(box!.height).toBeGreaterThan(0)
   })
 
   test('should toggle theme', async ({ page }) => {
