@@ -7,6 +7,7 @@ import { GalleryPage } from './pages/GalleryPage'
 import AboutPage from './pages/AboutPage'
 import { useAppStore } from './hooks/useAppStore'
 import { ThemeProvider } from './components/providers/ThemeProvider'
+import { OfflineIndicator, CachedContentIndicator } from './components/OfflineIndicator'
 
 function App() {
   const { theme } = useAppStore()
@@ -22,6 +23,10 @@ function App() {
             <Route path="about" element={<AboutPage />} />
           </Route>
         </Routes>
+        
+        {/* PWA and offline functionality */}
+        <OfflineIndicator />
+        <CachedContentIndicator />
       </div>
     </ThemeProvider>
   )

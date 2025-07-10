@@ -1,4 +1,4 @@
-import { fabric } from 'fabric'
+import { Canvas, IText, FabricObject, Rect, Circle } from 'fabric'
 import { useAppStore } from '@/store/appStore'
 import {
   MousePointer,
@@ -15,7 +15,7 @@ import {
 } from 'lucide-react'
 
 interface ToolbarProps {
-  canvas: fabric.Canvas | null
+  canvas: Canvas | null
 }
 
 export default function Toolbar({ canvas }: ToolbarProps) {
@@ -75,7 +75,7 @@ export default function Toolbar({ canvas }: ToolbarProps) {
   const handleAddText = () => {
     if (!canvas) return
 
-    const text = new fabric.IText('Click to edit', {
+    const text = new IText('Click to edit', {
       left: canvas.width! / 2 - 50,
       top: canvas.height! / 2 - 20,
       fontFamily: 'Inter',
@@ -91,13 +91,13 @@ export default function Toolbar({ canvas }: ToolbarProps) {
   const handleAddShape = (shapeId: string) => {
     if (!canvas) return
 
-    let shape: fabric.Object | null = null
+    let shape: FabricObject | null = null
     const centerX = canvas.width! / 2
     const centerY = canvas.height! / 2
 
     switch (shapeId) {
       case 'rect':
-        shape = new fabric.Rect({
+        shape = new Rect({
           left: centerX - 50,
           top: centerY - 50,
           width: 100,
@@ -107,7 +107,7 @@ export default function Toolbar({ canvas }: ToolbarProps) {
         break
 
       case 'circle':
-        shape = new fabric.Circle({
+        shape = new Circle({
           left: centerX - 50,
           top: centerY - 50,
           radius: 50,

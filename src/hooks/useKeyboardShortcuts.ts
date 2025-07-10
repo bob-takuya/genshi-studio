@@ -6,7 +6,15 @@ export function useKeyboardShortcuts() {
     setCanvasMode,
     canvasMode,
     zoom,
-    setZoom
+    setZoom,
+    setToolbarMode,
+    toolbarMode,
+    saveProject,
+    currentProject,
+    setExportDialogOpen,
+    setPresetDialogOpen,
+    setBookmarkDialogOpen,
+    resetCanvas
   } = useAppStore()
 
   useEffect(() => {
@@ -28,7 +36,10 @@ export function useKeyboardShortcuts() {
           case 's':
             e.preventDefault()
             // Save project
-            console.log('Save project')
+            if (currentProject) {
+              saveProject({})
+              console.log('Project saved!')
+            }
             break
           case 'z':
             e.preventDefault()
@@ -61,31 +72,58 @@ export function useKeyboardShortcuts() {
         // Single key shortcuts
         switch (e.key.toLowerCase()) {
           case 'v':
-            // Select tool
-            console.log('Select tool')
+          case ' ':
+            // Select tool - Space also activates pan/select mode
+            e.preventDefault()
+            setToolbarMode('select')
+            console.log('Select tool activated')
             break
           case 'p':
-            // Pencil tool
-            console.log('Pencil tool')
+            // Pencil/Draw tool
+            e.preventDefault()
+            setToolbarMode('draw')
+            console.log('Draw tool activated')
             break
           case 'r':
             // Rectangle tool
-            console.log('Rectangle tool')
+            e.preventDefault()
+            setToolbarMode('shape')
+            console.log('Rectangle tool activated')
+            break
+          case 'e':
+            // Export functionality
+            e.preventDefault()
+            setExportDialogOpen?.(true)
+            console.log('Export dialog opened')
+            break
+          case 'f':
+            // Load preset (F for favorites/presets)
+            e.preventDefault()
+            setPresetDialogOpen?.(true)
+            console.log('Preset dialog opened')
+            break
+          case 's':
+            // Open bookmarks dialog (S for save)
+            e.preventDefault()
+            setBookmarkDialogOpen?.(true)
+            console.log('Bookmark dialog opened')
             break
           case 't':
             // Text tool
-            console.log('Text tool')
+            e.preventDefault()
+            setToolbarMode('text')
+            console.log('Text tool activated')
             break
           case 'c':
             // Toggle code mode
             setCanvasMode(canvasMode === 'draw' ? 'code' : 'draw')
             break
-          case ' ':
-            // Space for pan (handled in canvas)
-            break
           case 'escape':
-            // Deselect
-            console.log('Deselect all')
+            // Reset/Deselect all
+            e.preventDefault()
+            setToolbarMode('select')
+            resetCanvas?.()
+            console.log('Reset and deselect all')
             break
         }
       }
@@ -93,5 +131,5 @@ export function useKeyboardShortcuts() {
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [canvasMode, setCanvasMode, zoom, setZoom])
+  }, [canvasMode, setCanvasMode, zoom, setZoom, toolbarMode, setToolbarMode, currentProject, saveProject, setExportDialogOpen, setPresetDialogOpen, setBookmarkDialogOpen, resetCanvas])
 }

@@ -30,7 +30,7 @@ export function HomePage() {
   return (
     <div className="relative overflow-hidden">
       {/* Hero Section */}
-      <section className="relative min-h-[80vh] flex items-center justify-center px-6 py-20">
+      <section data-testid="hero-section" className="relative min-h-[80vh] flex items-center justify-center px-6 py-20">
         {/* Animated background pattern */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0 bg-gradient-to-br from-primary via-transparent to-accent" />
@@ -96,7 +96,7 @@ export function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section className="px-6 py-20 bg-card">
+      <section data-testid="features-section" className="px-6 py-20 bg-card">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
             Create with Purpose
@@ -116,6 +116,7 @@ export function HomePage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.1 * index }}
                   className="text-center"
+                  data-testid={`feature-${feature.title.toLowerCase().replace(/\s+/g, '-')}`}
                 >
                   <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
                     <Icon className="h-8 w-8 text-primary" />

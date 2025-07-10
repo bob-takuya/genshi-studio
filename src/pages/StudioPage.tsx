@@ -1,14 +1,26 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useRef } from 'react'
 import { Canvas } from '../components/studio/Canvas'
 import { Toolbar } from '../components/studio/Toolbar'
 import { CodeEditor } from '../components/studio/CodeEditor'
 import { PatternSelector } from '../components/studio/PatternSelector'
+import { ExportDialog } from '../components/studio/ExportDialog'
+import { PresetDialog } from '../components/studio/PresetDialog'
+import { BookmarkDialog } from '../components/studio/BookmarkDialog'
 import { useAppStore } from '../hooks/useAppStore'
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts'
 
 export function StudioPage() {
-  const { canvasMode } = useAppStore()
+  const { 
+    canvasMode, 
+    exportDialogOpen, 
+    setExportDialogOpen,
+    presetDialogOpen,
+    setPresetDialogOpen,
+    bookmarkDialogOpen,
+    setBookmarkDialogOpen
+  } = useAppStore()
   const containerRef = useRef<HTMLDivElement>(null)
+  const canvasRef = useRef<any>(null)
   
   // Initialize keyboard shortcuts
   useKeyboardShortcuts()
@@ -23,7 +35,7 @@ export function StudioPage() {
         {canvasMode === 'draw' ? (
           <>
             {/* Drawing canvas */}
-            <Canvas />
+            <Canvas ref={canvasRef} />
             
             {/* Pattern selector overlay */}
             <PatternSelector />
@@ -33,6 +45,23 @@ export function StudioPage() {
           <CodeEditor />
         )}
       </div>
+      
+      {/* Dialogs */}
+      <ExportDialog 
+        isOpen={exportDialogOpen} 
+        onClose={() => setExportDialogOpen(false)}
+        canvas={canvasRef.current}
+      />
+      
+      <PresetDialog 
+        isOpen={presetDialogOpen} 
+        onClose={() => setPresetDialogOpen(false)}
+      />
+      
+      <BookmarkDialog 
+        isOpen={bookmarkDialogOpen} 
+        onClose={() => setBookmarkDialogOpen(false)}
+      />
     </div>
   )
 }

@@ -1,11 +1,12 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react'
-import { fabric } from 'fabric'
+import { Canvas as FabricCanvas, Point, Rect, Circle, Triangle, FabricObject } from 'fabric'
+import type { TEvent } from 'fabric'
 import { useAppStore } from '../../hooks/useAppStore'
 import { CanvasControls } from './CanvasControls'
 import { ExportDialog } from './ExportDialog'
 import { PatternLibrary } from './PatternLibrary'
 
-export function Canvas() {
+export const Canvas = React.forwardRef<any, {}>((props, ref) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const fabricRef = useRef<any>(null)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -23,13 +24,22 @@ export function Canvas() {
   useEffect(() => {
     if (!canvasRef.current || fabricRef.current) return
 
-    const canvas = new fabric.Canvas(canvasRef.current, {
+    const canvas = new FabricCanvas(canvasRef.current, {
       backgroundColor: '#ffffff',
       selection: true,
       preserveObjectStacking: true
     })
 
     fabricRef.current = canvas
+    
+    // Forward ref to parent component
+    if (ref) {
+      if (typeof ref === 'function') {
+        ref(canvas)
+      } else {
+        ref.current = canvas
+      }
+    }
 
     // Set initial size
     const handleResize = () => {
@@ -87,7 +97,7 @@ export function Canvas() {
   }, [zoom])
 
   // Mouse wheel zoom
-  const handleWheel = useCallback((opt: fabric.IEvent<WheelEvent>) => {
+  const handleWheel = useCallback((opt: TEvent<WheelEvent>) => {
     const delta = opt.e.deltaY
     let newZoom = zoom * (0.999 ** delta)
     newZoom = Math.max(0.1, Math.min(5, newZoom))
@@ -95,7 +105,7 @@ export function Canvas() {
     setZoom(newZoom)
     
     if (fabricRef.current) {
-      const point = new fabric.Point(opt.e.offsetX, opt.e.offsetY)
+      const point = new Point(opt.e.offsetX, opt.e.offsetY)
       fabricRef.current.zoomToPoint(point, newZoom)
     }
     
@@ -104,17 +114,17 @@ export function Canvas() {
   }, [zoom, setZoom])
 
   // Handle object events
-  const handleObjectAdded = useCallback((e: fabric.IEvent) => {
+  const handleObjectAdded = useCallback((e: any) => {
     // Add object to active layer
     console.log('Object added:', e.target)
   }, [activeLayerId])
 
-  const handleObjectModified = useCallback((e: fabric.IEvent) => {
+  const handleObjectModified = useCallback((e: any) => {
     // Update layer data
     console.log('Object modified:', e.target)
   }, [])
 
-  const handleSelection = useCallback((e: fabric.IEvent) => {
+  const handleSelection = useCallback((e: any) => {
     console.log('Selection created:', e.selected)
   }, [])
 
@@ -150,11 +160,11 @@ export function Canvas() {
   const addShape = useCallback((type: 'rect' | 'circle' | 'triangle') => {
     if (!fabricRef.current) return
 
-    let shape: fabric.Object
+    let shape: FabricObject
 
     switch (type) {
       case 'rect':
-        shape = new fabric.Rect({
+        shape = new Rect({
           left: 100,
           top: 100,
           width: 100,
@@ -164,7 +174,7 @@ export function Canvas() {
         })
         break
       case 'circle':
-        shape = new fabric.Circle({
+        shape = new Circle({
           left: 100,
           top: 100,
           radius: 50,
@@ -173,7 +183,7 @@ export function Canvas() {
         })
         break
       case 'triangle':
-        shape = new fabric.Triangle({
+        shape = new Triangle({
           left: 100,
           top: 100,
           width: 100,
@@ -223,7 +233,7 @@ export function Canvas() {
         
         let element
         if (shape === 0) {
-          element = new fabric.Circle({
+          element = new Circle({
             left: col * size + size/2,
             top: row * size + size/2,
             radius: size/3,
@@ -233,7 +243,7 @@ export function Canvas() {
             selectable: false
           })
         } else if (shape === 1) {
-          element = new fabric.Rect({
+          element = new Rect({
             left: col * size + size/2,
             top: row * size + size/2,
             width: size * 0.8,
@@ -244,7 +254,7 @@ export function Canvas() {
             selectable: false
           })
         } else {
-          element = new fabric.Triangle({
+          element = new Triangle({
             left: col * size + size/2,
             top: row * size + size/2,
             width: size * 0.8,
@@ -265,11 +275,11 @@ export function Canvas() {
 
 
   return (
-    <div ref={containerRef} className="relative w-full h-full bg-gray-50 flex">
+    <div ref={containerRef} className="relative w-full h-full bg-gray-50 flex" data-testid="main-canvas">
       {/* Canvas container */}
       <div className="flex-1 relative">
         {/* Canvas element */}
-        <canvas ref={canvasRef} />
+        <canvas ref={canvasRef} id="drawing-canvas" />
         
         {/* Canvas controls */}
         <CanvasControls
@@ -299,4 +309,6 @@ export function Canvas() {
       )}
     </div>
   )
-}
+})
+
+Canvas.displayName = 'Canvas'

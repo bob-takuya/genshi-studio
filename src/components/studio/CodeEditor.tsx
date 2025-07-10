@@ -152,7 +152,7 @@ export function CodeEditor() {
       console.log('Executing code:', code)
       
     } catch (error) {
-      setOutput(`Error: ${error.message}`)
+      setOutput(`Error: ${error instanceof Error ? error.message : String(error)}`)
     } finally {
       setIsRunning(false)
     }

@@ -281,9 +281,10 @@ export const ParametricPatternEditor: React.FC<ParametricPatternEditorProps> = (
       .filter(control => control.type !== ParameterType.BOOLEAN)
       .map(control => control.name);
     
-    patternSystemRef.current.setParameters(new Map(
-      animatableParams.map(name => [name, generateRandomValue(name)])
-    ));
+    // Set each parameter individually
+    animatableParams.forEach(name => {
+      patternSystemRef.current.setParameter(name, generateRandomValue(name));
+    });
     
     updateParameterControls();
     generatePattern();
@@ -655,7 +656,8 @@ export const ParametricPatternEditor: React.FC<ParametricPatternEditorProps> = (
         </div>
       </div>
       
-      <style jsx>{`
+      {/* TODO: Move styles to CSS modules or styled-components */}
+      <style>{`
         .parametric-pattern-editor {
           display: flex;
           flex-direction: column;

@@ -1,11 +1,11 @@
 import React from 'react'
-import { Rect, Circle, Triangle, Polygon, Path } from 'fabric'
+import { Rect, Circle, Triangle as FabricTriangle, Polygon, Path } from 'fabric'
 import { 
   Grid, 
   Waves, 
   Hexagon, 
   Triangle, 
-  Circle, 
+  Circle as LucideCircle, 
   Zap,
   Star,
   X
@@ -39,7 +39,7 @@ export function PatternLibrary({ canvas, onClose }: PatternLibraryProps) {
         for (let row = 0; row < rows; row++) {
           for (let col = 0; col < cols; col++) {
             if ((row + col) % 2 === 0) {
-              const rect = new fabric.Rect({
+              const rect = new Rect({
                 left: col * size,
                 top: row * size,
                 width: size,
@@ -66,7 +66,7 @@ export function PatternLibrary({ canvas, onClose }: PatternLibraryProps) {
         
         for (let row = 0; row < rows; row++) {
           for (let col = 0; col < cols; col++) {
-            const circle = new fabric.Circle({
+            const circle = new Circle({
               left: col * spacing + spacing/2,
               top: row * spacing + spacing/2,
               radius: radius,
@@ -93,7 +93,7 @@ export function PatternLibrary({ canvas, onClose }: PatternLibraryProps) {
         
         for (let row = 0; row < rows; row++) {
           for (let col = 0; col < cols; col++) {
-            const triangle = new fabric.Triangle({
+            const triangle = new FabricTriangle({
               left: col * spacing + spacing/2,
               top: row * spacing + spacing/2,
               width: size,
@@ -122,7 +122,7 @@ export function PatternLibrary({ canvas, onClose }: PatternLibraryProps) {
         for (let row = 0; row < rows; row++) {
           for (let col = 0; col < cols; col++) {
             const offsetX = row % 2 === 0 ? 0 : spacing / 2
-            const hexagon = new fabric.Polygon([
+            const hexagon = new Polygon([
               { x: 0, y: -size },
               { x: size * 0.866, y: -size/2 },
               { x: size * 0.866, y: size/2 },
@@ -162,7 +162,7 @@ export function PatternLibrary({ canvas, onClose }: PatternLibraryProps) {
             points.push({ x, y: waveY })
           }
           
-          const path = new fabric.Path(
+          const path = new Path(
             `M ${points[0].x} ${points[0].y} ${points.slice(1).map(p => `L ${p.x} ${p.y}`).join(' ')}`,
             {
               fill: '',
@@ -188,7 +188,7 @@ export function PatternLibrary({ canvas, onClose }: PatternLibraryProps) {
         
         for (let row = 0; row < rows; row++) {
           for (let col = 0; col < cols; col++) {
-            const dot = new fabric.Circle({
+            const dot = new Circle({
               left: col * spacing + spacing/2,
               top: row * spacing + spacing/2,
               radius: radius,
@@ -215,7 +215,7 @@ export function PatternLibrary({ canvas, onClose }: PatternLibraryProps) {
         
         for (let row = 0; row < rows; row++) {
           for (let col = 0; col < cols; col++) {
-            const star = new fabric.Polygon([
+            const star = new Polygon([
               { x: 0, y: -size },
               { x: size * 0.3, y: -size * 0.3 },
               { x: size, y: 0 },
@@ -249,7 +249,7 @@ export function PatternLibrary({ canvas, onClose }: PatternLibraryProps) {
         const stripeCount = Math.ceil(diagonal / (stripeWidth * 2))
         
         for (let i = 0; i < stripeCount; i++) {
-          const stripe = new fabric.Rect({
+          const stripe = new Rect({
             left: -diagonal/2 + i * stripeWidth * 2,
             top: -diagonal/2,
             width: stripeWidth,

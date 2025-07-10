@@ -10,7 +10,8 @@ import {
   VolumeX,
   Settings,
   Download,
-  Share2
+  Share2,
+  Plus
 } from 'lucide-react';
 import { 
   AnimationConfig, 

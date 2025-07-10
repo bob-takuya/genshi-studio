@@ -65,7 +65,7 @@ export default function LayersPanel({ canvas, selectedObject }: LayersPanelProps
     }
   }, [canvas])
 
-  const getObjectName = (obj: fabric.Object): string => {
+  const getObjectName = (obj: FabricObject): string => {
     switch (obj.type) {
       case 'rect': return 'Rectangle'
       case 'circle': return 'Circle'
@@ -126,10 +126,11 @@ export default function LayersPanel({ canvas, selectedObject }: LayersPanelProps
     }
   }
 
-  const handleDuplicateLayer = (layer: Layer) => {
+  const handleDuplicateLayer = async (layer: Layer) => {
     if (!canvas) return
 
-    layer.object.clone((cloned: fabric.Object) => {
+    try {
+      const cloned = await layer.object.clone()
       cloned.set({
         left: (cloned.left || 0) + 10,
         top: (cloned.top || 0) + 10,
@@ -137,7 +138,9 @@ export default function LayersPanel({ canvas, selectedObject }: LayersPanelProps
       canvas.add(cloned)
       canvas.setActiveObject(cloned)
       canvas.renderAll()
-    })
+    } catch (error) {
+      console.error('Failed to clone object:', error)
+    }
   }
 
   const handleLayerReorder = (result: any) => {
@@ -283,7 +286,7 @@ export default function LayersPanel({ canvas, selectedObject }: LayersPanelProps
           <button
             onClick={() => {
               if (canvas) {
-                canvas.bringToFront(selectedObject)
+                canvas.bringObjectToFront(selectedObject)
                 canvas.renderAll()
               }
             }}
@@ -295,7 +298,7 @@ export default function LayersPanel({ canvas, selectedObject }: LayersPanelProps
           <button
             onClick={() => {
               if (canvas) {
-                canvas.sendToBack(selectedObject)
+                canvas.sendObjectToBack(selectedObject)
                 canvas.renderAll()
               }
             }}
