@@ -187,80 +187,419 @@
   },
   "suites": [
     {
-      "title": "check-console-errors.spec.ts",
-      "file": "check-console-errors.spec.ts",
+      "title": "homepage.spec.ts",
+      "file": "homepage.spec.ts",
       "column": 0,
       "line": 0,
-      "specs": [
+      "specs": [],
+      "suites": [
         {
-          "title": "check console errors during load",
-          "ok": true,
-          "tags": [],
-          "tests": [
+          "title": "Homepage",
+          "file": "homepage.spec.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [
             {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "chromium",
-              "projectName": "chromium",
-              "results": [
+              "title": "should display the homepage with correct title",
+              "ok": false,
+              "tags": [],
+              "tests": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 7543,
-                  "errors": [],
-                  "stdout": [
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
                     {
-                      "text": "\n=== Console Messages ===\n"
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 438,
+                      "error": {
+                        "message": "Error: expect.toBeVisible: Error: strict mode violation: locator('text=View Gallery') resolved to 2 elements:\n    1) <a data-discover=\"true\" href=\"/genshi-studio/gallery\" class=\"inline-flex items-center gap-2 px-8 py-4 bg-secondary text-secondary-foreground rounded-lg font-semibold hover:bg-secondary/90 transition-colors\">View Gallery</a> aka getByTestId('hero-section').getByRole('link', { name: 'View Gallery' })\n    2) <a data-discover=\"true\" href=\"/genshi-studio/gallery\" class=\"inline-flex items-center gap-2 px-8 py-4 bg-secondary text-secondary-foreground rounded-lg font-semibold hover:bg-secondary/90 transition-colors\">…</a> aka getByRole('link', { name: 'View Gallery' }).nth(1)\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=View Gallery')\u001b[22m\n",
+                        "stack": "Error: expect.toBeVisible: Error: strict mode violation: locator('text=View Gallery') resolved to 2 elements:\n    1) <a data-discover=\"true\" href=\"/genshi-studio/gallery\" class=\"inline-flex items-center gap-2 px-8 py-4 bg-secondary text-secondary-foreground rounded-lg font-semibold hover:bg-secondary/90 transition-colors\">View Gallery</a> aka getByTestId('hero-section').getByRole('link', { name: 'View Gallery' })\n    2) <a data-discover=\"true\" href=\"/genshi-studio/gallery\" class=\"inline-flex items-center gap-2 px-8 py-4 bg-secondary text-secondary-foreground rounded-lg font-semibold hover:bg-secondary/90 transition-colors\">…</a> aka getByRole('link', { name: 'View Gallery' }).nth(1)\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=View Gallery')\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:23:53",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts",
+                          "column": 53,
+                          "line": 23
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 21 |\u001b[39m     \u001b[90m// Check CTA buttons\u001b[39m\n \u001b[90m 22 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'text=Open Studio'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 23 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'text=View Gallery'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m    |\u001b[39m                                                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 24 |\u001b[39m   })\n \u001b[90m 25 |\u001b[39m\n \u001b[90m 26 |\u001b[39m   test(\u001b[32m'should navigate to Studio page'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts",
+                            "column": 53,
+                            "line": 23
+                          },
+                          "message": "Error: expect.toBeVisible: Error: strict mode violation: locator('text=View Gallery') resolved to 2 elements:\n    1) <a data-discover=\"true\" href=\"/genshi-studio/gallery\" class=\"inline-flex items-center gap-2 px-8 py-4 bg-secondary text-secondary-foreground rounded-lg font-semibold hover:bg-secondary/90 transition-colors\">View Gallery</a> aka getByTestId('hero-section').getByRole('link', { name: 'View Gallery' })\n    2) <a data-discover=\"true\" href=\"/genshi-studio/gallery\" class=\"inline-flex items-center gap-2 px-8 py-4 bg-secondary text-secondary-foreground rounded-lg font-semibold hover:bg-secondary/90 transition-colors\">…</a> aka getByRole('link', { name: 'View Gallery' }).nth(1)\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=View Gallery')\u001b[22m\n\n\n  21 |     // Check CTA buttons\n  22 |     await expect(page.locator('text=Open Studio')).toBeVisible()\n> 23 |     await expect(page.locator('text=View Gallery')).toBeVisible()\n     |                                                     ^\n  24 |   })\n  25 |\n  26 |   test('should navigate to Studio page', async ({ page }) => {\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:23:53"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-10T13:31:18.661Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts",
+                        "column": 53,
+                        "line": 23
+                      }
                     },
                     {
-                      "text": "[warning] No routes matched location \"/genshi-studio/\" \n"
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 527,
+                      "error": {
+                        "message": "Error: expect.toBeVisible: Error: strict mode violation: locator('text=View Gallery') resolved to 2 elements:\n    1) <a data-discover=\"true\" href=\"/genshi-studio/gallery\" class=\"inline-flex items-center gap-2 px-8 py-4 bg-secondary text-secondary-foreground rounded-lg font-semibold hover:bg-secondary/90 transition-colors\">View Gallery</a> aka getByTestId('hero-section').getByRole('link', { name: 'View Gallery' })\n    2) <a data-discover=\"true\" href=\"/genshi-studio/gallery\" class=\"inline-flex items-center gap-2 px-8 py-4 bg-secondary text-secondary-foreground rounded-lg font-semibold hover:bg-secondary/90 transition-colors\">…</a> aka getByRole('link', { name: 'View Gallery' }).nth(1)\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=View Gallery')\u001b[22m\n",
+                        "stack": "Error: expect.toBeVisible: Error: strict mode violation: locator('text=View Gallery') resolved to 2 elements:\n    1) <a data-discover=\"true\" href=\"/genshi-studio/gallery\" class=\"inline-flex items-center gap-2 px-8 py-4 bg-secondary text-secondary-foreground rounded-lg font-semibold hover:bg-secondary/90 transition-colors\">View Gallery</a> aka getByTestId('hero-section').getByRole('link', { name: 'View Gallery' })\n    2) <a data-discover=\"true\" href=\"/genshi-studio/gallery\" class=\"inline-flex items-center gap-2 px-8 py-4 bg-secondary text-secondary-foreground rounded-lg font-semibold hover:bg-secondary/90 transition-colors\">…</a> aka getByRole('link', { name: 'View Gallery' }).nth(1)\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=View Gallery')\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:23:53",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts",
+                          "column": 53,
+                          "line": 23
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 21 |\u001b[39m     \u001b[90m// Check CTA buttons\u001b[39m\n \u001b[90m 22 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'text=Open Studio'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 23 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'text=View Gallery'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m    |\u001b[39m                                                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 24 |\u001b[39m   })\n \u001b[90m 25 |\u001b[39m\n \u001b[90m 26 |\u001b[39m   test(\u001b[32m'should navigate to Studio page'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts",
+                            "column": 53,
+                            "line": 23
+                          },
+                          "message": "Error: expect.toBeVisible: Error: strict mode violation: locator('text=View Gallery') resolved to 2 elements:\n    1) <a data-discover=\"true\" href=\"/genshi-studio/gallery\" class=\"inline-flex items-center gap-2 px-8 py-4 bg-secondary text-secondary-foreground rounded-lg font-semibold hover:bg-secondary/90 transition-colors\">View Gallery</a> aka getByTestId('hero-section').getByRole('link', { name: 'View Gallery' })\n    2) <a data-discover=\"true\" href=\"/genshi-studio/gallery\" class=\"inline-flex items-center gap-2 px-8 py-4 bg-secondary text-secondary-foreground rounded-lg font-semibold hover:bg-secondary/90 transition-colors\">…</a> aka getByRole('link', { name: 'View Gallery' }).nth(1)\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=View Gallery')\u001b[22m\n\n\n  21 |     // Check CTA buttons\n  22 |     await expect(page.locator('text=Open Studio')).toBeVisible()\n> 23 |     await expect(page.locator('text=View Gallery')).toBeVisible()\n     |                                                     ^\n  24 |   })\n  25 |\n  26 |   test('should navigate to Studio page', async ({ page }) => {\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:23:53"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2025-07-10T13:31:19.553Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium-retry1/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts",
+                        "column": 53,
+                        "line": 23
+                      }
                     },
                     {
-                      "text": "  at https://bob-takuya.github.io/genshi-studio/assets/react-vendor-DNnMuxeJ.js:31\n"
-                    },
-                    {
-                      "text": "[error] A bad HTTP response code (404) was received when fetching the script.\n"
-                    },
-                    {
-                      "text": "[error] Service Worker registration failed: TypeError: Failed to register a ServiceWorker for scope ('https://bob-takuya.github.io/') with script ('https://bob-takuya.github.io/sw.js'): A bad HTTP response code (404) was received when fetching the script.\n"
-                    },
-                    {
-                      "text": "  at https://bob-takuya.github.io/genshi-studio/assets/index-DsBnzNZg.js:862\n"
-                    },
-                    {
-                      "text": "\nTotal errors: 2\n"
-                    },
-                    {
-                      "text": "Total warnings: 1\n"
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 416,
+                      "error": {
+                        "message": "Error: expect.toBeVisible: Error: strict mode violation: locator('text=View Gallery') resolved to 2 elements:\n    1) <a data-discover=\"true\" href=\"/genshi-studio/gallery\" class=\"inline-flex items-center gap-2 px-8 py-4 bg-secondary text-secondary-foreground rounded-lg font-semibold hover:bg-secondary/90 transition-colors\">View Gallery</a> aka getByTestId('hero-section').getByRole('link', { name: 'View Gallery' })\n    2) <a data-discover=\"true\" href=\"/genshi-studio/gallery\" class=\"inline-flex items-center gap-2 px-8 py-4 bg-secondary text-secondary-foreground rounded-lg font-semibold hover:bg-secondary/90 transition-colors\">…</a> aka getByRole('link', { name: 'View Gallery' }).nth(1)\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=View Gallery')\u001b[22m\n",
+                        "stack": "Error: expect.toBeVisible: Error: strict mode violation: locator('text=View Gallery') resolved to 2 elements:\n    1) <a data-discover=\"true\" href=\"/genshi-studio/gallery\" class=\"inline-flex items-center gap-2 px-8 py-4 bg-secondary text-secondary-foreground rounded-lg font-semibold hover:bg-secondary/90 transition-colors\">View Gallery</a> aka getByTestId('hero-section').getByRole('link', { name: 'View Gallery' })\n    2) <a data-discover=\"true\" href=\"/genshi-studio/gallery\" class=\"inline-flex items-center gap-2 px-8 py-4 bg-secondary text-secondary-foreground rounded-lg font-semibold hover:bg-secondary/90 transition-colors\">…</a> aka getByRole('link', { name: 'View Gallery' }).nth(1)\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=View Gallery')\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:23:53",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts",
+                          "column": 53,
+                          "line": 23
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 21 |\u001b[39m     \u001b[90m// Check CTA buttons\u001b[39m\n \u001b[90m 22 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'text=Open Studio'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 23 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'text=View Gallery'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m    |\u001b[39m                                                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 24 |\u001b[39m   })\n \u001b[90m 25 |\u001b[39m\n \u001b[90m 26 |\u001b[39m   test(\u001b[32m'should navigate to Studio page'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts",
+                            "column": 53,
+                            "line": 23
+                          },
+                          "message": "Error: expect.toBeVisible: Error: strict mode violation: locator('text=View Gallery') resolved to 2 elements:\n    1) <a data-discover=\"true\" href=\"/genshi-studio/gallery\" class=\"inline-flex items-center gap-2 px-8 py-4 bg-secondary text-secondary-foreground rounded-lg font-semibold hover:bg-secondary/90 transition-colors\">View Gallery</a> aka getByTestId('hero-section').getByRole('link', { name: 'View Gallery' })\n    2) <a data-discover=\"true\" href=\"/genshi-studio/gallery\" class=\"inline-flex items-center gap-2 px-8 py-4 bg-secondary text-secondary-foreground rounded-lg font-semibold hover:bg-secondary/90 transition-colors\">…</a> aka getByRole('link', { name: 'View Gallery' }).nth(1)\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=View Gallery')\u001b[22m\n\n\n  21 |     // Check CTA buttons\n  22 |     await expect(page.locator('text=Open Studio')).toBeVisible()\n> 23 |     await expect(page.locator('text=View Gallery')).toBeVisible()\n     |                                                     ^\n  24 |   })\n  25 |\n  26 |   test('should navigate to Studio page', async ({ page }) => {\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:23:53"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 2,
+                      "startTime": "2025-07-10T13:31:20.554Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium-retry2/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium-retry2/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium-retry2/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts",
+                        "column": 53,
+                        "line": 23
+                      }
                     }
                   ],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2025-07-10T13:25:11.211Z",
-                  "annotations": [],
-                  "attachments": []
+                  "status": "unexpected"
                 }
               ],
-              "status": "expected"
+              "id": "84e7eb052e8cbae1c9f0-e38ae967161ac243ecf5",
+              "file": "homepage.spec.ts",
+              "line": 4,
+              "column": 3
+            },
+            {
+              "title": "should navigate to Studio page",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 10573,
+                      "error": {
+                        "message": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('canvas')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('canvas')\u001b[22m\n",
+                        "stack": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('canvas')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('canvas')\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:36:42",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts",
+                          "column": 42,
+                          "line": 36
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 34 |\u001b[39m     \n \u001b[90m 35 |\u001b[39m     \u001b[90m// Verify canvas is present\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 36 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'canvas'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m    |\u001b[39m                                          \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 37 |\u001b[39m   })\n \u001b[90m 38 |\u001b[39m\n \u001b[90m 39 |\u001b[39m   test(\u001b[32m'should toggle theme'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts",
+                            "column": 42,
+                            "line": 36
+                          },
+                          "message": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('canvas')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('canvas')\u001b[22m\n\n\n  34 |     \n  35 |     // Verify canvas is present\n> 36 |     await expect(page.locator('canvas')).toBeVisible()\n     |                                          ^\n  37 |   })\n  38 |\n  39 |   test('should toggle theme', async ({ page }) => {\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:36:42"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-10T13:31:21.453Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/homepage-Homepage-should-navigate-to-Studio-page-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/homepage-Homepage-should-navigate-to-Studio-page-chromium/video.webm"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts",
+                        "column": 42,
+                        "line": 36
+                      }
+                    },
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 11071,
+                      "error": {
+                        "message": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('canvas')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('canvas')\u001b[22m\n",
+                        "stack": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('canvas')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('canvas')\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:36:42",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts",
+                          "column": 42,
+                          "line": 36
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 34 |\u001b[39m     \n \u001b[90m 35 |\u001b[39m     \u001b[90m// Verify canvas is present\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 36 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'canvas'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m    |\u001b[39m                                          \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 37 |\u001b[39m   })\n \u001b[90m 38 |\u001b[39m\n \u001b[90m 39 |\u001b[39m   test(\u001b[32m'should toggle theme'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts",
+                            "column": 42,
+                            "line": 36
+                          },
+                          "message": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('canvas')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('canvas')\u001b[22m\n\n\n  34 |     \n  35 |     // Verify canvas is present\n> 36 |     await expect(page.locator('canvas')).toBeVisible()\n     |                                          ^\n  37 |   })\n  38 |\n  39 |   test('should toggle theme', async ({ page }) => {\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:36:42"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2025-07-10T13:31:32.368Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/homepage-Homepage-should-navigate-to-Studio-page-chromium-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/homepage-Homepage-should-navigate-to-Studio-page-chromium-retry1/video.webm"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/homepage-Homepage-should-navigate-to-Studio-page-chromium-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts",
+                        "column": 42,
+                        "line": 36
+                      }
+                    },
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 11215,
+                      "error": {
+                        "message": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('canvas')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('canvas')\u001b[22m\n",
+                        "stack": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('canvas')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('canvas')\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:36:42",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts",
+                          "column": 42,
+                          "line": 36
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 34 |\u001b[39m     \n \u001b[90m 35 |\u001b[39m     \u001b[90m// Verify canvas is present\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 36 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'canvas'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m    |\u001b[39m                                          \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 37 |\u001b[39m   })\n \u001b[90m 38 |\u001b[39m\n \u001b[90m 39 |\u001b[39m   test(\u001b[32m'should toggle theme'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts",
+                            "column": 42,
+                            "line": 36
+                          },
+                          "message": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('canvas')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('canvas')\u001b[22m\n\n\n  34 |     \n  35 |     // Verify canvas is present\n> 36 |     await expect(page.locator('canvas')).toBeVisible()\n     |                                          ^\n  37 |   })\n  38 |\n  39 |   test('should toggle theme', async ({ page }) => {\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:36:42"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 2,
+                      "startTime": "2025-07-10T13:31:43.864Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/homepage-Homepage-should-navigate-to-Studio-page-chromium-retry2/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/homepage-Homepage-should-navigate-to-Studio-page-chromium-retry2/video.webm"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts",
+                        "column": 42,
+                        "line": 36
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "84e7eb052e8cbae1c9f0-eaa5e874e7d3afc9bff5",
+              "file": "homepage.spec.ts",
+              "line": 26,
+              "column": 3
+            },
+            {
+              "title": "should toggle theme",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 446,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-10T13:31:55.482Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "84e7eb052e8cbae1c9f0-023e5a9ea2fc2331188d",
+              "file": "homepage.spec.ts",
+              "line": 39,
+              "column": 3
             }
-          ],
-          "id": "72339958859f7843af05-fdea1bfbeef50750ec9f",
-          "file": "check-console-errors.spec.ts",
-          "line": 3,
-          "column": 1
+          ]
         }
       ]
     }
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-07-10T13:25:10.873Z",
-    "duration": 8140.657,
+    "startTime": "2025-07-10T13:31:18.301Z",
+    "duration": 37757.1,
     "expected": 1,
     "skipped": 0,
-    "unexpected": 0,
+    "unexpected": 2,
     "flaky": 0
   }
 }

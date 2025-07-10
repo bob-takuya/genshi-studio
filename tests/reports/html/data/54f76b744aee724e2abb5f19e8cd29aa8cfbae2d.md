@@ -1,0 +1,71 @@
+# Page snapshot
+
+```yaml
+- complementary:
+  - heading "Tools" [level=2]
+  - button "Layers"
+  - button "Color Palette"
+  - button "Patterns"
+  - button "Code Editor"
+  - button "Properties"
+  - heading "Layers" [level=3]
+  - checkbox [checked]
+  - text: Layer 1
+- banner:
+  - link "G Genshi Studio":
+    - /url: /genshi-studio
+  - navigation "Main navigation":
+    - link "Home":
+      - /url: /genshi-studio
+    - link "Studio":
+      - /url: /genshi-studio/studio
+    - link "Gallery":
+      - /url: /genshi-studio/gallery
+    - link "About":
+      - /url: /genshi-studio/about
+  - button "Toggle theme"
+  - button "Settings"
+  - button "User menu"
+- main:
+  - img
+  - heading "Genshi Studio" [level=1]
+  - paragraph: Where traditional Japanese aesthetics meet modern web technology. Create, explore, and express through cultural patterns and programmable creativity.
+  - link "Open Studio":
+    - /url: /genshi-studio/studio
+  - link "View Gallery":
+    - /url: /genshi-studio/gallery
+  - heading "Create with Purpose" [level=2]
+  - paragraph: Genshi Studio bridges the gap between traditional cultural art and modern digital creativity, offering tools that respect heritage while enabling innovation.
+  - heading "Cultural Patterns" [level=3]
+  - paragraph: Explore traditional Japanese patterns like Seigaiha, Ichimatsu, and Asanoha with modern interactive tools
+  - heading "Hybrid Programming" [level=3]
+  - paragraph: Switch seamlessly between visual design tools and code editor for unlimited creative possibilities
+  - heading "Advanced Canvas" [level=3]
+  - paragraph: Professional-grade WebGL-powered drawing tools with real-time rendering and infinite canvas
+  - heading "Web-Native" [level=3]
+  - paragraph: Export directly to SVG, PNG, or CSS for immediate use in your web projects
+  - heading "Traditional Patterns, Modern Tools" [level=2]
+  - paragraph: Discover the beauty of Japanese cultural patterns reimagined for the digital age
+  - text: 青海波
+  - heading "Seigaiha" [level=3]
+  - paragraph: Ocean wave pattern symbolizing strength and resilience
+  - link "Try this pattern":
+    - /url: /genshi-studio/studio
+  - text: 市松
+  - heading "Ichimatsu" [level=3]
+  - paragraph: Checkered pattern representing expansion and growth
+  - link "Try this pattern":
+    - /url: /genshi-studio/studio
+  - text: 麻の葉
+  - heading "Asanoha" [level=3]
+  - paragraph: Hemp leaf pattern symbolizing healthy growth
+  - link "Try this pattern":
+    - /url: /genshi-studio/studio
+  - heading "Ready to Create Something Beautiful?" [level=2]
+  - paragraph: Join a community of designers exploring the intersection of tradition and innovation
+  - link "Start Creating":
+    - /url: /genshi-studio/studio
+  - link "View Gallery":
+    - /url: /genshi-studio/gallery
+- contentinfo: "Connected Zoom: 100% ⌘K Commands"
+```
