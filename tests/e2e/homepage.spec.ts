@@ -2,10 +2,10 @@ import { test, expect } from '@playwright/test'
 
 test.describe('Homepage', () => {
   test('should display the homepage with correct title', async ({ page }) => {
-    await page.goto('/')
+    await page.goto('') // Use empty string for base URL navigation
     
     // Check page title
-    await expect(page).toHaveTitle('Genshi Studio')
+    await expect(page).toHaveTitle('Genshi Studio - Digital Art & Cultural Pattern Generator')
     
     // Check main heading is visible
     const heading = page.locator('h1')
@@ -24,7 +24,7 @@ test.describe('Homepage', () => {
   })
 
   test('should navigate to Studio page', async ({ page }) => {
-    await page.goto('/')
+    await page.goto('') // Use empty string for base URL navigation
     
     // Click on Studio link
     await page.click('nav >> text=Studio')
@@ -37,7 +37,7 @@ test.describe('Homepage', () => {
   })
 
   test('should toggle theme', async ({ page }) => {
-    await page.goto('/')
+    await page.goto('') // Use empty string for base URL navigation
     
     // Get initial theme
     const initialTheme = await page.evaluate(() => {
