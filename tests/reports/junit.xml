@@ -1,2 +1,150 @@
-<testsuites id="" name="" tests="0" failures="0" skipped="0" errors="0" time="120.018644">
+<testsuites id="" name="" tests="3" failures="1" skipped="2" errors="0" time="47.391752999999994">
+<testsuite name="homepage.spec.ts" timestamp="2025-07-10T09:37:33.726Z" hostname="chromium" tests="3" failures="1" skipped="2" time="45.803" errors="0">
+<testcase name="Homepage › should display the homepage with correct title" classname="homepage.spec.ts" time="45.803">
+<failure message="homepage.spec.ts:4:7 should display the homepage with correct title" type="FAILURE">
+<![CDATA[  [chromium] › homepage.spec.ts:4:7 › Homepage › should display the homepage with correct title ────
+
+    Error: Timed out 10000ms waiting for expect(page).toHaveTitle(expected)
+
+    Locator: locator(':root')
+    Expected string: "Genshi Studio"
+    Received string: "homeserver.io"
+    Call log:
+      - Expect "toHaveTitle" with timeout 10000ms
+      - waiting for locator(':root')
+        14 × locator resolved to <html>…</html>
+           - unexpected value "homeserver.io"
+
+
+       6 |     
+       7 |     // Check page title
+    >  8 |     await expect(page).toHaveTitle('Genshi Studio')
+         |                        ^
+       9 |     
+      10 |     // Check main heading is visible
+      11 |     const heading = page.locator('h1')
+        at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:8:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    tests/results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 15000ms exceeded.
+
+    Error: Timed out 10000ms waiting for expect(page).toHaveTitle(expected)
+
+    Locator: locator(':root')
+    Expected string: "Genshi Studio"
+    Received string: "homeserver.io"
+    Call log:
+      - Expect "toHaveTitle" with timeout 10000ms
+      - waiting for locator(':root')
+        14 × locator resolved to <html>…</html>
+           - unexpected value "homeserver.io"
+
+
+       6 |     
+       7 |     // Check page title
+    >  8 |     await expect(page).toHaveTitle('Genshi Studio')
+         |                        ^
+       9 |     
+      10 |     // Check main heading is visible
+      11 |     const heading = page.locator('h1')
+        at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:8:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    tests/results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 15000ms exceeded.
+
+    Error: expect(page).toHaveTitle(expected)
+
+    Locator: locator(':root')
+    Expected string: "Genshi Studio"
+    Received string: "homeserver.io"
+    Call log:
+      - Expect "toHaveTitle" with timeout 10000ms
+      - waiting for locator(':root')
+        13 × locator resolved to <html>…</html>
+           - unexpected value "homeserver.io"
+
+
+       6 |     
+       7 |     // Check page title
+    >  8 |     await expect(page).toHaveTitle('Genshi Studio')
+         |                        ^
+       9 |     
+      10 |     // Check main heading is visible
+      11 |     const heading = page.locator('h1')
+        at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:8:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium-retry2/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    tests/results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium-retry2/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium-retry2/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium/video.webm]]
+
+[[ATTACHMENT|../results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium/error-context.md]]
+
+[[ATTACHMENT|../results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium-retry1/test-failed-1.png]]
+
+[[ATTACHMENT|../results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium-retry1/video.webm]]
+
+[[ATTACHMENT|../results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium-retry1/error-context.md]]
+
+[[ATTACHMENT|../results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium-retry1/trace.zip]]
+
+[[ATTACHMENT|../results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium-retry2/test-failed-1.png]]
+
+[[ATTACHMENT|../results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium-retry2/video.webm]]
+
+[[ATTACHMENT|../results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium-retry2/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage › should navigate to Studio page" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should toggle theme" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
 </testsuites>
