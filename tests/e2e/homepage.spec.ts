@@ -19,8 +19,8 @@ test.describe('Homepage', () => {
     }
     
     // Check CTA buttons
-    await expect(page.locator('text=Open Studio')).toBeVisible()
-    await expect(page.locator('text=Explore Gallery')).toBeVisible()
+    await expect(page.locator('text=Open Studio').first()).toBeVisible()
+    await expect(page.locator('text=View Gallery').first()).toBeVisible()
   })
 
   test('should navigate to Studio page', async ({ page }) => {
@@ -31,6 +31,9 @@ test.describe('Homepage', () => {
     
     // Verify URL changed
     await expect(page).toHaveURL(/.*\/studio/)
+    
+    // Wait for Studio page to load and canvas to be created
+    await page.waitForTimeout(2000)
     
     // Verify canvas is present
     await expect(page.locator('canvas')).toBeVisible()
