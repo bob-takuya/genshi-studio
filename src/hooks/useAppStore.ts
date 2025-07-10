@@ -42,7 +42,7 @@ interface AppState {
   zoom: number
   
   // Canvas State
-  canvasMode: 'draw' | 'code'
+  canvasMode: 'draw' | 'code' | 'parametric'
   layers: Layer[]
   activeLayerId: string | null
   
@@ -88,7 +88,7 @@ interface AppState {
   setSidebarOpen: (open: boolean) => void
   setActiveTool: (tool: string) => void
   setZoom: (zoom: number) => void
-  setCanvasMode: (mode: 'draw' | 'code') => void
+  setCanvasMode: (mode: 'draw' | 'code' | 'parametric') => void
   setActiveColor: (color: string) => void
   addLayer: (layer: Layer) => void
   removeLayer: (id: string) => void

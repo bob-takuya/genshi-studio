@@ -1,910 +1,460 @@
-/**
- * Parametric Pattern Editor Component for Genshi Studio
- * Provides a user interface for creating and editing parametric patterns
- */
+import React, { useState, useRef, useEffect } from 'react'
+import { Download, Shuffle } from 'lucide-react'
 
-import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { AdvancedParametricPatternSystem, PatternPreset, PatternExportOptions } from '../../graphics/patterns/AdvancedParametricPatternSystem';
-import { MathematicalPatternType } from '../../graphics/patterns/MathematicalPatternGenerators';
-import { ParameterType } from '../../graphics/patterns/ParametricPatternEngine';
-import { Size } from '../../types/graphics';
-
-interface ParametricPatternEditorProps {
-  width: number;
-  height: number;
-  onPatternChange?: (patternData: any) => void;
-  onExport?: (blob: Blob) => void;
-  className?: string;
+interface PatternSettings {
+  type: 'ichimatsu' | 'seigaiha' | 'asanoha' | 'shippo' | 'yamaji'
+  size: number
+  density: number
+  primaryColor: string
+  secondaryColor: string
+  accentColor: string
+  rotation: number
+  opacity: number
 }
 
-interface ParameterControl {
-  name: string;
-  type: ParameterType;
-  value: any;
-  min?: number;
-  max?: number;
-  step?: number;
-  options?: string[];
-  description?: string;
-  group?: string;
-}
+const COLOR_PALETTES = [
+  { name: 'Traditional Blue', colors: ['#4a90e2', '#f5f5f5', '#feca57'] },
+  { name: 'Sakura Spring', colors: ['#ffb7c5', '#fff0f5', '#ff69b4'] },
+  { name: 'Autumn Maple', colors: ['#dc143c', '#fff8dc', '#ff8c00'] },
+  { name: 'Zen Garden', colors: ['#228b22', '#f0fff0', '#8b4513'] },
+  { name: 'Night Sky', colors: ['#191970', '#f8f8ff', '#ffd700'] },
+]
 
-export const ParametricPatternEditor: React.FC<ParametricPatternEditorProps> = ({
-  width,
-  height,
-  onPatternChange,
-  onExport,
-  className
-}) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const patternSystemRef = useRef<AdvancedParametricPatternSystem | null>(null);
-  
-  const [currentPatternType, setCurrentPatternType] = useState<MathematicalPatternType>(
-    MathematicalPatternType.ISLAMIC_GEOMETRIC
-  );
-  const [parameters, setParameters] = useState<Map<string, any>>(new Map());
-  const [parameterControls, setParameterControls] = useState<ParameterControl[]>([]);
-  const [presets, setPresets] = useState<PatternPreset[]>([]);
-  const [selectedPreset, setSelectedPreset] = useState<string>('');
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [isExporting, setIsExporting] = useState(false);
-  const [performanceMetrics, setPerformanceMetrics] = useState({
-    fps: 0,
-    renderTime: 0,
-    memoryUsage: 0
-  });
-  const [activeTab, setActiveTab] = useState<'parameters' | 'presets' | 'export' | 'performance'>('parameters');
-  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set(['Transform', 'Colors']));
+export function ParametricPatternEditor() {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [settings, setSettings] = useState<PatternSettings>({
+    type: 'ichimatsu',
+    size: 30,
+    density: 1.0,
+    primaryColor: '#4a90e2',
+    secondaryColor: '#f5f5f5',
+    accentColor: '#feca57',
+    rotation: 0,
+    opacity: 100
+  })
 
-  // Initialize pattern system
+  // Update pattern whenever settings change
   useEffect(() => {
-    if (canvasRef.current) {
-      patternSystemRef.current = new AdvancedParametricPatternSystem(canvasRef.current);
-      
-      // Initialize session
-      patternSystemRef.current.initializeSession(currentPatternType);
-      
-      // Load presets
-      setPresets(patternSystemRef.current.getPresets());
-      
-      // Initialize parameters
-      updateParameterControls();
-      
-      // Initial render
-      generatePattern();
-      
-      // Performance monitoring
-      const interval = setInterval(updatePerformanceMetrics, 1000);
-      
-      return () => {
-        clearInterval(interval);
-        patternSystemRef.current?.destroy();
-      };
-    }
-  }, []);
+    updatePattern()
+  }, [settings])
 
-  // Update pattern when type changes
-  useEffect(() => {
-    if (patternSystemRef.current) {
-      patternSystemRef.current.initializeSession(currentPatternType);
-      updateParameterControls();
-      generatePattern();
-    }
-  }, [currentPatternType]);
+  const updatePattern = () => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
 
-  const updateParameterControls = useCallback(() => {
-    if (!patternSystemRef.current) return;
+    // Clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
     
-    const allParams = patternSystemRef.current.getAllParameters();
-    const controls: ParameterControl[] = [];
+    // Save context for transformations
+    ctx.save()
     
-    // Generate controls based on current parameters
-    for (const [name, value] of allParams) {
-      const control = createParameterControl(name, value);
-      if (control) {
-        controls.push(control);
+    // Apply rotation
+    if (settings.rotation !== 0) {
+      ctx.translate(canvas.width / 2, canvas.height / 2)
+      ctx.rotate(settings.rotation * Math.PI / 180)
+      ctx.translate(-canvas.width / 2, -canvas.height / 2)
+    }
+    
+    // Apply global opacity
+    ctx.globalAlpha = settings.opacity / 100
+    
+    // Draw pattern based on type
+    switch(settings.type) {
+      case 'ichimatsu':
+        drawIchimatsu(ctx, canvas, settings)
+        break
+      case 'seigaiha':
+        drawSeigaiha(ctx, canvas, settings)
+        break
+      case 'asanoha':
+        drawAsanoha(ctx, canvas, settings)
+        break
+      case 'shippo':
+        drawShippo(ctx, canvas, settings)
+        break
+      case 'yamaji':
+        drawYamaji(ctx, canvas, settings)
+        break
+    }
+    
+    // Restore context
+    ctx.restore()
+  }
+
+  const drawIchimatsu = (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, settings: PatternSettings) => {
+    const size = settings.size * settings.density
+    const colors = [settings.primaryColor, settings.secondaryColor]
+    
+    for (let x = -size; x < canvas.width + size; x += size) {
+      for (let y = -size; y < canvas.height + size; y += size) {
+        const colorIndex = (Math.floor(x / size) + Math.floor(y / size)) % 2
+        ctx.fillStyle = colors[colorIndex]
+        ctx.fillRect(x, y, size, size)
       }
     }
-    
-    setParameterControls(controls);
-    setParameters(new Map(allParams));
-  }, []);
+  }
 
-  const createParameterControl = (name: string, value: any): ParameterControl | null => {
-    let control: ParameterControl = {
-      name,
-      type: ParameterType.NUMBER,
-      value,
-      description: getParameterDescription(name)
-    };
+  const drawSeigaiha = (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, settings: PatternSettings) => {
+    const radius = settings.size * settings.density
+    const spacing = radius * 2
     
-    // Determine control type and constraints based on parameter name and value
-    if (name.includes('Color') || name.includes('color')) {
-      control.type = ParameterType.COLOR;
-      control.group = 'Colors';
-    } else if (name === 'rotation' || name.includes('Angle')) {
-      control.type = ParameterType.ANGLE;
-      control.min = 0;
-      control.max = 360;
-      control.step = 1;
-      control.group = 'Transform';
-    } else if (name === 'scale') {
-      control.type = ParameterType.RANGE;
-      control.min = 0.1;
-      control.max = 5.0;
-      control.step = 0.1;
-      control.group = 'Transform';
-    } else if (name.includes('offset') || name.includes('Offset')) {
-      control.type = ParameterType.RANGE;
-      control.min = -100;
-      control.max = 100;
-      control.step = 0.1;
-      control.group = 'Transform';
-    } else if (name.includes('opacity') || name.includes('Opacity')) {
-      control.type = ParameterType.PERCENTAGE;
-      control.min = 0;
-      control.max = 100;
-      control.step = 1;
-      control.group = 'Colors';
-    } else if (typeof value === 'boolean') {
-      control.type = ParameterType.BOOLEAN;
-      control.group = 'Options';
-    } else if (typeof value === 'number') {
-      control.type = ParameterType.RANGE;
-      control.min = getParameterMin(name);
-      control.max = getParameterMax(name);
-      control.step = getParameterStep(name);
-      control.group = getParameterGroup(name);
-    } else if (name.includes('colorScheme') || name.includes('ColorScheme')) {
-      control.type = ParameterType.SELECT;
-      control.options = ['rainbow', 'fire', 'ice', 'monochrome'];
-      control.group = 'Colors';
-    }
+    ctx.strokeStyle = settings.primaryColor
+    ctx.lineWidth = 2
     
-    return control;
-  };
-
-  const getParameterDescription = (name: string): string => {
-    const descriptions: { [key: string]: string } = {
-      'scale': 'Overall size of the pattern',
-      'rotation': 'Rotation angle in degrees',
-      'symmetry': 'Number of symmetry axes',
-      'complexity': 'Pattern complexity level',
-      'fractalIterations': 'Number of fractal iterations',
-      'fractalZoom': 'Zoom level for fractal view',
-      'voronoiPointCount': 'Number of Voronoi seed points',
-      'tileSize': 'Size of individual tiles',
-      'strokeWidth': 'Width of pattern strokes',
-      'primaryColor': 'Primary pattern color',
-      'secondaryColor': 'Secondary pattern color',
-      'backgroundColor': 'Background color'
-    };
-    
-    return descriptions[name] || `${name} parameter`;
-  };
-
-  const getParameterMin = (name: string): number => {
-    const mins: { [key: string]: number } = {
-      'symmetry': 3,
-      'complexity': 1,
-      'fractalIterations': 10,
-      'fractalZoom': 0.1,
-      'voronoiPointCount': 5,
-      'tileSize': 10,
-      'strokeWidth': 0.5
-    };
-    
-    return mins[name] || 0;
-  };
-
-  const getParameterMax = (name: string): number => {
-    const maxs: { [key: string]: number } = {
-      'symmetry': 16,
-      'complexity': 10,
-      'fractalIterations': 500,
-      'fractalZoom': 1000,
-      'voronoiPointCount': 200,
-      'tileSize': 100,
-      'strokeWidth': 10
-    };
-    
-    return maxs[name] || 100;
-  };
-
-  const getParameterStep = (name: string): number => {
-    const steps: { [key: string]: number } = {
-      'symmetry': 1,
-      'complexity': 1,
-      'fractalIterations': 10,
-      'fractalZoom': 0.1,
-      'voronoiPointCount': 5,
-      'tileSize': 1,
-      'strokeWidth': 0.1
-    };
-    
-    return steps[name] || 0.1;
-  };
-
-  const getParameterGroup = (name: string): string => {
-    if (name.includes('fractal') || name.includes('Fractal')) return 'Fractal';
-    if (name.includes('voronoi') || name.includes('Voronoi')) return 'Voronoi';
-    if (name.includes('tile') || name.includes('Tile')) return 'Tiles';
-    if (name.includes('animation') || name.includes('Animation')) return 'Animation';
-    
-    return 'General';
-  };
-
-  const generatePattern = useCallback(() => {
-    if (!patternSystemRef.current) return;
-    
-    const resolution: Size = { width, height };
-    patternSystemRef.current.generatePattern(currentPatternType, resolution, true);
-    
-    // Trigger change callback
-    if (onPatternChange) {
-      onPatternChange({
-        type: currentPatternType,
-        parameters: Object.fromEntries(parameters)
-      });
-    }
-  }, [currentPatternType, parameters, width, height, onPatternChange]);
-
-  const handleParameterChange = (name: string, value: any) => {
-    if (!patternSystemRef.current) return;
-    
-    const success = patternSystemRef.current.setParameter(name, value);
-    if (success) {
-      const newParams = new Map(parameters);
-      newParams.set(name, value);
-      setParameters(newParams);
-      
-      // Re-generate pattern with debouncing
-      setTimeout(generatePattern, 100);
-    }
-  };
-
-  const handlePresetSelect = (presetId: string) => {
-    if (!patternSystemRef.current) return;
-    
-    const success = patternSystemRef.current.applyPreset(presetId);
-    if (success) {
-      setSelectedPreset(presetId);
-      updateParameterControls();
-      generatePattern();
-    }
-  };
-
-  const handleRandomize = () => {
-    if (!patternSystemRef.current) return;
-    
-    const animatableParams = parameterControls
-      .filter(control => control.type !== ParameterType.BOOLEAN)
-      .map(control => control.name);
-    
-    // Set each parameter individually
-    animatableParams.forEach(name => {
-      patternSystemRef.current.setParameter(name, generateRandomValue(name));
-    });
-    
-    updateParameterControls();
-    generatePattern();
-  };
-
-  const generateRandomValue = (paramName: string): any => {
-    const control = parameterControls.find(c => c.name === paramName);
-    if (!control) return 0;
-    
-    switch (control.type) {
-      case ParameterType.RANGE:
-      case ParameterType.NUMBER:
-        const min = control.min || 0;
-        const max = control.max || 100;
-        return min + Math.random() * (max - min);
-      
-      case ParameterType.ANGLE:
-        return Math.random() * 360;
-      
-      case ParameterType.PERCENTAGE:
-        return Math.random() * 100;
-      
-      case ParameterType.COLOR:
-        return {
-          r: Math.random(),
-          g: Math.random(),
-          b: Math.random(),
-          a: 1.0
-        };
-      
-      case ParameterType.SELECT:
-        const options = control.options || [];
-        return options[Math.floor(Math.random() * options.length)];
-      
-      default:
-        return control.value;
-    }
-  };
-
-  const handleExport = async (format: 'png' | 'webp' | 'svg' | 'json') => {
-    if (!patternSystemRef.current) return;
-    
-    setIsExporting(true);
-    
-    try {
-      const options: PatternExportOptions = {
-        format,
-        resolution: { width: width * 2, height: height * 2 }, // Export at 2x resolution
-        quality: 0.9,
-        includeMetadata: true
-      };
-      
-      const result = await patternSystemRef.current.exportPattern(currentPatternType, options);
-      
-      if (result instanceof Blob && onExport) {
-        onExport(result);
-      } else if (typeof result === 'string') {
-        // Handle SVG or JSON export
-        const blob = new Blob([result], { 
-          type: format === 'svg' ? 'image/svg+xml' : 'application/json' 
-        });
-        if (onExport) {
-          onExport(blob);
+    for (let x = -radius; x < canvas.width + radius; x += spacing) {
+      for (let y = -radius; y < canvas.height + radius; y += spacing) {
+        for (let r = 5; r < radius; r += radius / 3) {
+          ctx.beginPath()
+          ctx.arc(x, y, r, 0, Math.PI)
+          ctx.stroke()
         }
       }
-    } catch (error) {
-      console.error('Export failed:', error);
-    } finally {
-      setIsExporting(false);
     }
-  };
+  }
 
-  const toggleAnimation = () => {
-    if (!patternSystemRef.current) return;
+  const drawAsanoha = (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, settings: PatternSettings) => {
+    const size = settings.size * settings.density
     
-    if (isAnimating) {
-      patternSystemRef.current.stopAnimation();
-    } else {
-      patternSystemRef.current.startAnimation(currentPatternType, { width, height });
-    }
+    ctx.strokeStyle = settings.primaryColor
+    ctx.lineWidth = 2
     
-    setIsAnimating(!isAnimating);
-  };
-
-  const updatePerformanceMetrics = () => {
-    if (!patternSystemRef.current) return;
-    
-    const metrics = patternSystemRef.current.getPerformanceMetrics();
-    setPerformanceMetrics({
-      fps: metrics.renderer.fps,
-      renderTime: metrics.renderer.avgRenderTime,
-      memoryUsage: metrics.system.memoryUsage
-    });
-  };
-
-  const toggleGroupExpansion = (groupName: string) => {
-    const newExpanded = new Set(expandedGroups);
-    if (newExpanded.has(groupName)) {
-      newExpanded.delete(groupName);
-    } else {
-      newExpanded.add(groupName);
-    }
-    setExpandedGroups(newExpanded);
-  };
-
-  const renderParameterControl = (control: ParameterControl) => {
-    const value = parameters.get(control.name);
-    
-    switch (control.type) {
-      case ParameterType.RANGE:
-      case ParameterType.NUMBER:
-        return (
-          <div key={control.name} className="parameter-control">
-            <label>{control.name}: {value?.toFixed(2)}</label>
-            <input
-              type="range"
-              min={control.min}
-              max={control.max}
-              step={control.step}
-              value={value}
-              onChange={(e) => handleParameterChange(control.name, parseFloat(e.target.value))}
-            />
-          </div>
-        );
-      
-      case ParameterType.ANGLE:
-        return (
-          <div key={control.name} className="parameter-control">
-            <label>{control.name}: {value}°</label>
-            <input
-              type="range"
-              min={0}
-              max={360}
-              step={1}
-              value={value}
-              onChange={(e) => handleParameterChange(control.name, parseInt(e.target.value))}
-            />
-          </div>
-        );
-      
-      case ParameterType.COLOR:
-        return (
-          <div key={control.name} className="parameter-control">
-            <label>{control.name}</label>
-            <input
-              type="color"
-              value={`#${Math.floor(value.r * 255).toString(16).padStart(2, '0')}${Math.floor(value.g * 255).toString(16).padStart(2, '0')}${Math.floor(value.b * 255).toString(16).padStart(2, '0')}`}
-              onChange={(e) => {
-                const hex = e.target.value.substring(1);
-                const r = parseInt(hex.substring(0, 2), 16) / 255;
-                const g = parseInt(hex.substring(2, 4), 16) / 255;
-                const b = parseInt(hex.substring(4, 6), 16) / 255;
-                handleParameterChange(control.name, { r, g, b, a: 1.0 });
-              }}
-            />
-          </div>
-        );
-      
-      case ParameterType.BOOLEAN:
-        return (
-          <div key={control.name} className="parameter-control">
-            <label>
-              <input
-                type="checkbox"
-                checked={value}
-                onChange={(e) => handleParameterChange(control.name, e.target.checked)}
-              />
-              {control.name}
-            </label>
-          </div>
-        );
-      
-      case ParameterType.SELECT:
-        return (
-          <div key={control.name} className="parameter-control">
-            <label>{control.name}</label>
-            <select
-              value={value}
-              onChange={(e) => handleParameterChange(control.name, e.target.value)}
-            >
-              {control.options?.map(option => (
-                <option key={option} value={option}>{option}</option>
-              ))}
-            </select>
-          </div>
-        );
-      
-      default:
-        return null;
-    }
-  };
-
-  const renderParameterGroups = () => {
-    const groups: { [key: string]: ParameterControl[] } = {};
-    
-    parameterControls.forEach(control => {
-      const group = control.group || 'General';
-      if (!groups[group]) {
-        groups[group] = [];
+    for (let x = -size; x < canvas.width + size; x += size) {
+      for (let y = -size; y < canvas.height + size; y += size) {
+        // Draw hexagon
+        ctx.beginPath()
+        for (let i = 0; i < 6; i++) {
+          const angle = (i * Math.PI) / 3
+          const px = x + size/2 + Math.cos(angle) * size/3
+          const py = y + size/2 + Math.sin(angle) * size/3
+          
+          if (i === 0) {
+            ctx.moveTo(px, py)
+          } else {
+            ctx.lineTo(px, py)
+          }
+        }
+        ctx.closePath()
+        ctx.stroke()
+        
+        // Draw inner lines
+        ctx.beginPath()
+        ctx.moveTo(x + size/2, y)
+        ctx.lineTo(x + size/2, y + size)
+        ctx.moveTo(x, y + size/2)
+        ctx.lineTo(x + size, y + size/2)
+        ctx.stroke()
       }
-      groups[group].push(control);
-    });
+    }
+  }
+
+  const drawShippo = (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, settings: PatternSettings) => {
+    const size = settings.size * settings.density
+    const radius = size / 2
     
-    return Object.entries(groups).map(([groupName, controls]) => (
-      <div key={groupName} className="parameter-group">
-        <button
-          className="group-header"
-          onClick={() => toggleGroupExpansion(groupName)}
-        >
-          {groupName} {expandedGroups.has(groupName) ? '▼' : '▶'}
-        </button>
-        {expandedGroups.has(groupName) && (
-          <div className="group-content">
-            {controls.map(renderParameterControl)}
-          </div>
-        )}
-      </div>
-    ));
-  };
+    ctx.strokeStyle = settings.primaryColor
+    ctx.lineWidth = 2
+    
+    for (let x = -size; x < canvas.width + size; x += size) {
+      for (let y = -size; y < canvas.height + size; y += size) {
+        // Draw overlapping circles
+        ctx.beginPath()
+        ctx.arc(x + size/2, y + size/2, radius, 0, 2 * Math.PI)
+        ctx.stroke()
+        
+        // Fill intersection with accent color
+        ctx.fillStyle = settings.accentColor
+        ctx.beginPath()
+        ctx.arc(x + size/2, y + size/2, radius / 3, 0, 2 * Math.PI)
+        ctx.fill()
+      }
+    }
+  }
+
+  const drawYamaji = (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, settings: PatternSettings) => {
+    const size = settings.size * settings.density
+    
+    ctx.strokeStyle = settings.primaryColor
+    ctx.lineWidth = 2
+    
+    for (let x = -size; x < canvas.width + size; x += size) {
+      for (let y = -size; y < canvas.height + size; y += size) {
+        // Draw diagonal lines creating mountain path pattern
+        ctx.beginPath()
+        ctx.moveTo(x, y)
+        ctx.lineTo(x + size, y + size)
+        ctx.moveTo(x + size, y)
+        ctx.lineTo(x, y + size)
+        ctx.stroke()
+        
+        // Add accent points
+        ctx.fillStyle = settings.accentColor
+        ctx.beginPath()
+        ctx.arc(x + size/2, y + size/2, 2, 0, 2 * Math.PI)
+        ctx.fill()
+      }
+    }
+  }
+
+  const exportPattern = (format: 'png' | 'svg') => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+
+    if (format === 'png') {
+      const link = document.createElement('a')
+      link.download = `genshi-pattern-${settings.type}-${Date.now()}.png`
+      link.href = canvas.toDataURL()
+      link.click()
+    } else if (format === 'svg') {
+      // Create SVG representation
+      const svg = createSVGPattern()
+      const blob = new Blob([svg], { type: 'image/svg+xml' })
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.download = `genshi-pattern-${settings.type}-${Date.now()}.svg`
+      link.href = url
+      link.click()
+      URL.revokeObjectURL(url)
+    }
+  }
+
+  const createSVGPattern = () => {
+    const width = 600
+    const height = 600
+    
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
+    <rect width="${width}" height="${height}" fill="${settings.secondaryColor}"/>
+    <g opacity="${settings.opacity / 100}" transform="rotate(${settings.rotation} ${width/2} ${height/2})">
+        <!-- Pattern elements would be generated here based on pattern type -->
+        <rect x="0" y="0" width="${width}" height="${height}" fill="${settings.primaryColor}" opacity="0.5"/>
+    </g>
+</svg>`
+  }
+
+  const randomizePattern = () => {
+    const patterns: PatternSettings['type'][] = ['ichimatsu', 'seigaiha', 'asanoha', 'shippo', 'yamaji']
+    const colors = [
+      '#4a90e2', '#e74c3c', '#2ecc71', '#9b59b6', '#f39c12',
+      '#1abc9c', '#34495e', '#e67e22', '#3498db', '#95a5a6'
+    ]
+    
+    setSettings({
+      type: patterns[Math.floor(Math.random() * patterns.length)],
+      size: Math.floor(Math.random() * 80) + 20,
+      density: Math.random() * 2.5 + 0.5,
+      primaryColor: colors[Math.floor(Math.random() * colors.length)],
+      secondaryColor: colors[Math.floor(Math.random() * colors.length)],
+      accentColor: colors[Math.floor(Math.random() * colors.length)],
+      rotation: Math.floor(Math.random() * 360),
+      opacity: Math.floor(Math.random() * 90) + 10
+    })
+  }
+
+  const applyPalette = (palette: typeof COLOR_PALETTES[0]) => {
+    setSettings(prev => ({
+      ...prev,
+      primaryColor: palette.colors[0],
+      secondaryColor: palette.colors[1],
+      accentColor: palette.colors[2]
+    }))
+  }
 
   return (
-    <div className={`parametric-pattern-editor ${className}`}>
-      <div className="editor-header">
-        <div className="pattern-type-selector">
-          <select
-            value={currentPatternType}
-            onChange={(e) => setCurrentPatternType(e.target.value as MathematicalPatternType)}
-          >
-            <option value={MathematicalPatternType.ISLAMIC_GEOMETRIC}>Islamic Geometric</option>
-            <option value={MathematicalPatternType.PENROSE_TILING}>Penrose Tiling</option>
-            <option value={MathematicalPatternType.TRUCHET_TILES}>Truchet Tiles</option>
-            <option value={MathematicalPatternType.MANDELBROT}>Mandelbrot Set</option>
-            <option value={MathematicalPatternType.JULIA_SET}>Julia Set</option>
-            <option value={MathematicalPatternType.VORONOI}>Voronoi Diagram</option>
-            <option value={MathematicalPatternType.CELTIC_KNOT}>Celtic Knot</option>
-            <option value={MathematicalPatternType.GIRIH_TILES}>Girih Tiles</option>
-          </select>
-        </div>
+    <div className="h-full bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 p-6 overflow-auto">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-3xl md:text-4xl font-bold text-white text-center mb-8 drop-shadow-lg">
+          源始 Genshi Studio - Parametric Pattern Editor
+        </h1>
         
-        <div className="editor-controls">
-          <button onClick={handleRandomize}>Randomize</button>
-          <button onClick={toggleAnimation}>
-            {isAnimating ? 'Stop' : 'Animate'}
-          </button>
-        </div>
-      </div>
-      
-      <div className="editor-content">
-        <div className="canvas-container">
-          <canvas
-            ref={canvasRef}
-            width={width}
-            height={height}
-            className="pattern-canvas"
-          />
-        </div>
-        
-        <div className="controls-panel">
-          <div className="tab-navigation">
-            <button
-              className={activeTab === 'parameters' ? 'active' : ''}
-              onClick={() => setActiveTab('parameters')}
-            >
-              Parameters
-            </button>
-            <button
-              className={activeTab === 'presets' ? 'active' : ''}
-              onClick={() => setActiveTab('presets')}
-            >
-              Presets
-            </button>
-            <button
-              className={activeTab === 'export' ? 'active' : ''}
-              onClick={() => setActiveTab('export')}
-            >
-              Export
-            </button>
-            <button
-              className={activeTab === 'performance' ? 'active' : ''}
-              onClick={() => setActiveTab('performance')}
-            >
-              Performance
-            </button>
-          </div>
-          
-          <div className="tab-content">
-            {activeTab === 'parameters' && (
-              <div className="parameters-tab">
-                <div className="parameter-controls">
-                  {renderParameterGroups()}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Controls Panel */}
+          <div className="lg:col-span-1">
+            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-lg p-6">
+              <h2 className="text-xl font-semibold text-white mb-6">Pattern Controls</h2>
+              
+              <div className="space-y-6">
+                {/* Pattern Type */}
+                <div className="space-y-2">
+                  <label className="text-white font-medium">Pattern Type</label>
+                  <select 
+                    value={settings.type} 
+                    onChange={(e) => setSettings(prev => ({ ...prev, type: e.target.value as PatternSettings['type'] }))}
+                    className="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-white/50"
+                  >
+                    <option value="ichimatsu" className="bg-gray-800">Ichimatsu (市松)</option>
+                    <option value="seigaiha" className="bg-gray-800">Seigaiha (青海波)</option>
+                    <option value="asanoha" className="bg-gray-800">Asanoha (麻の葉)</option>
+                    <option value="shippo" className="bg-gray-800">Shippo (七宝)</option>
+                    <option value="yamaji" className="bg-gray-800">Yamaji (山路)</option>
+                  </select>
                 </div>
-              </div>
-            )}
-            
-            {activeTab === 'presets' && (
-              <div className="presets-tab">
-                <div className="preset-list">
-                  {presets.map(preset => (
-                    <div
-                      key={preset.id}
-                      className={`preset-item ${selectedPreset === preset.id ? 'selected' : ''}`}
-                      onClick={() => handlePresetSelect(preset.id)}
-                    >
-                      <h4>{preset.name}</h4>
-                      <p>{preset.description}</p>
-                      <div className="preset-tags">
-                        {preset.tags.map(tag => (
-                          <span key={tag} className="tag">{tag}</span>
-                        ))}
-                      </div>
+
+                {/* Size */}
+                <div className="space-y-2">
+                  <label className="text-white font-medium">Size: <span className="text-yellow-300 font-bold">{settings.size}</span></label>
+                  <input
+                    type="range"
+                    value={settings.size}
+                    onChange={(e) => setSettings(prev => ({ ...prev, size: parseInt(e.target.value) }))}
+                    min={10}
+                    max={100}
+                    step={1}
+                    className="w-full h-2 bg-white/20 rounded-lg appearance-none cursor-pointer"
+                  />
+                </div>
+
+                {/* Density */}
+                <div className="space-y-2">
+                  <label className="text-white font-medium">Density: <span className="text-yellow-300 font-bold">{settings.density.toFixed(1)}</span></label>
+                  <input
+                    type="range"
+                    value={settings.density}
+                    onChange={(e) => setSettings(prev => ({ ...prev, density: parseFloat(e.target.value) }))}
+                    min={0.5}
+                    max={3.0}
+                    step={0.1}
+                    className="w-full h-2 bg-white/20 rounded-lg appearance-none cursor-pointer"
+                  />
+                </div>
+
+                {/* Rotation */}
+                <div className="space-y-2">
+                  <label className="text-white font-medium">Rotation: <span className="text-yellow-300 font-bold">{settings.rotation}°</span></label>
+                  <input
+                    type="range"
+                    value={settings.rotation}
+                    onChange={(e) => setSettings(prev => ({ ...prev, rotation: parseInt(e.target.value) }))}
+                    min={0}
+                    max={360}
+                    step={1}
+                    className="w-full h-2 bg-white/20 rounded-lg appearance-none cursor-pointer"
+                  />
+                </div>
+
+                {/* Opacity */}
+                <div className="space-y-2">
+                  <label className="text-white font-medium">Opacity: <span className="text-yellow-300 font-bold">{settings.opacity}%</span></label>
+                  <input
+                    type="range"
+                    value={settings.opacity}
+                    onChange={(e) => setSettings(prev => ({ ...prev, opacity: parseInt(e.target.value) }))}
+                    min={10}
+                    max={100}
+                    step={1}
+                    className="w-full h-2 bg-white/20 rounded-lg appearance-none cursor-pointer"
+                  />
+                </div>
+
+                {/* Colors */}
+                <div className="space-y-3">
+                  <label className="text-white font-medium">Colors</label>
+                  <div className="grid grid-cols-3 gap-2">
+                    <div className="space-y-1">
+                      <label className="text-xs text-white/70">Primary</label>
+                      <input
+                        type="color"
+                        value={settings.primaryColor}
+                        onChange={(e) => setSettings(prev => ({ ...prev, primaryColor: e.target.value }))}
+                        className="w-full h-10 rounded cursor-pointer"
+                      />
                     </div>
-                  ))}
-                </div>
-              </div>
-            )}
-            
-            {activeTab === 'export' && (
-              <div className="export-tab">
-                <div className="export-options">
-                  <h3>Export Pattern</h3>
-                  <div className="export-buttons">
-                    <button
-                      onClick={() => handleExport('png')}
-                      disabled={isExporting}
-                    >
-                      Export PNG
-                    </button>
-                    <button
-                      onClick={() => handleExport('webp')}
-                      disabled={isExporting}
-                    >
-                      Export WebP
-                    </button>
-                    <button
-                      onClick={() => handleExport('svg')}
-                      disabled={isExporting}
-                    >
-                      Export SVG
-                    </button>
-                    <button
-                      onClick={() => handleExport('json')}
-                      disabled={isExporting}
-                    >
-                      Export Config
-                    </button>
-                  </div>
-                  {isExporting && <div className="export-progress">Exporting...</div>}
-                </div>
-              </div>
-            )}
-            
-            {activeTab === 'performance' && (
-              <div className="performance-tab">
-                <div className="performance-metrics">
-                  <h3>Performance</h3>
-                  <div className="metric">
-                    <span>FPS: {performanceMetrics.fps}</span>
-                  </div>
-                  <div className="metric">
-                    <span>Render Time: {performanceMetrics.renderTime.toFixed(2)}ms</span>
-                  </div>
-                  <div className="metric">
-                    <span>Memory: {performanceMetrics.memoryUsage.toFixed(2)}MB</span>
+                    <div className="space-y-1">
+                      <label className="text-xs text-white/70">Secondary</label>
+                      <input
+                        type="color"
+                        value={settings.secondaryColor}
+                        onChange={(e) => setSettings(prev => ({ ...prev, secondaryColor: e.target.value }))}
+                        className="w-full h-10 rounded cursor-pointer"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-xs text-white/70">Accent</label>
+                      <input
+                        type="color"
+                        value={settings.accentColor}
+                        onChange={(e) => setSettings(prev => ({ ...prev, accentColor: e.target.value }))}
+                        className="w-full h-10 rounded cursor-pointer"
+                      />
+                    </div>
                   </div>
                 </div>
+
+                {/* Color Palettes */}
+                <div className="space-y-2">
+                  <label className="text-white font-medium">Color Palettes</label>
+                  <div className="grid grid-cols-2 gap-2">
+                    {COLOR_PALETTES.map((palette) => (
+                      <button
+                        key={palette.name}
+                        onClick={() => applyPalette(palette)}
+                        className="flex gap-1 p-2 rounded bg-white/10 hover:bg-white/20 transition-colors"
+                        title={palette.name}
+                      >
+                        {palette.colors.map((color, i) => (
+                          <div
+                            key={i}
+                            className="w-full h-6 rounded"
+                            style={{ backgroundColor: color }}
+                          />
+                        ))}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="space-y-2">
+                  <button
+                    onClick={randomizePattern}
+                    className="w-full px-4 py-2 bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-medium rounded-md transition-all transform hover:scale-105 flex items-center justify-center gap-2"
+                  >
+                    <Shuffle className="w-4 h-4" />
+                    Randomize Pattern
+                  </button>
+                  
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => exportPattern('png')}
+                      className="flex-1 px-4 py-2 bg-white/20 hover:bg-white/30 text-white font-medium rounded-md transition-colors flex items-center justify-center gap-2"
+                    >
+                      <Download className="w-4 h-4" />
+                      PNG
+                    </button>
+                    <button
+                      onClick={() => exportPattern('svg')}
+                      className="flex-1 px-4 py-2 bg-white/20 hover:bg-white/30 text-white font-medium rounded-md transition-colors flex items-center justify-center gap-2"
+                    >
+                      <Download className="w-4 h-4" />
+                      SVG
+                    </button>
+                  </div>
+                </div>
               </div>
-            )}
+            </div>
+          </div>
+
+          {/* Pattern Preview */}
+          <div className="lg:col-span-2">
+            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-lg p-6">
+              <h2 className="text-xl font-semibold text-white mb-6">Pattern Preview</h2>
+              <div className="flex items-center justify-center">
+                <div className="bg-white rounded-lg p-4 shadow-2xl">
+                  <canvas
+                    ref={canvasRef}
+                    width={600}
+                    height={600}
+                    className="max-w-full h-auto"
+                    style={{ maxHeight: '60vh' }}
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      
-      {/* TODO: Move styles to CSS modules or styled-components */}
-      <style>{`
-        .parametric-pattern-editor {
-          display: flex;
-          flex-direction: column;
-          height: 100%;
-          background: #f5f5f5;
-        }
-        
-        .editor-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 1rem;
-          background: white;
-          border-bottom: 1px solid #ddd;
-        }
-        
-        .pattern-type-selector select {
-          padding: 0.5rem;
-          font-size: 1rem;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-        }
-        
-        .editor-controls {
-          display: flex;
-          gap: 0.5rem;
-        }
-        
-        .editor-controls button {
-          padding: 0.5rem 1rem;
-          background: #007bff;
-          color: white;
-          border: none;
-          border-radius: 4px;
-          cursor: pointer;
-        }
-        
-        .editor-controls button:hover {
-          background: #0056b3;
-        }
-        
-        .editor-content {
-          display: flex;
-          flex: 1;
-          overflow: hidden;
-        }
-        
-        .canvas-container {
-          flex: 1;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          background: white;
-          border-right: 1px solid #ddd;
-        }
-        
-        .pattern-canvas {
-          max-width: 100%;
-          max-height: 100%;
-          border: 1px solid #ccc;
-        }
-        
-        .controls-panel {
-          width: 300px;
-          display: flex;
-          flex-direction: column;
-          background: white;
-        }
-        
-        .tab-navigation {
-          display: flex;
-          border-bottom: 1px solid #ddd;
-        }
-        
-        .tab-navigation button {
-          flex: 1;
-          padding: 0.75rem;
-          background: none;
-          border: none;
-          cursor: pointer;
-          font-size: 0.875rem;
-        }
-        
-        .tab-navigation button.active {
-          background: #007bff;
-          color: white;
-        }
-        
-        .tab-content {
-          flex: 1;
-          overflow-y: auto;
-          padding: 1rem;
-        }
-        
-        .parameter-group {
-          margin-bottom: 1rem;
-        }
-        
-        .group-header {
-          width: 100%;
-          text-align: left;
-          padding: 0.5rem;
-          background: #f8f9fa;
-          border: 1px solid #ddd;
-          border-radius: 4px;
-          cursor: pointer;
-          font-weight: bold;
-        }
-        
-        .group-content {
-          padding: 0.5rem 0;
-        }
-        
-        .parameter-control {
-          margin-bottom: 0.75rem;
-        }
-        
-        .parameter-control label {
-          display: block;
-          margin-bottom: 0.25rem;
-          font-size: 0.875rem;
-          font-weight: 500;
-        }
-        
-        .parameter-control input[type="range"] {
-          width: 100%;
-        }
-        
-        .parameter-control input[type="color"] {
-          width: 100%;
-          height: 2rem;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-        }
-        
-        .parameter-control select {
-          width: 100%;
-          padding: 0.25rem;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-        }
-        
-        .preset-list {
-          display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-        }
-        
-        .preset-item {
-          padding: 0.75rem;
-          border: 1px solid #ddd;
-          border-radius: 4px;
-          cursor: pointer;
-          transition: background-color 0.2s;
-        }
-        
-        .preset-item:hover {
-          background: #f8f9fa;
-        }
-        
-        .preset-item.selected {
-          background: #e3f2fd;
-          border-color: #007bff;
-        }
-        
-        .preset-item h4 {
-          margin: 0 0 0.25rem 0;
-          font-size: 0.875rem;
-        }
-        
-        .preset-item p {
-          margin: 0 0 0.5rem 0;
-          font-size: 0.75rem;
-          color: #666;
-        }
-        
-        .preset-tags {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 0.25rem;
-        }
-        
-        .tag {
-          padding: 0.125rem 0.5rem;
-          background: #e9ecef;
-          border-radius: 12px;
-          font-size: 0.625rem;
-          color: #495057;
-        }
-        
-        .export-buttons {
-          display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-        }
-        
-        .export-buttons button {
-          padding: 0.5rem 1rem;
-          background: #28a745;
-          color: white;
-          border: none;
-          border-radius: 4px;
-          cursor: pointer;
-        }
-        
-        .export-buttons button:hover {
-          background: #218838;
-        }
-        
-        .export-buttons button:disabled {
-          background: #6c757d;
-          cursor: not-allowed;
-        }
-        
-        .export-progress {
-          margin-top: 0.5rem;
-          padding: 0.5rem;
-          background: #fff3cd;
-          border: 1px solid #ffeaa7;
-          border-radius: 4px;
-          text-align: center;
-        }
-        
-        .performance-metrics {
-          display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-        }
-        
-        .metric {
-          padding: 0.5rem;
-          background: #f8f9fa;
-          border-radius: 4px;
-          font-family: monospace;
-        }
-        
-        @media (max-width: 768px) {
-          .editor-content {
-            flex-direction: column;
-          }
-          
-          .controls-panel {
-            width: 100%;
-            height: 300px;
-          }
-        }
-      `}</style>
     </div>
-  );
-};
+  )
+}

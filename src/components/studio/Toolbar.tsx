@@ -17,7 +17,8 @@ import {
   Eye,
   Code2,
   Star,
-  Bookmark
+  Bookmark,
+  Sparkles
 } from 'lucide-react'
 import { useAppStore } from '../../hooks/useAppStore'
 
@@ -87,18 +88,45 @@ export function Toolbar() {
         
         <div className="w-px h-8 bg-border mx-2" />
         
-        {/* Canvas/Code mode toggle */}
-        <button
-          onClick={() => setCanvasMode(canvasMode === 'draw' ? 'code' : 'draw')}
-          className={`flex items-center gap-2 px-3 py-1.5 rounded-md transition-colors ${
-            canvasMode === 'code' 
-              ? 'bg-primary text-primary-foreground' 
-              : 'hover:bg-accent'
-          }`}
-        >
-          <Code2 className="h-4 w-4" />
-          <span className="text-sm">Code</span>
-        </button>
+        {/* Canvas mode toggles */}
+        <div className="flex items-center gap-1">
+          <button
+            onClick={() => setCanvasMode('draw')}
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-md transition-colors ${
+              canvasMode === 'draw' 
+                ? 'bg-primary text-primary-foreground' 
+                : 'hover:bg-accent'
+            }`}
+            title="Drawing Canvas"
+          >
+            <Pencil className="h-4 w-4" />
+            <span className="text-sm">Draw</span>
+          </button>
+          <button
+            onClick={() => setCanvasMode('parametric')}
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-md transition-colors ${
+              canvasMode === 'parametric' 
+                ? 'bg-primary text-primary-foreground' 
+                : 'hover:bg-accent'
+            }`}
+            title="Parametric Pattern Editor"
+          >
+            <Sparkles className="h-4 w-4" />
+            <span className="text-sm">Parametric</span>
+          </button>
+          <button
+            onClick={() => setCanvasMode('code')}
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-md transition-colors ${
+              canvasMode === 'code' 
+                ? 'bg-primary text-primary-foreground' 
+                : 'hover:bg-accent'
+            }`}
+            title="Code Editor"
+          >
+            <Code2 className="h-4 w-4" />
+            <span className="text-sm">Code</span>
+          </button>
+        </div>
       </div>
 
       {/* Center - Actions */}
