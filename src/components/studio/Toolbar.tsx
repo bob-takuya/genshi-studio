@@ -15,7 +15,9 @@ import {
   ZoomOut,
   Grid,
   Eye,
-  Code2
+  Code2,
+  Star,
+  Bookmark
 } from 'lucide-react'
 import { useAppStore } from '../../hooks/useAppStore'
 
@@ -24,24 +26,31 @@ export function Toolbar() {
     canvasMode, 
     setCanvasMode,
     zoom,
-    setZoom
+    setZoom,
+    toolbarMode,
+    setToolbarMode,
+    setExportDialogOpen,
+    setPresetDialogOpen,
+    setBookmarkDialogOpen
   } = useAppStore()
 
   const tools = [
-    { id: 'select', icon: MousePointer, name: 'Select' },
-    { id: 'draw', icon: Pencil, name: 'Draw' },
-    { id: 'rect', icon: Square, name: 'Rectangle' },
-    { id: 'circle', icon: Circle, name: 'Circle' },
-    { id: 'triangle', icon: Triangle, name: 'Triangle' },
-    { id: 'text', icon: Type, name: 'Text' },
-    { id: 'eraser', icon: Eraser, name: 'Eraser' }
+    { id: 'select', icon: MousePointer, name: 'Select', shortcut: 'V' },
+    { id: 'pen', icon: Pencil, name: 'Pen', shortcut: 'P' },
+    { id: 'brush', icon: Circle, name: 'Brush', shortcut: 'B' },
+    { id: 'shapes', icon: Square, name: 'Shapes', shortcut: 'R' },
+    { id: 'text', icon: Type, name: 'Text', shortcut: 'T' },
+    { id: 'eraser', icon: Eraser, name: 'Eraser', shortcut: 'E' },
+    { id: 'pattern', icon: Star, name: 'Pattern', shortcut: 'Shift+P' }
   ]
 
   const actions = [
-    { id: 'undo', icon: Undo, name: 'Undo', shortcut: '⌘Z' },
-    { id: 'redo', icon: Redo, name: 'Redo', shortcut: '⌘⇧Z' },
-    { id: 'upload', icon: Upload, name: 'Import' },
-    { id: 'download', icon: Download, name: 'Export' }
+    { id: 'undo', icon: Undo, name: 'Undo', shortcut: '⌘Z', onClick: () => console.log('Undo') },
+    { id: 'redo', icon: Redo, name: 'Redo', shortcut: '⌘⇧Z', onClick: () => console.log('Redo') },
+    { id: 'presets', icon: Star, name: 'Presets', shortcut: 'F', onClick: () => setPresetDialogOpen(true) },
+    { id: 'bookmarks', icon: Bookmark, name: 'Bookmarks', onClick: () => setBookmarkDialogOpen(true) },
+    { id: 'upload', icon: Upload, name: 'Import', onClick: () => console.log('Import') },
+    { id: 'download', icon: Download, name: 'Export', shortcut: 'E', onClick: () => setExportDialogOpen(true) }
   ]
 
   const viewOptions = [
@@ -50,20 +59,27 @@ export function Toolbar() {
   ]
 
   return (
-    <div className="h-14 border-b border-border bg-card px-4 flex items-center justify-between">
+    <div className="h-14 border-b border-border bg-card px-4 flex items-center justify-between" data-testid="tool-panel">
       {/* Left side - Drawing tools */}
       <div className="flex items-center gap-1">
         {tools.map((tool) => {
           const Icon = tool.icon
+          const isActive = toolbarMode === tool.id
           return (
             <button
               key={tool.id}
-              className="p-2 hover:bg-accent rounded-md transition-colors group relative"
+              onClick={() => setToolbarMode(tool.id as any)}
+              className={`p-2 rounded-md transition-colors group relative ${
+                isActive 
+                  ? 'bg-primary text-primary-foreground' 
+                  : 'hover:bg-accent'
+              }`}
               aria-label={tool.name}
+              data-testid={`tool-${tool.id}`}
             >
               <Icon className="h-5 w-5" />
               <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-popover text-popover-foreground text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
-                {tool.name}
+                {tool.name} {tool.shortcut && `(${tool.shortcut})`}
               </span>
             </button>
           )
@@ -92,15 +108,15 @@ export function Toolbar() {
           return (
             <button
               key={action.id}
+              onClick={action.onClick}
               className="p-2 hover:bg-accent rounded-md transition-colors group relative"
               aria-label={action.name}
+              data-testid={`${action.id === 'download' ? 'export' : action.id === 'upload' ? 'save' : action.id}-button`}
             >
               <Icon className="h-5 w-5" />
-              {action.shortcut && (
-                <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-popover text-popover-foreground text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
-                  {action.shortcut}
-                </span>
-              )}
+              <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-popover text-popover-foreground text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
+                {action.name} {action.shortcut && `(${action.shortcut})`}
+              </span>
             </button>
           )
         })}
@@ -124,7 +140,7 @@ export function Toolbar() {
         <div className="w-px h-8 bg-border mx-2" />
         
         {/* Zoom controls */}
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1" data-testid="zoom-controls">
           <button
             onClick={() => setZoom(zoom * 0.8)}
             className="p-2 hover:bg-accent rounded-md transition-colors"

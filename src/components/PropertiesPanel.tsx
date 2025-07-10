@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { fabric } from 'fabric'
+import { Canvas, FabricObject } from 'fabric'
 import { 
   Palette, 
   Move, 
@@ -14,8 +14,8 @@ import {
 } from 'lucide-react'
 
 interface PropertiesPanelProps {
-  canvas: fabric.Canvas | null
-  selectedObject: fabric.Object | null
+  canvas: Canvas | null
+  selectedObject: FabricObject | null
 }
 
 export default function PropertiesPanel({ canvas, selectedObject }: PropertiesPanelProps) {
@@ -39,7 +39,7 @@ export default function PropertiesPanel({ canvas, selectedObject }: PropertiesPa
     if (!selectedObject) return
 
     setProperties({
-      fill: selectedObject.fill as string || '#000000',
+      fill: (typeof selectedObject.fill === 'string' ? selectedObject.fill : '#000000') || '#000000',
       stroke: selectedObject.stroke || '#000000',
       strokeWidth: selectedObject.strokeWidth || 1,
       opacity: selectedObject.opacity || 1,

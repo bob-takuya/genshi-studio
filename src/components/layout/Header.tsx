@@ -27,7 +27,7 @@ export function Header() {
         </button>
 
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 font-bold text-lg">
+        <Link to="/" className="flex items-center gap-2 font-bold text-lg" data-testid="app-logo">
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-primary-foreground">
             G
           </div>
@@ -35,7 +35,7 @@ export function Header() {
         </Link>
 
         {/* Navigation */}
-        <nav className="hidden md:flex items-center gap-1 ml-8">
+        <nav className="hidden md:flex items-center gap-1 ml-8" aria-label="Main navigation">
           {navigation.map((item) => {
             const isActive = location.pathname === item.href
             return (
@@ -62,6 +62,7 @@ export function Header() {
           onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
           className="p-2 hover:bg-accent rounded-md transition-colors"
           aria-label="Toggle theme"
+          data-testid="theme-toggle"
         >
           {theme === 'light' ? (
             <Moon className="h-5 w-5" />

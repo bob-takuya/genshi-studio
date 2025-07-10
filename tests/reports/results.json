@@ -59,7 +59,7 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 60000
+        "timeout": 30000
       },
       {
         "outputDir": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results",
@@ -73,7 +73,7 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 60000
+        "timeout": 30000
       },
       {
         "outputDir": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results",
@@ -87,7 +87,7 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 60000
+        "timeout": 30000
       },
       {
         "outputDir": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results",
@@ -101,7 +101,7 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 60000
+        "timeout": 30000
       },
       {
         "outputDir": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results",
@@ -115,7 +115,7 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 60000
+        "timeout": 30000
       },
       {
         "outputDir": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results",
@@ -129,7 +129,7 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 60000
+        "timeout": 30000
       },
       {
         "outputDir": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results",
@@ -143,7 +143,7 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 60000
+        "timeout": 30000
       },
       {
         "outputDir": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results",
@@ -157,7 +157,7 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 60000
+        "timeout": 30000
       }
     ],
     "shard": null,
@@ -185,8 +185,8 @@
     }
   ],
   "stats": {
-    "startTime": "2025-07-09T06:57:31.289Z",
-    "duration": 120018.838,
+    "startTime": "2025-07-09T17:54:42.149Z",
+    "duration": 120018.644,
     "expected": 0,
     "skipped": 0,
     "unexpected": 0,

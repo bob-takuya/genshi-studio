@@ -26,6 +26,116 @@ interface PatternParameter {
 }
 
 const patterns: Pattern[] = [
+  // E2E Test Required Patterns (9 types)
+  {
+    id: 'flow-fields',
+    name: 'Flow Fields',
+    category: 'generative',
+    description: 'Dynamic flow field patterns with particle movement',
+    preview: '🌀',
+    parameters: [
+      { name: 'Particle Count', type: 'range', min: 100, max: 2000, value: 500 },
+      { name: 'Flow Strength', type: 'range', min: 0.1, max: 2, value: 1 },
+      { name: 'Speed', type: 'range', min: 0.5, max: 5, value: 2 }
+    ]
+  },
+  {
+    id: 'waves',
+    name: 'Waves',
+    category: 'natural',
+    description: 'Flowing wave patterns with customizable amplitude and frequency',
+    preview: '〰️',
+    parameters: [
+      { name: 'Amplitude', type: 'range', min: 10, max: 100, value: 50 },
+      { name: 'Frequency', type: 'range', min: 0.1, max: 2, value: 0.5 },
+      { name: 'Phase', type: 'range', min: 0, max: 360, value: 0 }
+    ]
+  },
+  {
+    id: 'growth',
+    name: 'Growth',
+    category: 'organic',
+    description: 'Organic growth patterns inspired by natural systems',
+    preview: '🌱',
+    parameters: [
+      { name: 'Iterations', type: 'range', min: 3, max: 10, value: 6 },
+      { name: 'Branching Factor', type: 'range', min: 2, max: 5, value: 3 },
+      { name: 'Growth Rate', type: 'range', min: 0.5, max: 2, value: 1.2 }
+    ]
+  },
+  {
+    id: 'truchet',
+    name: 'Truchet',
+    category: 'geometric',
+    description: 'Truchet tile patterns with random rotation',
+    preview: '◐',
+    parameters: [
+      { name: 'Tile Size', type: 'range', min: 20, max: 100, value: 50 },
+      { name: 'Randomness', type: 'range', min: 0, max: 1, value: 0.5 },
+      { name: 'Style', type: 'select', value: 'curved', options: ['curved', 'straight', 'diagonal'] }
+    ]
+  },
+  {
+    id: 'reaction',
+    name: 'Reaction',
+    category: 'simulation',
+    description: 'Reaction-diffusion patterns mimicking chemical processes',
+    preview: '🧬',
+    parameters: [
+      { name: 'Diffusion Rate A', type: 'range', min: 0.5, max: 2, value: 1 },
+      { name: 'Diffusion Rate B', type: 'range', min: 0.1, max: 1, value: 0.5 },
+      { name: 'Feed Rate', type: 'range', min: 0.01, max: 0.1, value: 0.055 }
+    ]
+  },
+  {
+    id: 'voronoi',
+    name: 'Voronoi',
+    category: 'mathematical',
+    description: 'Voronoi diagrams with customizable seed points',
+    preview: '🔷',
+    parameters: [
+      { name: 'Point Count', type: 'range', min: 10, max: 200, value: 50 },
+      { name: 'Cell Style', type: 'select', value: 'filled', options: ['filled', 'outlined', 'gradient'] },
+      { name: 'Relaxation', type: 'range', min: 0, max: 5, value: 2 }
+    ]
+  },
+  {
+    id: 'maze',
+    name: 'Maze',
+    category: 'algorithmic',
+    description: 'Procedural maze generation with various algorithms',
+    preview: '🗺️',
+    parameters: [
+      { name: 'Cell Size', type: 'range', min: 10, max: 50, value: 20 },
+      { name: 'Algorithm', type: 'select', value: 'recursive', options: ['recursive', 'prim', 'kruskal'] },
+      { name: 'Complexity', type: 'range', min: 0.1, max: 1, value: 0.6 }
+    ]
+  },
+  {
+    id: 'l-systems',
+    name: 'L-Systems',
+    category: 'fractal',
+    description: 'Lindenmayer systems for fractal plant-like structures',
+    preview: '🌿',
+    parameters: [
+      { name: 'Iterations', type: 'range', min: 3, max: 8, value: 5 },
+      { name: 'Angle', type: 'range', min: 15, max: 90, value: 25 },
+      { name: 'Length', type: 'range', min: 5, max: 20, value: 10 }
+    ]
+  },
+  {
+    id: 'circles',
+    name: 'Circles',
+    category: 'geometric',
+    description: 'Circle packing and arrangements with various sizes',
+    preview: '⭕',
+    parameters: [
+      { name: 'Circle Count', type: 'range', min: 10, max: 500, value: 100 },
+      { name: 'Size Variation', type: 'range', min: 0.1, max: 2, value: 1 },
+      { name: 'Packing', type: 'select', value: 'random', options: ['random', 'grid', 'hexagonal'] }
+    ]
+  },
+  // Original Cultural Patterns
   {
     id: 'seigaiha',
     name: 'Seigaiha (Blue Sea Waves)',
@@ -104,6 +214,14 @@ export function PatternSelector() {
 
   const categories = [
     { id: 'all', name: 'All Patterns' },
+    { id: 'generative', name: 'Generative' },
+    { id: 'natural', name: 'Natural' },
+    { id: 'organic', name: 'Organic' },
+    { id: 'geometric', name: 'Geometric' },
+    { id: 'simulation', name: 'Simulation' },
+    { id: 'mathematical', name: 'Mathematical' },
+    { id: 'algorithmic', name: 'Algorithmic' },
+    { id: 'fractal', name: 'Fractal' },
     { id: 'japanese', name: 'Japanese' },
     { id: 'celtic', name: 'Celtic' },
     { id: 'islamic', name: 'Islamic' },
@@ -257,6 +375,7 @@ export function PatternSelector() {
       <button
         onClick={() => setIsOpen(true)}
         className="absolute bottom-4 right-4 px-4 py-2 bg-primary text-primary-foreground rounded-lg shadow-lg hover:bg-primary/90 transition-colors flex items-center gap-2"
+        data-testid="pattern-selector"
       >
         <Grid3x3 className="h-5 w-5" />
         <span>Patterns</span>
@@ -279,6 +398,7 @@ export function PatternSelector() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               className="bg-card rounded-xl shadow-2xl max-w-6xl w-full max-h-[90vh] flex flex-col"
+              data-testid="pattern-library"
             >
               {/* Header */}
               <div className="p-6 border-b border-border flex items-center justify-between">
@@ -380,6 +500,7 @@ export function PatternSelector() {
                                 ? 'border-primary bg-primary/10'
                                 : 'border-border hover:border-primary/50'
                             }`}
+                            data-pattern={pattern.name}
                           >
                             <div className="text-4xl mb-2">{pattern.preview}</div>
                             <h3 className="font-semibold text-sm">{pattern.name}</h3>
