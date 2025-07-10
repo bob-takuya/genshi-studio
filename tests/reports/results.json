@@ -215,10 +215,10 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 15170,
+                      "duration": 10553,
                       "error": {
-                        "message": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected string: \u001b[32m\"\u001b[7mGenshi Stud\u001b[27mio\"\u001b[39m\nReceived string: \u001b[31m\"\u001b[7mhomeserver.\u001b[27mio\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m    14 × locator resolved to <html>…</html>\u001b[22m\n\u001b[2m       - unexpected value \"homeserver.io\"\u001b[22m\n",
-                        "stack": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected string: \u001b[32m\"\u001b[7mGenshi Stud\u001b[27mio\"\u001b[39m\nReceived string: \u001b[31m\"\u001b[7mhomeserver.\u001b[27mio\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m    14 × locator resolved to <html>…</html>\u001b[22m\n\u001b[2m       - unexpected value \"homeserver.io\"\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:8:24",
+                        "message": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected string: \u001b[32m\"Genshi Studio\"\u001b[39m\nReceived string: \u001b[31m\"Site not found · GitHub Pages\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m    14 × locator resolved to <html>…</html>\u001b[22m\n\u001b[2m       - unexpected value \"Site not found · GitHub Pages\"\u001b[22m\n",
+                        "stack": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected string: \u001b[32m\"Genshi Studio\"\u001b[39m\nReceived string: \u001b[31m\"Site not found · GitHub Pages\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m    14 × locator resolved to <html>…</html>\u001b[22m\n\u001b[2m       - unexpected value \"Site not found · GitHub Pages\"\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:8:24",
                         "location": {
                           "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts",
                           "column": 24,
@@ -233,13 +233,13 @@
                             "column": 24,
                             "line": 8
                           },
-                          "message": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected string: \u001b[32m\"\u001b[7mGenshi Stud\u001b[27mio\"\u001b[39m\nReceived string: \u001b[31m\"\u001b[7mhomeserver.\u001b[27mio\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m    14 × locator resolved to <html>…</html>\u001b[22m\n\u001b[2m       - unexpected value \"homeserver.io\"\u001b[22m\n\n\n   6 |     \n   7 |     // Check page title\n>  8 |     await expect(page).toHaveTitle('Genshi Studio')\n     |                        ^\n   9 |     \n  10 |     // Check main heading is visible\n  11 |     const heading = page.locator('h1')\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:8:24"
+                          "message": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected string: \u001b[32m\"Genshi Studio\"\u001b[39m\nReceived string: \u001b[31m\"Site not found · GitHub Pages\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m    14 × locator resolved to <html>…</html>\u001b[22m\n\u001b[2m       - unexpected value \"Site not found · GitHub Pages\"\u001b[22m\n\n\n   6 |     \n   7 |     // Check page title\n>  8 |     await expect(page).toHaveTitle('Genshi Studio')\n     |                        ^\n   9 |     \n  10 |     // Check main heading is visible\n  11 |     const heading = page.locator('h1')\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:8:24"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-07-10T09:37:34.005Z",
+                      "startTime": "2025-07-10T09:48:01.102Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -267,29 +267,32 @@
                     {
                       "workerIndex": 1,
                       "parallelIndex": 0,
-                      "status": "timedOut",
-                      "duration": 15403,
+                      "status": "failed",
+                      "duration": 10345,
                       "error": {
-                        "message": "\u001b[31mTest timeout of 15000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 15000ms exceeded.\u001b[39m"
+                        "message": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected string: \u001b[32m\"Genshi Studio\"\u001b[39m\nReceived string: \u001b[31m\"Site not found · GitHub Pages\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m    14 × locator resolved to <html>…</html>\u001b[22m\n\u001b[2m       - unexpected value \"Site not found · GitHub Pages\"\u001b[22m\n",
+                        "stack": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected string: \u001b[32m\"Genshi Studio\"\u001b[39m\nReceived string: \u001b[31m\"Site not found · GitHub Pages\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m    14 × locator resolved to <html>…</html>\u001b[22m\n\u001b[2m       - unexpected value \"Site not found · GitHub Pages\"\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:8:24",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts",
+                          "column": 24,
+                          "line": 8
+                        },
+                        "snippet": "\u001b[0m \u001b[90m  6 |\u001b[39m     \n \u001b[90m  7 |\u001b[39m     \u001b[90m// Check page title\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  8 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[32m'Genshi Studio'\u001b[39m)\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m  9 |\u001b[39m     \n \u001b[90m 10 |\u001b[39m     \u001b[90m// Check main heading is visible\u001b[39m\n \u001b[90m 11 |\u001b[39m     \u001b[36mconst\u001b[39m heading \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'h1'\u001b[39m)\u001b[0m"
                       },
                       "errors": [
-                        {
-                          "message": "\u001b[31mTest timeout of 15000ms exceeded.\u001b[39m"
-                        },
                         {
                           "location": {
                             "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts",
                             "column": 24,
                             "line": 8
                           },
-                          "message": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected string: \u001b[32m\"\u001b[7mGenshi Stud\u001b[27mio\"\u001b[39m\nReceived string: \u001b[31m\"\u001b[7mhomeserver.\u001b[27mio\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m    14 × locator resolved to <html>…</html>\u001b[22m\n\u001b[2m       - unexpected value \"homeserver.io\"\u001b[22m\n\n\n   6 |     \n   7 |     // Check page title\n>  8 |     await expect(page).toHaveTitle('Genshi Studio')\n     |                        ^\n   9 |     \n  10 |     // Check main heading is visible\n  11 |     const heading = page.locator('h1')\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:8:24"
+                          "message": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected string: \u001b[32m\"Genshi Studio\"\u001b[39m\nReceived string: \u001b[31m\"Site not found · GitHub Pages\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m    14 × locator resolved to <html>…</html>\u001b[22m\n\u001b[2m       - unexpected value \"Site not found · GitHub Pages\"\u001b[22m\n\n\n   6 |     \n   7 |     // Check page title\n>  8 |     await expect(page).toHaveTitle('Genshi Studio')\n     |                        ^\n   9 |     \n  10 |     // Check main heading is visible\n  11 |     const heading = page.locator('h1')\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:8:24"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 1,
-                      "startTime": "2025-07-10T09:37:49.578Z",
+                      "startTime": "2025-07-10T09:48:12.079Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -312,34 +315,42 @@
                           "contentType": "application/zip",
                           "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium-retry1/trace.zip"
                         }
-                      ]
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts",
+                        "column": 24,
+                        "line": 8
+                      }
                     },
                     {
                       "workerIndex": 2,
                       "parallelIndex": 0,
-                      "status": "timedOut",
-                      "duration": 15230,
+                      "status": "failed",
+                      "duration": 10373,
                       "error": {
-                        "message": "\u001b[31mTest timeout of 15000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 15000ms exceeded.\u001b[39m"
+                        "message": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected string: \u001b[32m\"Genshi Studio\"\u001b[39m\nReceived string: \u001b[31m\"Site not found · GitHub Pages\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m    14 × locator resolved to <html>…</html>\u001b[22m\n\u001b[2m       - unexpected value \"Site not found · GitHub Pages\"\u001b[22m\n",
+                        "stack": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected string: \u001b[32m\"Genshi Studio\"\u001b[39m\nReceived string: \u001b[31m\"Site not found · GitHub Pages\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m    14 × locator resolved to <html>…</html>\u001b[22m\n\u001b[2m       - unexpected value \"Site not found · GitHub Pages\"\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:8:24",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts",
+                          "column": 24,
+                          "line": 8
+                        },
+                        "snippet": "\u001b[0m \u001b[90m  6 |\u001b[39m     \n \u001b[90m  7 |\u001b[39m     \u001b[90m// Check page title\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  8 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[32m'Genshi Studio'\u001b[39m)\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m  9 |\u001b[39m     \n \u001b[90m 10 |\u001b[39m     \u001b[90m// Check main heading is visible\u001b[39m\n \u001b[90m 11 |\u001b[39m     \u001b[36mconst\u001b[39m heading \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'h1'\u001b[39m)\u001b[0m"
                       },
                       "errors": [
-                        {
-                          "message": "\u001b[31mTest timeout of 15000ms exceeded.\u001b[39m"
-                        },
                         {
                           "location": {
                             "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts",
                             "column": 24,
                             "line": 8
                           },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected string: \u001b[32m\"\u001b[7mGenshi Stud\u001b[27mio\"\u001b[39m\nReceived string: \u001b[31m\"\u001b[7mhomeserver.\u001b[27mio\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m    13 × locator resolved to <html>…</html>\u001b[22m\n\u001b[2m       - unexpected value \"homeserver.io\"\u001b[22m\n\n\n   6 |     \n   7 |     // Check page title\n>  8 |     await expect(page).toHaveTitle('Genshi Studio')\n     |                        ^\n   9 |     \n  10 |     // Check main heading is visible\n  11 |     const heading = page.locator('h1')\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:8:24"
+                          "message": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected string: \u001b[32m\"Genshi Studio\"\u001b[39m\nReceived string: \u001b[31m\"Site not found · GitHub Pages\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m    14 × locator resolved to <html>…</html>\u001b[22m\n\u001b[2m       - unexpected value \"Site not found · GitHub Pages\"\u001b[22m\n\n\n   6 |     \n   7 |     // Check page title\n>  8 |     await expect(page).toHaveTitle('Genshi Studio')\n     |                        ^\n   9 |     \n  10 |     // Check main heading is visible\n  11 |     const heading = page.locator('h1')\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts:8:24"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 2,
-                      "startTime": "2025-07-10T09:38:05.754Z",
+                      "startTime": "2025-07-10T09:48:22.882Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -357,7 +368,12 @@
                           "contentType": "text/markdown",
                           "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/homepage-Homepage-should-d-78a15-homepage-with-correct-title-chromium-retry2/error-context.md"
                         }
-                      ]
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/homepage.spec.ts",
+                        "column": 24,
+                        "line": 8
+                      }
                     }
                   ],
                   "status": "unexpected"
@@ -366,7 +382,7 @@
               "id": "84e7eb052e8cbae1c9f0-e38ae967161ac243ecf5",
               "file": "homepage.spec.ts",
               "line": 4,
-              "column": 7
+              "column": 3
             },
             {
               "title": "should navigate to Studio page",
@@ -386,7 +402,7 @@
               "id": "84e7eb052e8cbae1c9f0-eaa5e874e7d3afc9bff5",
               "file": "homepage.spec.ts",
               "line": 26,
-              "column": 7
+              "column": 3
             },
             {
               "title": "should toggle theme",
@@ -406,7 +422,7 @@
               "id": "84e7eb052e8cbae1c9f0-023e5a9ea2fc2331188d",
               "file": "homepage.spec.ts",
               "line": 39,
-              "column": 7
+              "column": 3
             }
           ]
         }
@@ -419,8 +435,8 @@
     }
   ],
   "stats": {
-    "startTime": "2025-07-10T09:37:33.708Z",
-    "duration": 47391.753,
+    "startTime": "2025-07-10T09:48:00.782Z",
+    "duration": 32599.087999999996,
     "expected": 0,
     "skipped": 2,
     "unexpected": 1,

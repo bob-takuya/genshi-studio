@@ -1,19 +1,19 @@
-<testsuites id="" name="" tests="3" failures="1" skipped="2" errors="0" time="47.391752999999994">
-<testsuite name="homepage.spec.ts" timestamp="2025-07-10T09:37:33.726Z" hostname="chromium" tests="3" failures="1" skipped="2" time="45.803" errors="0">
-<testcase name="Homepage › should display the homepage with correct title" classname="homepage.spec.ts" time="45.803">
-<failure message="homepage.spec.ts:4:7 should display the homepage with correct title" type="FAILURE">
-<![CDATA[  [chromium] › homepage.spec.ts:4:7 › Homepage › should display the homepage with correct title ────
+<testsuites id="" name="" tests="3" failures="1" skipped="2" errors="0" time="32.599087999999995">
+<testsuite name="homepage.spec.ts" timestamp="2025-07-10T09:48:00.794Z" hostname="chromium" tests="3" failures="1" skipped="2" time="31.271" errors="0">
+<testcase name="Homepage › should display the homepage with correct title" classname="homepage.spec.ts" time="31.271">
+<failure message="homepage.spec.ts:4:3 should display the homepage with correct title" type="FAILURE">
+<![CDATA[  [chromium] › homepage.spec.ts:4:3 › Homepage › should display the homepage with correct title ────
 
     Error: Timed out 10000ms waiting for expect(page).toHaveTitle(expected)
 
     Locator: locator(':root')
     Expected string: "Genshi Studio"
-    Received string: "homeserver.io"
+    Received string: "Site not found · GitHub Pages"
     Call log:
       - Expect "toHaveTitle" with timeout 10000ms
       - waiting for locator(':root')
         14 × locator resolved to <html>…</html>
-           - unexpected value "homeserver.io"
+           - unexpected value "Site not found · GitHub Pages"
 
 
        6 |     
@@ -37,18 +37,16 @@
 
     Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
 
-    Test timeout of 15000ms exceeded.
-
     Error: Timed out 10000ms waiting for expect(page).toHaveTitle(expected)
 
     Locator: locator(':root')
     Expected string: "Genshi Studio"
-    Received string: "homeserver.io"
+    Received string: "Site not found · GitHub Pages"
     Call log:
       - Expect "toHaveTitle" with timeout 10000ms
       - waiting for locator(':root')
         14 × locator resolved to <html>…</html>
-           - unexpected value "homeserver.io"
+           - unexpected value "Site not found · GitHub Pages"
 
 
        6 |     
@@ -80,18 +78,16 @@
 
     Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
 
-    Test timeout of 15000ms exceeded.
-
-    Error: expect(page).toHaveTitle(expected)
+    Error: Timed out 10000ms waiting for expect(page).toHaveTitle(expected)
 
     Locator: locator(':root')
     Expected string: "Genshi Studio"
-    Received string: "homeserver.io"
+    Received string: "Site not found · GitHub Pages"
     Call log:
       - Expect "toHaveTitle" with timeout 10000ms
       - waiting for locator(':root')
-        13 × locator resolved to <html>…</html>
-           - unexpected value "homeserver.io"
+        14 × locator resolved to <html>…</html>
+           - unexpected value "Site not found · GitHub Pages"
 
 
        6 |     
