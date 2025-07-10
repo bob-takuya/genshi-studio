@@ -1,0 +1,129 @@
+{
+  "workflow_id": "genshi_glitch_fix_001",
+  "created_by": "COORDINATOR_004",
+  "created_at": "2025-07-09T14:20:00.000Z",
+  "status": "ACTIVE",
+  "phases": [
+    {
+      "phase": 1,
+      "name": "Critical Build Fixes",
+      "status": "IN_PROGRESS",
+      "tasks": [
+        {
+          "id": "fix_imports",
+          "description": "Fix all import errors (fabric.js, React, etc.)",
+          "assigned_to": "DEVELOPER_004",
+          "priority": "CRITICAL",
+          "status": "PENDING",
+          "acceptance_criteria": [
+            "All fabric.js imports use correct syntax",
+            "React imports configured for JSX transform",
+            "No import-related TypeScript errors"
+          ]
+        },
+        {
+          "id": "configure_vite",
+          "description": "Create vite.config.ts and update scripts",
+          "assigned_to": "DEVELOPER_004",
+          "priority": "CRITICAL",
+          "status": "PENDING",
+          "acceptance_criteria": [
+            "vite.config.ts exists with React plugin",
+            "npm run dev starts Vite server",
+            "Server accessible on port 5173"
+          ]
+        },
+        {
+          "id": "fix_type_errors",
+          "description": "Fix all TypeScript type errors",
+          "assigned_to": "DEVELOPER_004",
+          "priority": "HIGH",
+          "status": "PENDING",
+          "acceptance_criteria": [
+            "All parameters have proper types",
+            "No implicit 'any' errors",
+            "TypeScript compiles with 0 errors"
+          ]
+        }
+      ]
+    },
+    {
+      "phase": 2,
+      "name": "Testing Preparation",
+      "status": "BLOCKED",
+      "dependencies": ["phase_1"],
+      "tasks": [
+        {
+          "id": "install_test_deps",
+          "description": "Install missing test dependencies",
+          "assigned_to": "TESTER_003",
+          "priority": "HIGH",
+          "status": "PENDING",
+          "acceptance_criteria": [
+            "jest-environment-jsdom installed",
+            "npm test runs without config errors",
+            "Test environment properly configured"
+          ]
+        },
+        {
+          "id": "run_e2e_tests",
+          "description": "Execute full E2E test suite",
+          "assigned_to": "TESTER_003",
+          "priority": "HIGH",
+          "status": "PENDING",
+          "acceptance_criteria": [
+            "All test scenarios executed",
+            "Test report generated",
+            "90%+ pass rate achieved"
+          ]
+        }
+      ]
+    },
+    {
+      "phase": 3,
+      "name": "Glitch Fixing",
+      "status": "PENDING",
+      "dependencies": ["phase_2"],
+      "tasks": [
+        {
+          "id": "fix_identified_glitches",
+          "description": "Fix all glitches found during E2E testing",
+          "assigned_to": "DEVELOPER_004",
+          "priority": "HIGH",
+          "status": "PENDING",
+          "acceptance_criteria": [
+            "All critical glitches resolved",
+            "Re-test confirms fixes",
+            "No regression issues"
+          ]
+        }
+      ]
+    },
+    {
+      "phase": 4,
+      "name": "Final Review",
+      "status": "PENDING",
+      "dependencies": ["phase_3"],
+      "tasks": [
+        {
+          "id": "code_review",
+          "description": "Review all fixes and changes",
+          "assigned_to": "REVIEWER_003",
+          "priority": "MEDIUM",
+          "status": "PENDING",
+          "acceptance_criteria": [
+            "Code quality standards met",
+            "Best practices followed",
+            "Documentation updated"
+          ]
+        }
+      ]
+    }
+  ],
+  "success_metrics": {
+    "build_health": "TypeScript 0 errors, ESLint passing",
+    "test_coverage": "E2E tests 90%+ pass rate",
+    "glitch_resolution": "All critical issues fixed",
+    "team_efficiency": "Completed within 6 hours"
+  }
+}
