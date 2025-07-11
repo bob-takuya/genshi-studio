@@ -1,4 +1,3 @@
-import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Menu, Moon, Sun, Settings, User } from 'lucide-react'
 import { useAppStore } from '../../hooks/useAppStore'
@@ -10,6 +9,7 @@ export function Header() {
   const navigation = [
     { name: 'Studio', href: '/' },
     { name: 'Gallery', href: '/gallery' },
+    { name: 'Pressure Test', href: '/pressure-test' },
     { name: 'About', href: '/about' }
   ]
 

@@ -4,7 +4,7 @@
  * for high-performance real-time pattern generation
  */
 
-import { Color, Point, Size } from '../../types/graphics';
+import { Size } from '../../types/graphics';
 import { WebGLContextManager } from '../engine/WebGLContext';
 import { ParametricPatternEngine, ParameterSet, ParameterType, ParameterAnimation } from './ParametricPatternEngine';
 import { MathematicalPatternGenerators, MathematicalPatternType } from './MathematicalPatternGenerators';

@@ -1,7 +1,9 @@
-import React, { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import * as monaco from 'monaco-editor'
-import { Play, Save, Copy, RefreshCw } from 'lucide-react'
-import { useAppStore } from '../../hooks/useAppStore'
+import { Play, Save, Copy, RefreshCw, Loader2 } from 'lucide-react'
+import { CodeExecutionEngine } from '../../core/execution/CodeExecutionEngine'
+import { GraphicsBridge } from '../../core/execution/GraphicsBridge'
+import { GraphicsEngine } from '../../graphics/engine/GraphicsEngine'
 
 // TypeScript definitions for the Genshi API
 const GENSHI_TYPES = `
@@ -86,8 +88,14 @@ pattern.apply()
 export function CodeEditor() {
   const editorRef = useRef<HTMLDivElement>(null)
   const monacoRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const graphicsEngineRef = useRef<GraphicsEngine | null>(null)
+  const executionEngineRef = useRef<CodeExecutionEngine | null>(null)
+  const graphicsBridgeRef = useRef<GraphicsBridge | null>(null)
+  
   const [output, setOutput] = useState<string>('')
   const [isRunning, setIsRunning] = useState(false)
+  const [executionTime, setExecutionTime] = useState<number | null>(null)
 
   useEffect(() => {
     if (!editorRef.current || monacoRef.current) return
@@ -132,27 +140,68 @@ export function CodeEditor() {
     }
   }, [])
 
+  // Initialize graphics engine and execution engine
+  useEffect(() => {
+    if (!canvasRef.current) return
+
+    // Create graphics engine
+    const graphicsEngine = new GraphicsEngine({
+      canvas: canvasRef.current,
+      pixelRatio: window.devicePixelRatio
+    })
+    graphicsEngineRef.current = graphicsEngine
+
+    // Create graphics bridge
+    const graphicsBridge = new GraphicsBridge(graphicsEngine)
+    graphicsBridgeRef.current = graphicsBridge
+
+    // Create execution engine
+    const executionEngine = new CodeExecutionEngine()
+    executionEngineRef.current = executionEngine
+
+    // Connect graphics bridge to execution engine
+    executionEngine.connectGraphicsEngine(graphicsBridge)
+
+    return () => {
+      executionEngine.destroy()
+      graphicsEngine.destroy()
+    }
+  }, [])
+
   // Run code
   const runCode = async () => {
-    if (!monacoRef.current) return
+    if (!monacoRef.current || !executionEngineRef.current) return
     
     setIsRunning(true)
-    setOutput('Running code...')
+    setOutput('Transpiling and executing code...')
+    setExecutionTime(null)
     
     try {
       const code = monacoRef.current.getValue()
       
-      // Here you would integrate with your actual execution engine
-      // For now, we'll simulate execution
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      // Execute code through the execution engine
+      const result = await executionEngineRef.current.execute(code)
       
-      setOutput('Code executed successfully!')
-      
-      // TODO: Send code to canvas rendering engine
-      console.log('Executing code:', code)
+      if (result.success) {
+        const totalTime = result.performance.transpileTime + result.performance.executionTime
+        setExecutionTime(totalTime)
+        
+        let outputText = 'Code executed successfully!\n'
+        outputText += `Transpilation: ${result.performance.transpileTime.toFixed(2)}ms\n`
+        outputText += `Execution: ${result.performance.executionTime.toFixed(2)}ms\n`
+        
+        if (result.logs.length > 0) {
+          outputText += '\n--- Console Output ---\n'
+          outputText += result.logs.join('\n')
+        }
+        
+        setOutput(outputText)
+      } else {
+        setOutput(`Error: ${result.error}\n${result.logs.join('\n')}`)
+      }
       
     } catch (error) {
-      setOutput(`Error: ${error instanceof Error ? error.message : String(error)}`)
+      setOutput(`Fatal Error: ${error instanceof Error ? error.message : String(error)}`)
     } finally {
       setIsRunning(false)
     }
@@ -203,8 +252,12 @@ export function CodeEditor() {
               disabled={isRunning}
               className="flex items-center gap-2 px-4 py-1.5 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors disabled:opacity-50"
             >
-              <Play className="h-4 w-4" />
-              <span>Run</span>
+              {isRunning ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Play className="h-4 w-4" />
+              )}
+              <span>{isRunning ? 'Running...' : 'Run'}</span>
             </button>
             
             <button
@@ -242,19 +295,49 @@ export function CodeEditor() {
         
         {/* Output panel */}
         {output && (
-          <div className="h-24 border-t border-border bg-muted p-4 font-mono text-sm">
-            {output}
+          <div className="h-32 border-t border-border bg-muted p-4 font-mono text-sm overflow-y-auto">
+            <pre className="whitespace-pre-wrap">{output}</pre>
           </div>
         )}
       </div>
       
       {/* Preview panel */}
-      <div className="w-1/2 border-l border-border bg-gray-50">
-        <div className="h-full flex items-center justify-center text-muted-foreground">
-          <div className="text-center">
-            <p className="text-lg font-semibold mb-2">Preview</p>
-            <p className="text-sm">Run your code to see the result</p>
+      <div className="w-1/2 border-l border-border bg-gray-50 relative">
+        {/* Preview header */}
+        <div className="h-12 border-b border-border bg-card px-4 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium">Preview</span>
+            {executionTime !== null && (
+              <span className="text-xs text-muted-foreground">
+                Executed in {executionTime.toFixed(2)}ms
+              </span>
+            )}
           </div>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => graphicsBridgeRef.current?.clearExecutionLayer()}
+              className="p-1.5 hover:bg-accent rounded-md transition-colors text-xs"
+              title="Clear canvas"
+            >
+              Clear
+            </button>
+          </div>
+        </div>
+        
+        {/* Canvas container */}
+        <div className="relative w-full h-[calc(100%-3rem)]">
+          <canvas 
+            ref={canvasRef}
+            className="absolute inset-0 w-full h-full"
+            style={{ imageRendering: 'crisp-edges' }}
+          />
+          {!executionTime && (
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="text-center text-muted-foreground">
+                <p className="text-sm">Run your code to see the result</p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

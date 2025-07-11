@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { X, ChevronLeft, ChevronRight, Sliders, Grid3x3, Wand2, Layers, Share2, Download, Upload, Plus, Settings, Search, Clock, Tag, Filter } from 'lucide-react'
+import { X, Sliders, Grid3x3, Wand2, Layers, Share2, Download, Upload, Plus, Settings, Search, Clock } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { CustomPattern, PatternCombination } from '../../types/graphics'
+import { CustomPattern } from '../../types/graphics'
 import { PatternBuilder } from './PatternBuilder'
 import { PatternCombiner } from './PatternCombiner'
 import { PatternStorageService } from '../../services/PatternStorageService'
-import { PatternType } from '../../graphics/patterns/CulturalPatternGenerator'
 
 interface Pattern {
   id: string
@@ -753,7 +752,7 @@ export function PatternSelector() {
             setShowBuilder(false)
             setBuilderPattern(null)
           }}
-          initialPattern={builderPattern}
+          initialPattern={builderPattern || undefined}
           onSave={handlePatternSave}
         />
       )}

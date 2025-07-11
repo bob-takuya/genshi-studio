@@ -3,7 +3,7 @@
  * Implements Sierpinski triangles, dragon curves, L-systems, and Mandelbrot-style patterns
  */
 
-import { Color, PatternGeneratorOptions, Point } from '../../types/graphics';
+import { PatternGeneratorOptions, Point } from '../../types/graphics';
 
 export enum FractalPatternType {
   SierpinskiTriangle = 'sierpinski-triangle',
@@ -126,7 +126,7 @@ export class FractalPatternGenerator {
   }
 
   private generateSierpinskiTriangle(width: number, height: number, options: FractalPatternOptions): void {
-    const { scale = 1, rotation = 0, color1, color2, iterations = 6 } = options;
+    const { scale: _scale = 1, rotation = 0, color1, color2, iterations = 6 } = options;
     
     this.ctx.save();
     this.applyTransform(width, height, rotation);
@@ -135,7 +135,7 @@ export class FractalPatternGenerator {
     this.ctx.fillRect(0, 0, width, height);
     
     this.ctx.strokeStyle = `rgba(${color2.r * 255}, ${color2.g * 255}, ${color2.b * 255}, ${color2.a})`;
-    this.ctx.lineWidth = 1 * scale;
+    this.ctx.lineWidth = 1 * _scale;
     
     const size = Math.min(width, height) * 0.8;
     const centerX = width / 2;
@@ -178,7 +178,7 @@ export class FractalPatternGenerator {
   }
 
   private generateSierpinskiCarpet(width: number, height: number, options: FractalPatternOptions): void {
-    const { scale = 1, rotation = 0, color1, color2, iterations = 4 } = options;
+    const { scale: _scale = 1, rotation = 0, color1, color2, iterations = 4 } = options;
     
     this.ctx.save();
     this.applyTransform(width, height, rotation);
@@ -221,7 +221,7 @@ export class FractalPatternGenerator {
   }
 
   private generateDragonCurve(width: number, height: number, options: FractalPatternOptions): void {
-    const { scale = 1, rotation = 0, color1, color2, iterations = 10 } = options;
+    const { scale: _scale = 1, rotation = 0, color1, color2, iterations = 10 } = options;
     
     this.ctx.save();
     this.applyTransform(width, height, rotation);
@@ -230,7 +230,7 @@ export class FractalPatternGenerator {
     this.ctx.fillRect(0, 0, width, height);
     
     this.ctx.strokeStyle = `rgba(${color2.r * 255}, ${color2.g * 255}, ${color2.b * 255}, ${color2.a})`;
-    this.ctx.lineWidth = 2 * scale;
+    this.ctx.lineWidth = 2 * _scale;
     this.ctx.lineCap = 'round';
     this.ctx.lineJoin = 'round';
     
@@ -266,7 +266,7 @@ export class FractalPatternGenerator {
   }
 
   private generateKochSnowflake(width: number, height: number, options: FractalPatternOptions): void {
-    const { scale = 1, rotation = 0, color1, color2, iterations = 4 } = options;
+    const { scale: _scale = 1, rotation = 0, color1, color2, iterations = 4 } = options;
     
     this.ctx.save();
     this.applyTransform(width, height, rotation);
@@ -275,7 +275,7 @@ export class FractalPatternGenerator {
     this.ctx.fillRect(0, 0, width, height);
     
     this.ctx.strokeStyle = `rgba(${color2.r * 255}, ${color2.g * 255}, ${color2.b * 255}, ${color2.a})`;
-    this.ctx.lineWidth = 2 * scale;
+    this.ctx.lineWidth = 2 * _scale;
     this.ctx.lineCap = 'round';
     this.ctx.lineJoin = 'round';
     
@@ -299,7 +299,7 @@ export class FractalPatternGenerator {
   }
 
   private generateKochCurve(width: number, height: number, options: FractalPatternOptions): void {
-    const { scale = 1, rotation = 0, color1, color2, iterations = 4 } = options;
+    const { scale: _scale = 1, rotation = 0, color1, color2, iterations = 4 } = options;
     
     this.ctx.save();
     this.applyTransform(width, height, rotation);
@@ -308,7 +308,7 @@ export class FractalPatternGenerator {
     this.ctx.fillRect(0, 0, width, height);
     
     this.ctx.strokeStyle = `rgba(${color2.r * 255}, ${color2.g * 255}, ${color2.b * 255}, ${color2.a})`;
-    this.ctx.lineWidth = 2 * scale;
+    this.ctx.lineWidth = 2 * _scale;
     this.ctx.lineCap = 'round';
     
     const start: Point = { x: width * 0.1, y: height / 2 };
@@ -348,7 +348,7 @@ export class FractalPatternGenerator {
   }
 
   private generateLSystemTree(width: number, height: number, options: FractalPatternOptions): void {
-    const { scale = 1, rotation = 0, color1, color2, iterations = 5, angle = Math.PI / 6 } = options;
+    const { scale: _scale = 1, rotation = 0, color1, color2, iterations = 5, angle = Math.PI / 6 } = options;
     
     this.ctx.save();
     this.applyTransform(width, height, rotation);
@@ -357,12 +357,12 @@ export class FractalPatternGenerator {
     this.ctx.fillRect(0, 0, width, height);
     
     this.ctx.strokeStyle = `rgba(${color2.r * 255}, ${color2.g * 255}, ${color2.b * 255}, ${color2.a})`;
-    this.ctx.lineWidth = 2 * scale;
+    this.ctx.lineWidth = 2 * _scale;
     this.ctx.lineCap = 'round';
     
     // L-System rules for tree
     let axiom = 'F';
-    const rules = { 'F': 'F[+F]F[-F]F' };
+    const rules: { [key: string]: string } = { 'F': 'F[+F]F[-F]F' };
     
     // Apply rules
     for (let i = 0; i < iterations; i++) {
@@ -374,13 +374,13 @@ export class FractalPatternGenerator {
     }
     
     // Draw the tree
-    this.drawLSystem(axiom, width / 2, height * 0.9, -Math.PI / 2, 5 * scale, angle);
+    this.drawLSystem(axiom, width / 2, height * 0.9, -Math.PI / 2, 5 * _scale, angle);
     
     this.ctx.restore();
   }
 
   private generateLSystemDragon(width: number, height: number, options: FractalPatternOptions): void {
-    const { scale = 1, rotation = 0, color1, color2, iterations = 10, angle = Math.PI / 2 } = options;
+    const { scale: _scale = 1, rotation = 0, color1, color2, iterations = 10, angle = Math.PI / 2 } = options;
     
     this.ctx.save();
     this.applyTransform(width, height, rotation);
@@ -389,12 +389,12 @@ export class FractalPatternGenerator {
     this.ctx.fillRect(0, 0, width, height);
     
     this.ctx.strokeStyle = `rgba(${color2.r * 255}, ${color2.g * 255}, ${color2.b * 255}, ${color2.a})`;
-    this.ctx.lineWidth = 2 * scale;
+    this.ctx.lineWidth = 2 * _scale;
     this.ctx.lineCap = 'round';
     
     // L-System rules for dragon curve
     let axiom = 'FX';
-    const rules = { 'X': 'X+YF+', 'Y': '-FX-Y' };
+    const rules: { [key: string]: string } = { 'X': 'X+YF+', 'Y': '-FX-Y' };
     
     // Apply rules
     for (let i = 0; i < iterations; i++) {
@@ -406,13 +406,13 @@ export class FractalPatternGenerator {
     }
     
     // Draw the dragon
-    this.drawLSystem(axiom, width / 3, height / 2, 0, 3 * scale, angle);
+    this.drawLSystem(axiom, width / 3, height / 2, 0, 3 * _scale, angle);
     
     this.ctx.restore();
   }
 
   private generateLSystemFern(width: number, height: number, options: FractalPatternOptions): void {
-    const { scale = 1, rotation = 0, color1, color2, iterations = 5, angle = Math.PI / 8 } = options;
+    const { scale: _scale = 1, rotation = 0, color1, color2, iterations = 5, angle = Math.PI / 8 } = options;
     
     this.ctx.save();
     this.applyTransform(width, height, rotation);
@@ -421,12 +421,12 @@ export class FractalPatternGenerator {
     this.ctx.fillRect(0, 0, width, height);
     
     this.ctx.strokeStyle = `rgba(${color2.r * 255}, ${color2.g * 255}, ${color2.b * 255}, ${color2.a})`;
-    this.ctx.lineWidth = 1 * scale;
+    this.ctx.lineWidth = 1 * _scale;
     this.ctx.lineCap = 'round';
     
     // L-System rules for fern
     let axiom = 'X';
-    const rules = { 'X': 'F+[[X]-X]-F[-FX]+X', 'F': 'FF' };
+    const rules: { [key: string]: string } = { 'X': 'F+[[X]-X]-F[-FX]+X', 'F': 'FF' };
     
     // Apply rules
     for (let i = 0; i < iterations; i++) {
@@ -438,7 +438,7 @@ export class FractalPatternGenerator {
     }
     
     // Draw the fern
-    this.drawLSystem(axiom, width / 2, height * 0.9, -Math.PI / 2, 3 * scale, angle);
+    this.drawLSystem(axiom, width / 2, height * 0.9, -Math.PI / 2, 3 * _scale, angle);
     
     this.ctx.restore();
   }
@@ -606,7 +606,7 @@ export class FractalPatternGenerator {
   }
 
   private generateNewtonFractal(width: number, height: number, options: FractalPatternOptions): void {
-    const { scale = 1, rotation = 0, color1, color2, maxIterations = 50, zoom = 1 } = options;
+    const { scale: _scale = 1, rotation = 0, color1, color2, maxIterations = 50, zoom = 1 } = options;
     
     this.ctx.save();
     this.applyTransform(width, height, rotation);
@@ -689,7 +689,7 @@ export class FractalPatternGenerator {
   }
 
   private generateCanterSet(width: number, height: number, options: FractalPatternOptions): void {
-    const { scale = 1, rotation = 0, color1, color2, iterations = 6 } = options;
+    const { scale: _scale = 1, rotation = 0, color1, color2, iterations = 6 } = options;
     
     this.ctx.save();
     this.applyTransform(width, height, rotation);
@@ -701,7 +701,7 @@ export class FractalPatternGenerator {
     
     const margin = width * 0.1;
     const lineWidth = (width - 2 * margin);
-    const lineHeight = 20 * scale;
+    const lineHeight = 20 * _scale;
     
     for (let level = 0; level < iterations; level++) {
       const y = margin + level * lineHeight * 2;
@@ -725,7 +725,7 @@ export class FractalPatternGenerator {
   }
 
   private generateHilbertCurve(width: number, height: number, options: FractalPatternOptions): void {
-    const { scale = 1, rotation = 0, color1, color2, iterations = 4 } = options;
+    const { scale: _scale = 1, rotation = 0, color1, color2, iterations = 4 } = options;
     
     this.ctx.save();
     this.applyTransform(width, height, rotation);
@@ -734,7 +734,7 @@ export class FractalPatternGenerator {
     this.ctx.fillRect(0, 0, width, height);
     
     this.ctx.strokeStyle = `rgba(${color2.r * 255}, ${color2.g * 255}, ${color2.b * 255}, ${color2.a})`;
-    this.ctx.lineWidth = 2 * scale;
+    this.ctx.lineWidth = 2 * _scale;
     this.ctx.lineCap = 'round';
     this.ctx.lineJoin = 'round';
     
@@ -799,7 +799,7 @@ export class FractalPatternGenerator {
   }
 
   private generatePeanoCurve(width: number, height: number, options: FractalPatternOptions): void {
-    const { scale = 1, rotation = 0, color1, color2, iterations = 3 } = options;
+    const { scale: _scale = 1, rotation = 0, color1, color2, iterations = 3 } = options;
     
     this.ctx.save();
     this.applyTransform(width, height, rotation);
@@ -808,7 +808,7 @@ export class FractalPatternGenerator {
     this.ctx.fillRect(0, 0, width, height);
     
     this.ctx.strokeStyle = `rgba(${color2.r * 255}, ${color2.g * 255}, ${color2.b * 255}, ${color2.a})`;
-    this.ctx.lineWidth = 2 * scale;
+    this.ctx.lineWidth = 2 * _scale;
     this.ctx.lineCap = 'round';
     
     const size = Math.min(width, height) * 0.8;
@@ -816,7 +816,7 @@ export class FractalPatternGenerator {
     
     // L-System for Peano curve
     let axiom = 'L';
-    const rules = { 
+    const rules: { [key: string]: string } = { 
       'L': 'LFRFL-F-RFLFR+F+LFRFL',
       'R': 'RFLFR+F+LFRFL-F-RFLFR'
     };
@@ -836,7 +836,7 @@ export class FractalPatternGenerator {
   }
 
   private generateBarnsleyFern(width: number, height: number, options: FractalPatternOptions): void {
-    const { scale = 1, rotation = 0, color1, color2, iterations = 50000 } = options;
+    const { scale: _scale = 1, rotation = 0, color1, color2, iterations = 50000 } = options;
     
     this.ctx.save();
     this.applyTransform(width, height, rotation);
@@ -891,7 +891,7 @@ export class FractalPatternGenerator {
   }
 
   private generateLevyDragon(width: number, height: number, options: FractalPatternOptions): void {
-    const { scale = 1, rotation = 0, color1, color2, iterations = 12 } = options;
+    const { scale: _scale = 1, rotation = 0, color1, color2, iterations = 12 } = options;
     
     this.ctx.save();
     this.applyTransform(width, height, rotation);
@@ -900,12 +900,12 @@ export class FractalPatternGenerator {
     this.ctx.fillRect(0, 0, width, height);
     
     this.ctx.strokeStyle = `rgba(${color2.r * 255}, ${color2.g * 255}, ${color2.b * 255}, ${color2.a})`;
-    this.ctx.lineWidth = 2 * scale;
+    this.ctx.lineWidth = 2 * _scale;
     this.ctx.lineCap = 'round';
     
     // L-System for Levy dragon
     let axiom = 'F';
-    const rules = { 'F': '+F--F+' };
+    const rules: { [key: string]: string } = { 'F': '+F--F+' };
     
     for (let i = 0; i < iterations; i++) {
       let newAxiom = '';

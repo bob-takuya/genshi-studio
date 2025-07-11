@@ -3,7 +3,7 @@
  * Implements Voronoi diagrams, Delaunay triangulations, reaction-diffusion, and cellular automata
  */
 
-import { Color, PatternGeneratorOptions, Point } from '../../types/graphics';
+import { PatternGeneratorOptions, Point } from '../../types/graphics';
 
 export enum OrganicPatternType {
   VoronoiDiagram = 'voronoi-diagram',
@@ -186,7 +186,7 @@ export class OrganicPatternGenerator {
   }
 
   private generateDelaunayTriangulation(width: number, height: number, options: OrganicPatternOptions): void {
-    const { scale = 1, rotation = 0, color1, color2, seedCount = 30 } = options;
+    const { scale: _scale = 1, rotation = 0, color1, color2, seedCount = 30 } = options;
     
     this.ctx.save();
     this.applyTransform(width, height, rotation);
@@ -195,7 +195,7 @@ export class OrganicPatternGenerator {
     this.ctx.fillRect(0, 0, width, height);
     
     this.ctx.strokeStyle = `rgba(${color2.r * 255}, ${color2.g * 255}, ${color2.b * 255}, ${color2.a})`;
-    this.ctx.lineWidth = 1 * scale;
+    this.ctx.lineWidth = 1 * _scale;
     
     // Generate random points
     const points: Point[] = [];
@@ -280,7 +280,7 @@ export class OrganicPatternGenerator {
 
   private generateReactionDiffusion(width: number, height: number, options: OrganicPatternOptions): void {
     const { 
-      scale = 1, 
+      scale: _scale = 1, 
       rotation = 0, 
       color1, 
       color2, 
@@ -371,7 +371,7 @@ export class OrganicPatternGenerator {
 
   private generateCellularAutomata(width: number, height: number, options: OrganicPatternOptions): void {
     const { 
-      scale = 1, 
+      scale: _scale = 1, 
       rotation = 0, 
       color1, 
       color2, 
@@ -383,7 +383,7 @@ export class OrganicPatternGenerator {
     this.ctx.save();
     this.applyTransform(width, height, rotation);
     
-    const cellSize = Math.max(1, Math.floor(4 * scale));
+    const cellSize = Math.max(1, Math.floor(4 * _scale));
     const gridWidth = Math.floor(width / cellSize);
     const gridHeight = Math.floor(height / cellSize);
     
@@ -449,7 +449,7 @@ export class OrganicPatternGenerator {
 
   private generatePerlinNoise(width: number, height: number, options: OrganicPatternOptions): void {
     const { 
-      scale = 1, 
+      scale: _scale = 1, 
       rotation = 0, 
       color1, 
       color2, 
@@ -554,7 +554,7 @@ export class OrganicPatternGenerator {
 
   private generateFlowField(width: number, height: number, options: OrganicPatternOptions): void {
     const { 
-      scale = 1, 
+      scale: _scale = 1, 
       rotation = 0, 
       color1, 
       color2, 
@@ -604,7 +604,7 @@ export class OrganicPatternGenerator {
 
   private generateBioMorphs(width: number, height: number, options: OrganicPatternOptions): void {
     const { 
-      scale = 1, 
+      scale: _scale = 1, 
       rotation = 0, 
       color1, 
       color2, 
@@ -620,7 +620,7 @@ export class OrganicPatternGenerator {
     this.ctx.fillRect(0, 0, width, height);
     
     this.ctx.strokeStyle = `rgba(${color2.r * 255}, ${color2.g * 255}, ${color2.b * 255}, ${color2.a})`;
-    this.ctx.lineWidth = 2 * scale;
+    this.ctx.lineWidth = 2 * _scale;
     this.ctx.lineCap = 'round';
     
     const centerX = width / 2;
@@ -665,7 +665,7 @@ export class OrganicPatternGenerator {
 
   private generateLindenmayerPlant(width: number, height: number, options: OrganicPatternOptions): void {
     const { 
-      scale = 1, 
+      scale: _scale = 1, 
       rotation = 0, 
       color1, 
       color2, 
@@ -680,12 +680,12 @@ export class OrganicPatternGenerator {
     this.ctx.fillRect(0, 0, width, height);
     
     this.ctx.strokeStyle = `rgba(${color2.r * 255}, ${color2.g * 255}, ${color2.b * 255}, ${color2.a})`;
-    this.ctx.lineWidth = 2 * scale;
+    this.ctx.lineWidth = 2 * _scale;
     this.ctx.lineCap = 'round';
     
     // L-System for plant growth
     let axiom = 'F';
-    const rules = {
+    const rules: { [key: string]: string } = {
       'F': 'F[+F]F[-F][F]',
       '+': '+',
       '-': '-',
@@ -703,7 +703,7 @@ export class OrganicPatternGenerator {
     }
     
     // Draw the plant
-    this.drawLindenmayerSystem(axiom, width / 2, height * 0.9, -Math.PI / 2, 8 * scale, branchingAngle);
+    this.drawLindenmayerSystem(axiom, width / 2, height * 0.9, -Math.PI / 2, 8 * _scale, branchingAngle);
     
     this.ctx.restore();
   }
@@ -749,7 +749,7 @@ export class OrganicPatternGenerator {
 
   private generateWaveInterference(width: number, height: number, options: OrganicPatternOptions): void {
     const { 
-      scale = 1, 
+      scale: _scale = 1, 
       rotation = 0, 
       color1, 
       color2, 
@@ -800,12 +800,12 @@ export class OrganicPatternGenerator {
 
   private generateDiffusionLimited(width: number, height: number, options: OrganicPatternOptions): void {
     const { 
-      scale = 1, 
+      scale: _scale = 1, 
       rotation = 0, 
       color1, 
       color2, 
       particleCount = 5000,
-      generations = 1000
+      generations: _generations = 1000
     } = options;
     
     this.ctx.save();
@@ -871,7 +871,7 @@ export class OrganicPatternGenerator {
 
   private generateGrowthPattern(width: number, height: number, options: OrganicPatternOptions): void {
     const { 
-      scale = 1, 
+      scale: _scale = 1, 
       rotation = 0, 
       color1, 
       color2, 
@@ -931,7 +931,7 @@ export class OrganicPatternGenerator {
 
   private generateNeuralNetwork(width: number, height: number, options: OrganicPatternOptions): void {
     const { 
-      scale = 1, 
+      scale: _scale = 1, 
       rotation = 0, 
       color1, 
       color2, 
@@ -976,7 +976,7 @@ export class OrganicPatternGenerator {
     this.ctx.fillStyle = `rgba(${color2.r * 255}, ${color2.g * 255}, ${color2.b * 255}, ${color2.a})`;
     nodes.forEach(node => {
       this.ctx.beginPath();
-      this.ctx.arc(node.x, node.y, 3 * scale, 0, Math.PI * 2);
+      this.ctx.arc(node.x, node.y, 3 * _scale, 0, Math.PI * 2);
       this.ctx.fill();
     });
     
@@ -985,7 +985,7 @@ export class OrganicPatternGenerator {
 
   private generateFlockingPattern(width: number, height: number, options: OrganicPatternOptions): void {
     const { 
-      scale = 1, 
+      scale: _scale = 1, 
       rotation = 0, 
       color1, 
       color2, 
@@ -1083,7 +1083,7 @@ export class OrganicPatternGenerator {
 
   private generateCrystalGrowth(width: number, height: number, options: OrganicPatternOptions): void {
     const { 
-      scale = 1, 
+      scale: _scale = 1, 
       rotation = 0, 
       color1, 
       color2, 
@@ -1147,12 +1147,12 @@ export class OrganicPatternGenerator {
 
   private generateOrganicTexture(width: number, height: number, options: OrganicPatternOptions): void {
     const { 
-      scale = 1, 
+      scale: _scale = 1, 
       rotation = 0, 
       color1, 
       color2, 
       frequency = 0.02,
-      octaves = 3
+      octaves: _octaves = 3
     } = options;
     
     this.ctx.save();
@@ -1193,7 +1193,7 @@ export class OrganicPatternGenerator {
 
   private generateBioFilm(width: number, height: number, options: OrganicPatternOptions): void {
     const { 
-      scale = 1, 
+      scale: _scale = 1, 
       rotation = 0, 
       color1, 
       color2, 
@@ -1204,7 +1204,7 @@ export class OrganicPatternGenerator {
     this.ctx.save();
     this.applyTransform(width, height, rotation);
     
-    const cellSize = Math.max(1, Math.floor(3 * scale));
+    const cellSize = Math.max(1, Math.floor(3 * _scale));
     const gridWidth = Math.floor(width / cellSize);
     const gridHeight = Math.floor(height / cellSize);
     

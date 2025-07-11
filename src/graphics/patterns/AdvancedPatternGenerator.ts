@@ -10,8 +10,7 @@ import {
   AnimationConfig, 
   AnimationKeyframe, 
   PatternCombination,
-  BlendMode,
-  Point
+  BlendMode
 } from '../../types/graphics';
 import { CulturalPatternGenerator, PatternType } from './CulturalPatternGenerator';
 
@@ -136,7 +135,7 @@ export class AdvancedPatternGenerator extends CulturalPatternGenerator {
       
       // Apply blend mode and opacity
       this.combinerCtx.globalAlpha = patternConfig.opacity;
-      this.combinerCtx.globalCompositeOperation = patternConfig.blendMode;
+      this.combinerCtx.globalCompositeOperation = patternConfig.blendMode as GlobalCompositeOperation;
       
       // Apply offset and draw
       this.combinerCtx.drawImage(
@@ -205,12 +204,12 @@ export class AdvancedPatternGenerator extends CulturalPatternGenerator {
   /**
    * Export pattern as different formats
    */
-  exportPattern(
+  async exportPattern(
     pattern: CustomPattern,
     width: number,
     height: number,
     format: 'png' | 'svg' | 'json'
-  ): string | Blob {
+  ): Promise<string | Blob> {
     const imageData = this.generateCustomPattern(pattern, width, height);
     
     switch (format) {
@@ -221,7 +220,7 @@ export class AdvancedPatternGenerator extends CulturalPatternGenerator {
         if (!ctx) throw new Error('Failed to create export context');
         
         ctx.putImageData(imageData, 0, 0);
-        return canvas.convertToBlob({ type: 'image/png' });
+        return await canvas.convertToBlob({ type: 'image/png' });
         
       case 'svg':
         return this.convertToSVG(pattern, width, height);

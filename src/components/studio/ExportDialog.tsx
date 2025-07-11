@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { 
   Download, 
   FileImage, 
@@ -6,9 +6,20 @@ import {
   Code, 
   Eye,
   X,
-  Check
+  Check,
+  FileType,
+  Printer
 } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { 
+  SVGExporter, 
+  PDFExporter, 
+  EPSExporter,
+  SVGExportOptions,
+  PDFExportOptions,
+  EPSExportOptions,
+  downloadFile
+} from '../../utils/vectorExport'
 
 interface ExportDialogProps {
   isOpen: boolean
@@ -17,7 +28,7 @@ interface ExportDialogProps {
 }
 
 interface ExportOptions {
-  format: 'png' | 'svg' | 'css'
+  format: 'png' | 'svg' | 'css' | 'pdf' | 'eps'
   quality: number
   resolution: 'web' | 'print' | 'custom'
   customWidth: number
@@ -27,6 +38,23 @@ interface ExportOptions {
   cssType: 'background' | 'pattern' | 'mask'
   cssUnits: 'px' | '%' | 'em' | 'rem'
   cssRepeat: 'repeat' | 'repeat-x' | 'repeat-y' | 'no-repeat'
+  // SVG specific options
+  svgOptimize: boolean
+  svgPrecision: number
+  svgIncludeLayers: boolean
+  // PDF specific options
+  pdfFormat: 'a4' | 'a3' | 'letter' | 'custom'
+  pdfOrientation: 'portrait' | 'landscape'
+  pdfColorSpace: 'RGB' | 'CMYK'
+  // EPS specific options
+  epsLevel: 2 | 3
+  epsColorSpace: 'RGB' | 'CMYK' | 'Grayscale'
+  // Metadata options
+  includeMetadata: boolean
+  title: string
+  author: string
+  description: string
+  keywords: string[]
 }
 
 const presetResolutions = {
@@ -47,7 +75,24 @@ export function ExportDialog({ isOpen, onClose, canvas }: ExportDialogProps) {
     includeBackground: true,
     cssType: 'background',
     cssUnits: 'px',
-    cssRepeat: 'repeat'
+    cssRepeat: 'repeat',
+    // SVG options
+    svgOptimize: true,
+    svgPrecision: 2,
+    svgIncludeLayers: true,
+    // PDF options
+    pdfFormat: 'a4',
+    pdfOrientation: 'portrait',
+    pdfColorSpace: 'RGB',
+    // EPS options
+    epsLevel: 3,
+    epsColorSpace: 'RGB',
+    // Metadata
+    includeMetadata: true,
+    title: 'Genshi Pattern',
+    author: 'Genshi Studio',
+    description: '',
+    keywords: ['pattern', 'generative', 'art']
   })
   
   const [preview, setPreview] = useState<string | null>(null)
@@ -73,6 +118,12 @@ export function ExportDialog({ isOpen, onClose, canvas }: ExportDialogProps) {
           break
         case 'svg':
           generateSVGPreview()
+          break
+        case 'pdf':
+          generatePDFPreview()
+          break
+        case 'eps':
+          generateEPSPreview()
           break
         case 'css':
           generateCSSPreview()
@@ -101,23 +152,41 @@ export function ExportDialog({ isOpen, onClose, canvas }: ExportDialogProps) {
     setPreview(dataURL)
   }
 
-  const generateSVGPreview = () => {
+  const generateSVGPreview = async () => {
     if (!canvas) return
     
-    const svgString = canvas.toSVG({
-      suppressPreamble: false,
-      viewBox: {
-        x: 0,
-        y: 0,
-        width: canvas.width!,
-        height: canvas.height!
-      }
-    })
+    const svgOptions: SVGExportOptions = {
+      optimize: options.svgOptimize,
+      embedStyles: true,
+      includeLayers: options.svgIncludeLayers,
+      preservePatterns: true,
+      precision: options.svgPrecision,
+      includeMetadata: options.includeMetadata,
+      title: options.title,
+      description: options.description,
+      creator: options.author
+    }
     
-    // Create a data URL for the SVG
+    const svgString = await SVGExporter.exportFromCanvas(canvas, svgOptions)
     const svgBlob = new Blob([svgString], { type: 'image/svg+xml' })
     const svgURL = URL.createObjectURL(svgBlob)
     setPreview(svgURL)
+  }
+
+  const generatePDFPreview = () => {
+    if (!canvas) return
+    
+    // For PDF preview, show the canvas as PNG
+    generatePNGPreview()
+    setExportCode('PDF Export Ready\nFormat: ' + options.pdfFormat.toUpperCase() + '\nOrientation: ' + options.pdfOrientation)
+  }
+
+  const generateEPSPreview = () => {
+    if (!canvas) return
+    
+    // For EPS preview, show the canvas as PNG
+    generatePNGPreview()
+    setExportCode('EPS Export Ready\nLevel: PostScript Level ' + options.epsLevel + '\nColor Space: ' + options.epsColorSpace)
   }
 
   const generateCSSPreview = () => {
@@ -232,18 +301,56 @@ export function ExportDialog({ isOpen, onClose, canvas }: ExportDialogProps) {
           break
           
         case 'svg':
-          const svgString = canvas.toSVG({
-            suppressPreamble: false,
-            viewBox: {
-              x: 0,
-              y: 0,
-              width: canvas.width!,
-              height: canvas.height!
-            }
-          })
-          const svgBlob = new Blob([svgString], { type: 'image/svg+xml' })
-          const svgURL = URL.createObjectURL(svgBlob)
-          downloadFile(svgURL, `genshi-pattern-${timestamp}.svg`)
+          const svgOptions: SVGExportOptions = {
+            optimize: options.svgOptimize,
+            embedStyles: true,
+            includeLayers: options.svgIncludeLayers,
+            preservePatterns: true,
+            precision: options.svgPrecision,
+            includeMetadata: options.includeMetadata,
+            title: options.title,
+            description: options.description,
+            creator: options.author,
+            license: 'Creative Commons BY 4.0'
+          }
+          const svgContent = await SVGExporter.exportFromCanvas(canvas, svgOptions)
+          downloadFile(svgContent, `genshi-pattern-${timestamp}.svg`, 'image/svg+xml')
+          break
+          
+        case 'pdf':
+          const pdfOptions: PDFExportOptions = {
+            format: options.pdfFormat,
+            orientation: options.pdfOrientation,
+            colorSpace: options.pdfColorSpace,
+            compression: true,
+            embedFonts: true,
+            dpi: 300,
+            customWidth: options.customWidth,
+            customHeight: options.customHeight,
+            includeMetadata: options.includeMetadata,
+            title: options.title,
+            subject: options.description,
+            author: options.author,
+            keywords: options.keywords
+          }
+          const pdfBlob = await PDFExporter.exportFromCanvas(canvas, pdfOptions)
+          downloadFile(pdfBlob, `genshi-pattern-${timestamp}.pdf`, 'application/pdf')
+          break
+          
+        case 'eps':
+          const epsOptions: EPSExportOptions = {
+            level: options.epsLevel,
+            colorSpace: options.epsColorSpace,
+            includePreview: false,
+            resolution: 300,
+            boundingBox: 'tight',
+            includeMetadata: options.includeMetadata,
+            title: options.title,
+            creator: options.author,
+            creationDate: new Date()
+          }
+          const epsContent = await EPSExporter.exportFromCanvas(canvas, epsOptions)
+          downloadFile(epsContent, `genshi-pattern-${timestamp}.eps`, 'application/postscript')
           break
           
         case 'css':
@@ -262,17 +369,7 @@ export function ExportDialog({ isOpen, onClose, canvas }: ExportDialogProps) {
     }
   }
 
-  const downloadFile = (url: string, filename: string) => {
-    const a = document.createElement('a')
-    a.href = url
-    a.download = filename
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-    if (url.startsWith('blob:')) {
-      URL.revokeObjectURL(url)
-    }
-  }
+  // Download file function is now imported from vectorExport.ts
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text).then(() => {
@@ -308,10 +405,12 @@ export function ExportDialog({ isOpen, onClose, canvas }: ExportDialogProps) {
               {/* Format Selection */}
               <div>
                 <label className="block text-sm font-medium mb-3">Export Format</label>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
                   {[
                     { id: 'png', icon: FileImage, label: 'PNG' },
                     { id: 'svg', icon: FileText, label: 'SVG' },
+                    { id: 'pdf', icon: FileType, label: 'PDF' },
+                    { id: 'eps', icon: Printer, label: 'EPS' },
                     { id: 'css', icon: Code, label: 'CSS' }
                   ].map((format) => {
                     const Icon = format.icon
@@ -333,8 +432,8 @@ export function ExportDialog({ isOpen, onClose, canvas }: ExportDialogProps) {
                 </div>
               </div>
 
-              {/* PNG/SVG Options */}
-              {(options.format === 'png' || options.format === 'svg') && (
+              {/* PNG Options */}
+              {options.format === 'png' && (
                 <>
                   {/* Quality */}
                   {options.format === 'png' && (
@@ -392,27 +491,236 @@ export function ExportDialog({ isOpen, onClose, canvas }: ExportDialogProps) {
                     </div>
                   )}
 
-                  {/* Background */}
+                </>
+              )}
+
+              {/* SVG Options */}
+              {options.format === 'svg' && (
+                <>
                   <div>
                     <div className="flex items-center gap-2 mb-2">
                       <input
                         type="checkbox"
-                        id="includeBackground"
-                        checked={options.includeBackground}
-                        onChange={(e) => setOptions({ ...options, includeBackground: e.target.checked })}
+                        id="svgOptimize"
+                        checked={options.svgOptimize}
+                        onChange={(e) => setOptions({ ...options, svgOptimize: e.target.checked })}
                         className="rounded"
                       />
-                      <label htmlFor="includeBackground" className="text-sm font-medium">
-                        Include background
+                      <label htmlFor="svgOptimize" className="text-sm font-medium">
+                        Optimize paths
                       </label>
                     </div>
-                    {options.includeBackground && (
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium mb-2">
+                      Precision: {options.svgPrecision} decimals
+                    </label>
+                    <input
+                      type="range"
+                      min="0"
+                      max="6"
+                      step="1"
+                      value={options.svgPrecision}
+                      onChange={(e) => setOptions({ ...options, svgPrecision: parseInt(e.target.value) })}
+                      className="w-full"
+                    />
+                  </div>
+                  
+                  <div>
+                    <div className="flex items-center gap-2">
                       <input
-                        type="color"
-                        value={options.backgroundColor}
-                        onChange={(e) => setOptions({ ...options, backgroundColor: e.target.value })}
-                        className="w-full h-10 rounded-md border border-border"
+                        type="checkbox"
+                        id="svgIncludeLayers"
+                        checked={options.svgIncludeLayers}
+                        onChange={(e) => setOptions({ ...options, svgIncludeLayers: e.target.checked })}
+                        className="rounded"
                       />
+                      <label htmlFor="svgIncludeLayers" className="text-sm font-medium">
+                        Include layer structure
+                      </label>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {/* PDF Options */}
+              {options.format === 'pdf' && (
+                <>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Page Format</label>
+                    <select
+                      value={options.pdfFormat}
+                      onChange={(e) => setOptions({ ...options, pdfFormat: e.target.value as any })}
+                      className="w-full p-2 border border-border rounded-md bg-background"
+                    >
+                      <option value="a4">A4</option>
+                      <option value="a3">A3</option>
+                      <option value="letter">Letter</option>
+                      <option value="custom">Custom</option>
+                    </select>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Orientation</label>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        onClick={() => setOptions({ ...options, pdfOrientation: 'portrait' })}
+                        className={`p-2 rounded-md border transition-colors ${
+                          options.pdfOrientation === 'portrait'
+                            ? 'border-primary bg-primary/10 text-primary'
+                            : 'border-border hover:bg-accent'
+                        }`}
+                      >
+                        Portrait
+                      </button>
+                      <button
+                        onClick={() => setOptions({ ...options, pdfOrientation: 'landscape' })}
+                        className={`p-2 rounded-md border transition-colors ${
+                          options.pdfOrientation === 'landscape'
+                            ? 'border-primary bg-primary/10 text-primary'
+                            : 'border-border hover:bg-accent'
+                        }`}
+                      >
+                        Landscape
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Color Space</label>
+                    <select
+                      value={options.pdfColorSpace}
+                      onChange={(e) => setOptions({ ...options, pdfColorSpace: e.target.value as any })}
+                      className="w-full p-2 border border-border rounded-md bg-background"
+                    >
+                      <option value="RGB">RGB (Screen)</option>
+                      <option value="CMYK">CMYK (Print)</option>
+                    </select>
+                  </div>
+                </>
+              )}
+
+              {/* EPS Options */}
+              {options.format === 'eps' && (
+                <>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">PostScript Level</label>
+                    <select
+                      value={options.epsLevel}
+                      onChange={(e) => setOptions({ ...options, epsLevel: parseInt(e.target.value) as any })}
+                      className="w-full p-2 border border-border rounded-md bg-background"
+                    >
+                      <option value="2">Level 2</option>
+                      <option value="3">Level 3</option>
+                    </select>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Color Space</label>
+                    <select
+                      value={options.epsColorSpace}
+                      onChange={(e) => setOptions({ ...options, epsColorSpace: e.target.value as any })}
+                      className="w-full p-2 border border-border rounded-md bg-background"
+                    >
+                      <option value="RGB">RGB</option>
+                      <option value="CMYK">CMYK</option>
+                      <option value="Grayscale">Grayscale</option>
+                    </select>
+                  </div>
+                </>
+              )}
+
+              {/* Background option for all formats except CSS */}
+              {options.format !== 'css' && (
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <input
+                      type="checkbox"
+                      id="includeBackground"
+                      checked={options.includeBackground}
+                      onChange={(e) => setOptions({ ...options, includeBackground: e.target.checked })}
+                      className="rounded"
+                    />
+                    <label htmlFor="includeBackground" className="text-sm font-medium">
+                      Include background
+                    </label>
+                  </div>
+                  {options.includeBackground && (
+                    <input
+                      type="color"
+                      value={options.backgroundColor}
+                      onChange={(e) => setOptions({ ...options, backgroundColor: e.target.value })}
+                      className="w-full h-10 rounded-md border border-border"
+                    />
+                  )}
+                </div>
+              )}
+
+              {/* Metadata Options for SVG, PDF, EPS */}
+              {(options.format === 'svg' || options.format === 'pdf' || options.format === 'eps') && (
+                <>
+                  <div className="border-t border-border pt-4">
+                    <div className="flex items-center gap-2 mb-3">
+                      <input
+                        type="checkbox"
+                        id="includeMetadata"
+                        checked={options.includeMetadata}
+                        onChange={(e) => setOptions({ ...options, includeMetadata: e.target.checked })}
+                        className="rounded"
+                      />
+                      <label htmlFor="includeMetadata" className="text-sm font-medium">
+                        Include metadata
+                      </label>
+                    </div>
+                    
+                    {options.includeMetadata && (
+                      <div className="space-y-3 ml-6">
+                        <div>
+                          <label className="block text-xs font-medium mb-1">Title</label>
+                          <input
+                            type="text"
+                            value={options.title}
+                            onChange={(e) => setOptions({ ...options, title: e.target.value })}
+                            className="w-full p-1.5 text-sm border border-border rounded-md bg-background"
+                            placeholder="Pattern title"
+                          />
+                        </div>
+                        
+                        <div>
+                          <label className="block text-xs font-medium mb-1">Author</label>
+                          <input
+                            type="text"
+                            value={options.author}
+                            onChange={(e) => setOptions({ ...options, author: e.target.value })}
+                            className="w-full p-1.5 text-sm border border-border rounded-md bg-background"
+                            placeholder="Your name or organization"
+                          />
+                        </div>
+                        
+                        <div>
+                          <label className="block text-xs font-medium mb-1">Description</label>
+                          <textarea
+                            value={options.description}
+                            onChange={(e) => setOptions({ ...options, description: e.target.value })}
+                            className="w-full p-1.5 text-sm border border-border rounded-md bg-background h-16 resize-none"
+                            placeholder="Pattern description"
+                          />
+                        </div>
+                        
+                        {options.format === 'pdf' && (
+                          <div>
+                            <label className="block text-xs font-medium mb-1">Keywords</label>
+                            <input
+                              type="text"
+                              value={options.keywords.join(', ')}
+                              onChange={(e) => setOptions({ ...options, keywords: e.target.value.split(',').map(k => k.trim()).filter(k => k) })}
+                              className="w-full p-1.5 text-sm border border-border rounded-md bg-background"
+                              placeholder="pattern, generative, art"
+                            />
+                          </div>
+                        )}
+                      </div>
                     )}
                   </div>
                 </>
@@ -490,7 +798,22 @@ export function ExportDialog({ isOpen, onClose, canvas }: ExportDialogProps) {
                   </div>
                 ) : (
                   <div className="h-full flex items-center justify-center">
-                    {options.format === 'css' ? (
+                    {(options.format === 'pdf' || options.format === 'eps') ? (
+                      <div className="text-center space-y-4">
+                        {preview && (
+                          <img 
+                            src={preview} 
+                            alt="Preview" 
+                            className="max-w-full max-h-48 object-contain border border-border rounded mx-auto"
+                          />
+                        )}
+                        <div className="bg-card rounded-lg p-4 border border-border">
+                          <pre className="text-xs text-muted-foreground">
+                            <code>{exportCode}</code>
+                          </pre>
+                        </div>
+                      </div>
+                    ) : options.format === 'css' ? (
                       <div className="w-full h-full space-y-4">
                         <div className="bg-card rounded-lg p-4 border border-border">
                           <div className="flex items-center justify-between mb-2">
@@ -537,7 +860,9 @@ export function ExportDialog({ isOpen, onClose, canvas }: ExportDialogProps) {
         <div className="flex items-center justify-between p-6 border-t border-border">
           <div className="text-sm text-muted-foreground">
             {options.format === 'png' && `${getExportDimensions().width}x${getExportDimensions().height} pixels`}
-            {options.format === 'svg' && 'Scalable vector format'}
+            {options.format === 'svg' && 'Scalable vector format (optimized)'}
+            {options.format === 'pdf' && `PDF ${options.pdfFormat.toUpperCase()} ${options.pdfOrientation}`}
+            {options.format === 'eps' && `EPS Level ${options.epsLevel} - ${options.epsColorSpace}`}
             {options.format === 'css' && 'CSS pattern code'}
           </div>
           <div className="flex gap-2">

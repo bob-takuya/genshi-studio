@@ -1,4 +1,3 @@
-import React from 'react'
 import { Rect, Circle, Triangle as FabricTriangle, Polygon, Path } from 'fabric'
 import { 
   Grid, 

@@ -40,7 +40,7 @@ export default function PropertiesPanel({ canvas, selectedObject }: PropertiesPa
 
     setProperties({
       fill: (typeof selectedObject.fill === 'string' ? selectedObject.fill : '#000000') || '#000000',
-      stroke: selectedObject.stroke || '#000000',
+      stroke: (typeof selectedObject.stroke === 'string' ? selectedObject.stroke : '#000000') || '#000000',
       strokeWidth: selectedObject.strokeWidth || 1,
       opacity: selectedObject.opacity || 1,
       angle: selectedObject.angle || 0,

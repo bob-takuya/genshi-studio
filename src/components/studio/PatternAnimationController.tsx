@@ -1,23 +1,17 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { motion } from 'framer-motion';
 import { 
   Play, 
   Pause, 
   RotateCcw, 
   SkipBack, 
   SkipForward, 
-  Volume2, 
-  VolumeX,
-  Settings,
   Download,
-  Share2,
   Plus
 } from 'lucide-react';
 import { 
   AnimationConfig, 
   AnimationKeyframe, 
-  CustomPattern, 
-  PatternParameterConfig
+  CustomPattern
 } from '../../types/graphics';
 import { AdvancedPatternGenerator } from '../../graphics/patterns/AdvancedPatternGenerator';
 import { PatternType } from '../../graphics/patterns/CulturalPatternGenerator';
@@ -45,14 +39,11 @@ export function PatternAnimationController({
   const [currentTime, setCurrentTime] = useState(0);
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const [isLooping, setIsLooping] = useState(true);
-  const [isMuted, setIsMuted] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
   const [exportingGif, setExportingGif] = useState(false);
   
   const animationRef = useRef<number | null>(null);
   const generatorRef = useRef<AdvancedPatternGenerator | null>(null);
   const startTimeRef = useRef<number>(0);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
 
   // Initialize pattern generator

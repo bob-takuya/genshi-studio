@@ -99,7 +99,7 @@ export class ParametricPatternEngine {
   private animationFrame: number = 0;
   private changeListeners: Map<string, ((value: any) => void)[]> = new Map();
   private globalListeners: ((allValues: Map<string, any>) => void)[] = [];
-  private randomSeed: number = 0;
+  private _randomSeed: number = 0;
 
   constructor() {
     this.initializeDefaultParameterSets();

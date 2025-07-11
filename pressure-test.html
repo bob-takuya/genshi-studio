@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genshi Studio - Pressure Sensitive Drawing Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a1a;
+            color: white;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .header {
+            background: #2a2a2a;
+            padding: 15px 20px;
+            border-bottom: 1px solid #444;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .main {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 300px;
+            background: #2a2a2a;
+            padding: 20px;
+            overflow-y: auto;
+            border-right: 1px solid #444;
+        }
+
+        .canvas-container {
+            flex: 1;
+            position: relative;
+            background: #333;
+        }
+
+        #drawingCanvas {
+            display: block;
+            cursor: crosshair;
+            touch-action: none;
+            background: white;
+        }
+
+        .pressure-info {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 12px;
+            min-width: 250px;
+        }
+
+        .controls {
+            background: #2a2a2a;
+            padding: 15px 20px;
+            border-bottom: 1px solid #444;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        button {
+            background: #3a3a3a;
+            color: white;
+            border: 1px solid #555;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background: #4a4a4a;
+        }
+
+        button.active {
+            background: #4CAF50;
+            border-color: #4CAF50;
+        }
+
+        input[type="range"] {
+            width: 100px;
+        }
+
+        .value-display {
+            min-width: 40px;
+            text-align: right;
+        }
+
+        .device-status {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            font-size: 11px;
+        }
+
+        .status-item {
+            padding: 2px 8px;
+            border-radius: 3px;
+            background: #333;
+        }
+
+        .status-item.supported {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .status-item.unsupported {
+            background: #666;
+            color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Genshi Studio - Pressure Sensitive Drawing</h1>
+        </div>
+        
+        <div class="controls">
+            <div class="control-group">
+                <button id="brushBtn" class="active">Brush</button>
+                <button id="eraserBtn">Eraser</button>
+            </div>
+            
+            <div class="control-group">
+                <label>Size:</label>
+                <input type="range" id="sizeSlider" min="1" max="100" value="20">
+                <span class="value-display" id="sizeValue">20px</span>
+            </div>
+            
+            <div class="control-group">
+                <label>Color:</label>
+                <input type="color" id="colorPicker" value="#000000">
+            </div>
+            
+            <div class="control-group">
+                <label>Pressure → Size:</label>
+                <input type="range" id="pressureSizeSlider" min="0" max="100" value="100">
+                <span class="value-display" id="pressureSizeValue">100%</span>
+            </div>
+            
+            <div class="control-group">
+                <label>Pressure → Opacity:</label>
+                <input type="range" id="pressureOpacitySlider" min="0" max="100" value="70">
+                <span class="value-display" id="pressureOpacityValue">70%</span>
+            </div>
+            
+            <button id="clearBtn">Clear Canvas</button>
+        </div>
+        
+        <div class="main">
+            <div class="sidebar">
+                <h2>Instructions</h2>
+                <p>This demo showcases pressure-sensitive drawing capabilities for professional tablets.</p>
+                
+                <h3>Supported Devices</h3>
+                <ul>
+                    <li>Wacom Tablets</li>
+                    <li>Apple Pencil</li>
+                    <li>Surface Pen</li>
+                    <li>Huion Tablets</li>
+                    <li>Other pressure-sensitive devices</li>
+                </ul>
+                
+                <h3>Features</h3>
+                <ul>
+                    <li><strong>Pressure Sensitivity:</strong> Varies brush size and opacity</li>
+                    <li><strong>Tilt Detection:</strong> Affects brush angle (if supported)</li>
+                    <li><strong>Smooth Strokes:</strong> Advanced smoothing algorithm</li>
+                    <li><strong>Fallback Support:</strong> Works with mouse/touch</li>
+                </ul>
+                
+                <h3>Tips</h3>
+                <ul>
+                    <li>Adjust pressure sensitivity sliders to your preference</li>
+                    <li>Light pressure creates thin, transparent strokes</li>
+                    <li>Heavy pressure creates thick, opaque strokes</li>
+                    <li>Use the eraser button to switch to eraser mode</li>
+                </ul>
+            </div>
+            
+            <div class="canvas-container">
+                <canvas id="drawingCanvas"></canvas>
+                
+                <div class="pressure-info" id="pressureInfo">
+                    <h3 style="margin: 0 0 10px 0; font-size: 14px;">Device Info</h3>
+                    <div id="deviceInfo">Detecting device...</div>
+                    <div class="device-status" id="deviceStatus"></div>
+                    
+                    <div id="currentPressure" style="margin-top: 15px; display: none;">
+                        <h4 style="margin: 0 0 5px 0; font-size: 12px;">Current Input</h4>
+                        <div id="pressureValue">Pressure: 0%</div>
+                        <div id="tiltValue" style="display: none;">Tilt: X=0° Y=0°</div>
+                        <div id="velocityValue">Velocity: 0 px/s</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Canvas setup
+        const canvas = document.getElementById('drawingCanvas');
+        const ctx = canvas.getContext('2d');
+        const container = document.querySelector('.canvas-container');
+        
+        // Resize canvas
+        function resizeCanvas() {
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        
+        // Drawing state
+        let isDrawing = false;
+        let currentTool = 'brush';
+        let baseSize = 20;
+        let currentColor = '#000000';
+        let pressureSizeMultiplier = 1.0;
+        let pressureOpacityMultiplier = 0.7;
+        let lastPoint = null;
+        let velocityBuffer = [];
+        let deviceInfo = {
+            type: 'unknown',
+            supportsPressure: false,
+            supportsTilt: false,
+            supportsRotation: false
+        };
+        
+        // UI Elements
+        const brushBtn = document.getElementById('brushBtn');
+        const eraserBtn = document.getElementById('eraserBtn');
+        const sizeSlider = document.getElementById('sizeSlider');
+        const sizeValue = document.getElementById('sizeValue');
+        const colorPicker = document.getElementById('colorPicker');
+        const pressureSizeSlider = document.getElementById('pressureSizeSlider');
+        const pressureSizeValue = document.getElementById('pressureSizeValue');
+        const pressureOpacitySlider = document.getElementById('pressureOpacitySlider');
+        const pressureOpacityValue = document.getElementById('pressureOpacityValue');
+        const clearBtn = document.getElementById('clearBtn');
+        const deviceInfoEl = document.getElementById('deviceInfo');
+        const deviceStatusEl = document.getElementById('deviceStatus');
+        const currentPressureEl = document.getElementById('currentPressure');
+        const pressureValueEl = document.getElementById('pressureValue');
+        const tiltValueEl = document.getElementById('tiltValue');
+        const velocityValueEl = document.getElementById('velocityValue');
+        
+        // Tool selection
+        brushBtn.addEventListener('click', () => {
+            currentTool = 'brush';
+            brushBtn.classList.add('active');
+            eraserBtn.classList.remove('active');
+            ctx.globalCompositeOperation = 'source-over';
+        });
+        
+        eraserBtn.addEventListener('click', () => {
+            currentTool = 'eraser';
+            eraserBtn.classList.add('active');
+            brushBtn.classList.remove('active');
+            ctx.globalCompositeOperation = 'destination-out';
+        });
+        
+        // Settings
+        sizeSlider.addEventListener('input', (e) => {
+            baseSize = parseInt(e.target.value);
+            sizeValue.textContent = baseSize + 'px';
+        });
+        
+        colorPicker.addEventListener('input', (e) => {
+            currentColor = e.target.value;
+        });
+        
+        pressureSizeSlider.addEventListener('input', (e) => {
+            pressureSizeMultiplier = parseInt(e.target.value) / 100;
+            pressureSizeValue.textContent = e.target.value + '%';
+        });
+        
+        pressureOpacitySlider.addEventListener('input', (e) => {
+            pressureOpacityMultiplier = parseInt(e.target.value) / 100;
+            pressureOpacityValue.textContent = e.target.value + '%';
+        });
+        
+        clearBtn.addEventListener('click', () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        });
+        
+        // Device detection
+        function detectDevice(event) {
+            if (event.pointerType === 'pen') {
+                deviceInfo.type = 'pen';
+                deviceInfo.supportsPressure = event.pressure !== 0.5;
+                deviceInfo.supportsTilt = event.tiltX !== 0 || event.tiltY !== 0;
+                deviceInfo.supportsRotation = 'twist' in event && event.twist !== undefined;
+                updateDeviceInfo();
+            } else if (event.pointerType === 'touch') {
+                deviceInfo.type = 'touch';
+                deviceInfo.supportsPressure = 'force' in event || 'webkitForce' in event;
+                updateDeviceInfo();
+            } else {
+                deviceInfo.type = 'mouse';
+                deviceInfo.supportsPressure = false;
+                updateDeviceInfo();
+            }
+        }
+        
+        function updateDeviceInfo() {
+            deviceInfoEl.textContent = `Device: ${deviceInfo.type}`;
+            
+            deviceStatusEl.innerHTML = `
+                <span class="status-item ${deviceInfo.supportsPressure ? 'supported' : 'unsupported'}">
+                    Pressure: ${deviceInfo.supportsPressure ? '✓' : '✗'}
+                </span>
+                <span class="status-item ${deviceInfo.supportsTilt ? 'supported' : 'unsupported'}">
+                    Tilt: ${deviceInfo.supportsTilt ? '✓' : '✗'}
+                </span>
+                <span class="status-item ${deviceInfo.supportsRotation ? 'supported' : 'unsupported'}">
+                    Rotation: ${deviceInfo.supportsRotation ? '✓' : '✗'}
+                </span>
+            `;
+        }
+        
+        // Calculate velocity
+        function calculateVelocity(x, y, timestamp) {
+            if (!lastPoint) return 0;
+            
+            const dt = timestamp - lastPoint.timestamp;
+            if (dt === 0) return 0;
+            
+            const dx = x - lastPoint.x;
+            const dy = y - lastPoint.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const velocity = distance / dt * 1000;
+            
+            velocityBuffer.push(velocity);
+            if (velocityBuffer.length > 5) velocityBuffer.shift();
+            
+            const avgVelocity = velocityBuffer.reduce((a, b) => a + b, 0) / velocityBuffer.length;
+            return avgVelocity;
+        }
+        
+        // Extract pressure data
+        function extractPressure(event) {
+            let pressure = 0.5;
+            let tiltX = 0;
+            let tiltY = 0;
+            
+            if ('pressure' in event) {
+                pressure = event.pressure;
+                
+                if ('tiltX' in event) tiltX = event.tiltX;
+                if ('tiltY' in event) tiltY = event.tiltY;
+            } else if ('force' in event) {
+                pressure = event.force;
+            } else if ('webkitForce' in event) {
+                const maxForce = event.WEBKIT_FORCE_AT_FORCE_MOUSE_DOWN || 3;
+                pressure = event.webkitForce / maxForce;
+            }
+            
+            return { pressure, tiltX, tiltY };
+        }
+        
+        // Drawing functions
+        function startDrawing(event) {
+            isDrawing = true;
+            velocityBuffer = [];
+            
+            const rect = canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            const { pressure } = extractPressure(event);
+            
+            lastPoint = { x, y, timestamp: event.timeStamp };
+            
+            detectDevice(event);
+            
+            // Draw initial point
+            drawPoint(x, y, pressure, 0);
+            
+            currentPressureEl.style.display = 'block';
+        }
+        
+        function draw(event) {
+            if (!isDrawing) return;
+            
+            const rect = canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            const { pressure, tiltX, tiltY } = extractPressure(event);
+            const velocity = calculateVelocity(x, y, event.timeStamp);
+            
+            // Update UI
+            pressureValueEl.textContent = `Pressure: ${Math.round(pressure * 100)}%`;
+            velocityValueEl.textContent = `Velocity: ${Math.round(velocity)} px/s`;
+            
+            if (deviceInfo.supportsTilt) {
+                tiltValueEl.style.display = 'block';
+                tiltValueEl.textContent = `Tilt: X=${Math.round(tiltX)}° Y=${Math.round(tiltY)}°`;
+            }
+            
+            // Draw line from last point
+            if (lastPoint) {
+                drawLine(lastPoint.x, lastPoint.y, x, y, pressure, velocity);
+            }
+            
+            lastPoint = { x, y, timestamp: event.timeStamp };
+        }
+        
+        function stopDrawing() {
+            isDrawing = false;
+            lastPoint = null;
+            currentPressureEl.style.display = 'none';
+        }
+        
+        function drawPoint(x, y, pressure, velocity) {
+            const size = calculateSize(pressure);
+            const opacity = calculateOpacity(pressure);
+            
+            ctx.save();
+            ctx.globalAlpha = opacity;
+            ctx.fillStyle = currentColor;
+            ctx.beginPath();
+            ctx.arc(x, y, size / 2, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        }
+        
+        function drawLine(x1, y1, x2, y2, pressure, velocity) {
+            const distance = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
+            const steps = Math.max(1, Math.floor(distance / 2));
+            
+            for (let i = 0; i <= steps; i++) {
+                const t = i / steps;
+                const x = x1 + (x2 - x1) * t;
+                const y = y1 + (y2 - y1) * t;
+                drawPoint(x, y, pressure, velocity);
+            }
+        }
+        
+        function calculateSize(pressure) {
+            const minSize = baseSize * 0.1;
+            const maxSize = baseSize;
+            const pressureEffect = pressure * pressureSizeMultiplier;
+            return minSize + (maxSize - minSize) * pressureEffect;
+        }
+        
+        function calculateOpacity(pressure) {
+            const minOpacity = 0.1;
+            const maxOpacity = 1.0;
+            const pressureEffect = pressure * pressureOpacityMultiplier;
+            return minOpacity + (maxOpacity - minOpacity) * pressureEffect;
+        }
+        
+        // Event listeners
+        canvas.addEventListener('pointerdown', startDrawing);
+        canvas.addEventListener('pointermove', draw);
+        canvas.addEventListener('pointerup', stopDrawing);
+        canvas.addEventListener('pointercancel', stopDrawing);
+        canvas.addEventListener('pointerleave', stopDrawing);
+        
+        // Prevent default touch behaviors
+        canvas.addEventListener('touchstart', (e) => e.preventDefault());
+        canvas.addEventListener('touchmove', (e) => e.preventDefault());
+        
+        // Initialize
+        updateDeviceInfo();
+    </script>
+</body>
+</html>

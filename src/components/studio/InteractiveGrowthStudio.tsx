@@ -1,9 +1,49 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react'
-import { Play, Pause, RotateCcw, Download, Settings, Zap, Palette, Maximize2, MousePointer } from 'lucide-react'
+import { useState, useEffect, useRef, useCallback } from 'react'
+import { 
+  Play, Pause, RotateCcw, Download, Settings, Zap, Palette, Maximize2, MousePointer
+} from 'lucide-react'
 import { OrganicPatternGenerator, OrganicPatternType } from '../../graphics/patterns/OrganicPatternGenerator'
+
+// Enhanced growth algorithm types
+export enum GrowthAlgorithm {
+  OrganicGrowth = 'organic-growth',
+  LSystem = 'l-system',
+  CellularAutomata = 'cellular-automata',
+  ReactionDiffusion = 'reaction-diffusion',
+  DLA = 'diffusion-limited',
+  FractalGrowth = 'fractal-growth',
+  ConwayVariants = 'conway-variants',
+  CrystalFormation = 'crystal-formation',
+  VoronoiGrowth = 'voronoi-growth',
+  NeuralGrowth = 'neural-growth'
+}
+
+// L-System rules for plant growth
+interface LSystemRule {
+  axiom: string
+  rules: { [key: string]: string }
+  angle: number
+  iterations: number
+}
+
+// Cellular automata rule sets
+interface CellularRule {
+  birth: number[]
+  survival: number[]
+  neighborhoodType: 'moore' | 'vonNeumann'
+}
+
+// Reaction-diffusion parameters
+interface ReactionDiffusionParams {
+  feedRate: number
+  killRate: number
+  diffusionRateA: number
+  diffusionRateB: number
+}
 
 interface GrowthSettings {
   type: OrganicPatternType
+  algorithm: GrowthAlgorithm
   growthRate: number
   density: number
   particleCount: number
@@ -13,6 +53,14 @@ interface GrowthSettings {
   speed: number
   interactive: boolean
   autoGrowth: boolean
+  // Advanced parameters
+  lSystem?: LSystemRule
+  cellularRule?: CellularRule
+  reactionDiffusion?: ReactionDiffusionParams
+  // Multi-layer support
+  layersEnabled: boolean
+  currentLayer: number
+  maxLayers: number
 }
 
 export function InteractiveGrowthStudio() {
@@ -26,6 +74,7 @@ export function InteractiveGrowthStudio() {
   const [showSettings, setShowSettings] = useState(false)
   const [settings, setSettings] = useState<GrowthSettings>({
     type: OrganicPatternType.GrowthPattern,
+    algorithm: GrowthAlgorithm.OrganicGrowth,
     growthRate: 0.02,
     density: 0.3,
     particleCount: 1000,
@@ -34,7 +83,30 @@ export function InteractiveGrowthStudio() {
     accentColor: '#ff0088',
     speed: 1,
     interactive: true,
-    autoGrowth: true
+    autoGrowth: true,
+    layersEnabled: false,
+    currentLayer: 0,
+    maxLayers: 5,
+    // Default L-System for tree-like growth
+    lSystem: {
+      axiom: 'F',
+      rules: { 'F': 'F[+F]F[-F]F' },
+      angle: 25,
+      iterations: 4
+    },
+    // Default cellular automata rule (Conway's Game of Life)
+    cellularRule: {
+      birth: [3],
+      survival: [2, 3],
+      neighborhoodType: 'moore'
+    },
+    // Default reaction-diffusion parameters (Gray-Scott model)
+    reactionDiffusion: {
+      feedRate: 0.055,
+      killRate: 0.062,
+      diffusionRateA: 1.0,
+      diffusionRateB: 0.5
+    }
   })
   
   // Growth state

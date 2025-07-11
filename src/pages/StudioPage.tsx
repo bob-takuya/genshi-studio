@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import { useRef } from 'react'
 import { Canvas } from '../components/studio/Canvas'
 import { Toolbar } from '../components/studio/Toolbar'
 import { CodeEditor } from '../components/studio/CodeEditor'

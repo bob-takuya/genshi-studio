@@ -3,7 +3,7 @@
  * Implements interlaced knots, Celtic borders, spiral patterns, and trinity knots
  */
 
-import { Color, PatternGeneratorOptions, Point } from '../../types/graphics';
+import { Color, PatternGeneratorOptions } from '../../types/graphics';
 
 export enum CelticPatternType {
   InterlacedKnot = 'interlaced-knot',

@@ -1,5 +1,4 @@
-import React from 'react'
-import { Wifi, WifiOff, Save, AlertCircle } from 'lucide-react'
+import { Wifi, WifiOff, Save } from 'lucide-react'
 import { useAppStore } from '../../hooks/useAppStore'
 
 export function StatusBar() {

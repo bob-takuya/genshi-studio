@@ -20,7 +20,7 @@ export const Canvas: React.FC<CanvasProps> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const engineRef = useRef<GraphicsEngine | null>(null);
-  const [isReady, setIsReady] = useState(false);
+  const [, setIsReady] = useState(false);
   const [metrics, setMetrics] = useState<any>(null);
 
   useEffect(() => {
