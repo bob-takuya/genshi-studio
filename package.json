@@ -1,6 +1,6 @@
 {
   "name": "genshi-studio",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "type": "module",
   "description": "WebGL-based graphics engine for cultural expression and digital art",
   "homepage": "https://bob-takuya.github.io/genshi-studio/",
@@ -61,6 +61,7 @@
     "@typescript-eslint/parser": "^6.0.0",
     "eslint": "^8.45.0",
     "eslint-plugin-react": "^7.33.0",
+    "gh-pages": "^6.3.0",
     "jest": "^29.6.0",
     "ts-jest": "^29.1.0",
     "typescript": "^5.1.6"
