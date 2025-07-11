@@ -3,7 +3,7 @@
  * Implements traditional Japanese patterns including Ichimatsu
  */
 
-import { Color, PatternGeneratorOptions } from '../../types/graphics';
+import { PatternGeneratorOptions } from '../../types/graphics';
 
 export enum PatternType {
   Ichimatsu = 'ichimatsu',      // Checkerboard pattern

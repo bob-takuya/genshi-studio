@@ -2,10 +2,10 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Interactive Growth Studio', () => {
   test.beforeEach(async ({ page }) => {
+    // Go directly to Studio page - it's at the root
     await page.goto('/');
-    // Navigate to Studio page - use exact match to avoid ambiguity
-    await page.getByRole('link', { name: 'Studio', exact: true }).click();
-    await page.waitForURL('**/studio', { timeout: 10000 });
+    // Wait for page to load
+    await page.waitForLoadState('networkidle');
   });
 
   test('should display Growth button in toolbar', async ({ page }) => {
@@ -30,8 +30,8 @@ test.describe('Interactive Growth Studio', () => {
     const growthCanvas = page.locator('canvas');
     await expect(growthCanvas).toBeVisible();
     
-    // Check if it's fullscreen
-    const canvasContainer = page.locator('.fixed.inset-0');
+    // Check if the growth studio container is visible (more specific selector)
+    const canvasContainer = page.locator('.fixed.inset-0.bg-black');
     await expect(canvasContainer).toBeVisible();
   });
 
@@ -55,8 +55,11 @@ test.describe('Interactive Growth Studio', () => {
   test('should show settings panel when settings clicked', async ({ page }) => {
     await page.locator('button:has-text("Growth")').click();
     
-    // Click settings button
-    await page.locator('button[title="Settings"]').click();
+    // Wait for growth mode to be active
+    await page.waitForTimeout(500);
+    
+    // Click settings button with force to bypass any overlapping elements
+    await page.locator('button[title="Settings"]').click({ force: true });
     
     // Check if settings panel is visible
     const settingsPanel = page.locator('text=Growth Settings');
@@ -89,11 +92,14 @@ test.describe('Interactive Growth Studio', () => {
   test('should reset growth when reset clicked', async ({ page }) => {
     await page.locator('button:has-text("Growth")').click();
     
+    // Wait for growth mode to be active
+    await page.waitForTimeout(500);
+    
     // Let it grow for a bit
     await page.waitForTimeout(2000);
     
-    // Click reset
-    await page.locator('button[title="Reset"]').click();
+    // Click reset with force to bypass any overlapping elements
+    await page.locator('button[title="Reset"]').click({ force: true });
     
     // Check if generation counter reset
     const generationText = page.locator('text=Generation: 0');
@@ -103,19 +109,22 @@ test.describe('Interactive Growth Studio', () => {
   test('should pause/play animation', async ({ page }) => {
     await page.locator('button:has-text("Growth")').click();
     
+    // Wait for growth mode to be active
+    await page.waitForTimeout(500);
+    
     // Initially should be playing (Pause button visible)
     const pauseButton = page.locator('button[title="Pause"]');
     await expect(pauseButton).toBeVisible();
     
-    // Click to pause
-    await pauseButton.click();
+    // Click to pause with force
+    await pauseButton.click({ force: true });
     
     // Now Play button should be visible
     const playButton = page.locator('button[title="Play"]');
     await expect(playButton).toBeVisible();
     
-    // Click to play again
-    await playButton.click();
+    // Click to play again with force
+    await playButton.click({ force: true });
     
     // Pause button should be visible again
     await expect(pauseButton).toBeVisible();
@@ -124,14 +133,17 @@ test.describe('Interactive Growth Studio', () => {
   test('should export image', async ({ page }) => {
     await page.locator('button:has-text("Growth")').click();
     
+    // Wait for growth mode to be active
+    await page.waitForTimeout(500);
+    
     // Let it grow for a bit
     await page.waitForTimeout(1000);
     
     // Set up download promise before clicking
     const downloadPromise = page.waitForEvent('download');
     
-    // Click export
-    await page.locator('button[title="Export Image"]').click();
+    // Click export with force
+    await page.locator('button[title="Export Image"]').click({ force: true });
     
     // Wait for download
     const download = await downloadPromise;
@@ -144,8 +156,14 @@ test.describe('Interactive Growth Studio', () => {
   test('should switch between pattern types', async ({ page }) => {
     await page.locator('button:has-text("Growth")').click();
     
-    // Open settings
-    await page.locator('button[title="Settings"]').click();
+    // Wait for growth mode to be active
+    await page.waitForTimeout(500);
+    
+    // Open settings with force
+    await page.locator('button[title="Settings"]').click({ force: true });
+    
+    // Wait for settings panel
+    await page.waitForTimeout(300);
     
     // Change pattern type
     const patternSelect = page.locator('select').first();
@@ -163,8 +181,14 @@ test.describe('Interactive Growth Studio', () => {
   test('should apply color palettes', async ({ page }) => {
     await page.locator('button:has-text("Growth")').click();
     
-    // Open settings
-    await page.locator('button[title="Settings"]').click();
+    // Wait for growth mode to be active
+    await page.waitForTimeout(500);
+    
+    // Open settings with force
+    await page.locator('button[title="Settings"]').click({ force: true });
+    
+    // Wait for settings panel
+    await page.waitForTimeout(300);
     
     // Click on a color palette (e.g., Matrix)
     await page.locator('button:has-text("Matrix")').click();

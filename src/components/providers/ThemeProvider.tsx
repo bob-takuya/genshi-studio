@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect } from 'react'
+import React, { useLayoutEffect } from 'react'
 
 interface ThemeProviderProps {
   theme: 'light' | 'dark'

@@ -1,10 +1,10 @@
-import React from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { MainLayout } from './components/layout/MainLayout'
 import { StudioPage } from './pages/StudioPage'
 import { HomePage } from './pages/HomePage'
 import { GalleryPage } from './pages/GalleryPage'
 import AboutPage from './pages/AboutPage'
+import { PressureTestPage } from './pages/PressureTestPage'
 import { useAppStore } from './hooks/useAppStore'
 import { ThemeProvider } from './components/providers/ThemeProvider'
 import { OfflineIndicator } from './components/OfflineIndicator'
@@ -21,6 +21,7 @@ function App() {
             <Route path="home" element={<HomePage />} />
             <Route path="gallery" element={<GalleryPage />} />
             <Route path="about" element={<AboutPage />} />
+            <Route path="pressure-test" element={<PressureTestPage />} />
           </Route>
         </Routes>
         

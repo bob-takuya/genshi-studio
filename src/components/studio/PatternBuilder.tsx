@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   X, 
@@ -6,18 +6,11 @@ import {
   Play, 
   Pause, 
   RotateCcw, 
-  Copy, 
   Share2, 
   Download, 
-  Upload,
   Plus,
-  Minus,
-  Sliders,
   Layers,
-  Palette,
-  Settings,
-  Eye,
-  EyeOff
+  Palette
 } from 'lucide-react';
 import { 
   CustomPattern, 
@@ -41,7 +34,6 @@ interface PatternBuilderProps {
 export function PatternBuilder({ isOpen, onClose, initialPattern, onSave }: PatternBuilderProps) {
   const [activeTab, setActiveTab] = useState<'design' | 'animate' | 'combine'>('design');
   const [currentPattern, setCurrentPattern] = useState<CustomPattern | null>(initialPattern || null);
-  const [previewCanvas, setPreviewCanvas] = useState<HTMLCanvasElement | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
   const [animationConfig, setAnimationConfig] = useState<AnimationConfig>({
     enabled: false,
@@ -65,7 +57,6 @@ export function PatternBuilder({ isOpen, onClose, initialPattern, onSave }: Patt
   
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const generatorRef = useRef<AdvancedPatternGenerator | null>(null);
-  const previewImageRef = useRef<HTMLImageElement | null>(null);
 
   // Initialize pattern generator
   useEffect(() => {
@@ -148,10 +139,6 @@ export function PatternBuilder({ isOpen, onClose, initialPattern, onSave }: Patt
     };
   };
 
-  const colorToHex = (color: Color): string => {
-    const toHex = (c: number) => Math.round(c * 255).toString(16).padStart(2, '0');
-    return `#${toHex(color.r)}${toHex(color.g)}${toHex(color.b)}`;
-  };
 
   const handleParameterChange = (paramName: string, value: any) => {
     setPatternParameters(prev => 
@@ -239,7 +226,7 @@ export function PatternBuilder({ isOpen, onClose, initialPattern, onSave }: Patt
 
     if (result instanceof Promise) {
       result.then(blob => downloadBlob(blob, `pattern.${format}`));
-    } else {
+    } else if (typeof result === 'string') {
       downloadText(result, `pattern.${format}`);
     }
   };

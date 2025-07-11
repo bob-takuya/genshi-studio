@@ -82,7 +82,7 @@ export class StudioPage extends BasePage {
    * Navigate to studio page
    */
   async goto() {
-    await super.goto('/studio');
+    await super.goto('/');
   }
   
   /**

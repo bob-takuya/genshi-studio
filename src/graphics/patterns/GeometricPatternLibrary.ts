@@ -10,6 +10,12 @@ import { CelticKnotGenerator, CelticPatternType } from './CelticKnotGenerator';
 import { FractalPatternGenerator, FractalPatternType } from './FractalPatternGenerator';
 import { OrganicPatternGenerator, OrganicPatternType } from './OrganicPatternGenerator';
 
+// Helper function to convert Color to hex string
+const colorToHex = (color: Color): string => {
+  const toHex = (c: number) => Math.round(c * 255).toString(16).padStart(2, '0');
+  return `#${toHex(color.r)}${toHex(color.g)}${toHex(color.b)}`;
+};
+
 export type AllPatternTypes = 
   | IslamicPatternType 
   | MathematicalTilingType 
@@ -371,8 +377,8 @@ export class GeometricPatternLibrary {
         { name: 'scale', type: 'range', min: 0.5, max: 3, step: 0.1, value: 1, description: 'Pattern scale' },
         { name: 'rotation', type: 'range', min: 0, max: 360, step: 1, value: 0, description: 'Pattern rotation' },
         { name: 'strokeWidth', type: 'range', min: 1, max: 10, step: 0.5, value: 2, description: 'Line thickness' },
-        { name: 'color1', type: 'color', value: category.defaultColors.color1, description: 'Background color' },
-        { name: 'color2', type: 'color', value: category.defaultColors.color2, description: 'Line color' }
+        { name: 'color1', type: 'color', value: colorToHex(category.defaultColors.color1), description: 'Background color' },
+        { name: 'color2', type: 'color', value: colorToHex(category.defaultColors.color2), description: 'Line color' }
       ],
       presets: [
         {
@@ -406,8 +412,8 @@ export class GeometricPatternLibrary {
         { name: 'scale', type: 'range', min: 0.5, max: 3, step: 0.1, value: 1, description: 'Pattern scale' },
         { name: 'rotation', type: 'range', min: 0, max: 360, step: 1, value: 0, description: 'Pattern rotation' },
         { name: 'strokeWidth', type: 'range', min: 1, max: 10, step: 0.5, value: 2, description: 'Line thickness' },
-        { name: 'color1', type: 'color', value: category.defaultColors.color1, description: 'Background color' },
-        { name: 'color2', type: 'color', value: category.defaultColors.color2, description: 'Line color' }
+        { name: 'color1', type: 'color', value: colorToHex(category.defaultColors.color1), description: 'Background color' },
+        { name: 'color2', type: 'color', value: colorToHex(category.defaultColors.color2), description: 'Line color' }
       ],
       presets: [
         {
@@ -434,8 +440,8 @@ export class GeometricPatternLibrary {
         { name: 'scale', type: 'range', min: 0.5, max: 3, step: 0.1, value: 1, description: 'Pattern scale' },
         { name: 'rotation', type: 'range', min: 0, max: 360, step: 1, value: 0, description: 'Pattern rotation' },
         { name: 'strokeWidth', type: 'range', min: 1, max: 10, step: 0.5, value: 2, description: 'Line thickness' },
-        { name: 'color1', type: 'color', value: category.defaultColors.color1, description: 'Background color' },
-        { name: 'color2', type: 'color', value: category.defaultColors.color2, description: 'Line color' }
+        { name: 'color1', type: 'color', value: colorToHex(category.defaultColors.color1), description: 'Background color' },
+        { name: 'color2', type: 'color', value: colorToHex(category.defaultColors.color2), description: 'Line color' }
       ],
       presets: [
         {
@@ -483,8 +489,8 @@ export class GeometricPatternLibrary {
         { name: 'scale', type: 'range', min: 0.5, max: 3, step: 0.1, value: 1, description: 'Pattern scale' },
         { name: 'rotation', type: 'range', min: 0, max: 360, step: 1, value: 0, description: 'Pattern rotation' },
         { name: 'generation', type: 'range', min: 1, max: 6, step: 1, value: 4, description: 'Detail level' },
-        { name: 'color1', type: 'color', value: category.defaultColors.color1, description: 'Background color' },
-        { name: 'color2', type: 'color', value: category.defaultColors.color2, description: 'Line color' }
+        { name: 'color1', type: 'color', value: colorToHex(category.defaultColors.color1), description: 'Background color' },
+        { name: 'color2', type: 'color', value: colorToHex(category.defaultColors.color2), description: 'Line color' }
       ],
       presets: [
         {
@@ -511,8 +517,8 @@ export class GeometricPatternLibrary {
         { name: 'scale', type: 'range', min: 0.5, max: 3, step: 0.1, value: 1, description: 'Pattern scale' },
         { name: 'rotation', type: 'range', min: 0, max: 360, step: 1, value: 0, description: 'Pattern rotation' },
         { name: 'tileSize', type: 'range', min: 10, max: 100, step: 5, value: 40, description: 'Tile size' },
-        { name: 'color1', type: 'color', value: category.defaultColors.color1, description: 'Background color' },
-        { name: 'color2', type: 'color', value: category.defaultColors.color2, description: 'Line color' }
+        { name: 'color1', type: 'color', value: colorToHex(category.defaultColors.color1), description: 'Background color' },
+        { name: 'color2', type: 'color', value: colorToHex(category.defaultColors.color2), description: 'Line color' }
       ],
       presets: [
         {
@@ -559,7 +565,7 @@ export class GeometricPatternLibrary {
         { name: 'scale', type: 'range', min: 0.5, max: 3, step: 0.1, value: 1, description: 'Pattern scale' },
         { name: 'rotation', type: 'range', min: 0, max: 360, step: 1, value: 0, description: 'Pattern rotation' },
         { name: 'knotWidth', type: 'range', min: 5, max: 30, step: 1, value: 15, description: 'Knot strand width' },
-        { name: 'color1', type: 'color', value: category.defaultColors.color1, description: 'Background color' },
+        { name: 'color1', type: 'color', value: colorToHex(category.defaultColors.color1), description: 'Background color' },
         { name: 'color2', type: 'color', value: category.defaultColors.color2, description: 'Knot color' }
       ],
       presets: [
@@ -587,7 +593,7 @@ export class GeometricPatternLibrary {
         { name: 'scale', type: 'range', min: 0.5, max: 3, step: 0.1, value: 1, description: 'Pattern scale' },
         { name: 'rotation', type: 'range', min: 0, max: 360, step: 1, value: 0, description: 'Pattern rotation' },
         { name: 'borderWidth', type: 'range', min: 20, max: 100, step: 5, value: 40, description: 'Border width' },
-        { name: 'color1', type: 'color', value: category.defaultColors.color1, description: 'Background color' },
+        { name: 'color1', type: 'color', value: colorToHex(category.defaultColors.color1), description: 'Background color' },
         { name: 'color2', type: 'color', value: category.defaultColors.color2, description: 'Border color' }
       ],
       presets: [
@@ -635,7 +641,7 @@ export class GeometricPatternLibrary {
         { name: 'scale', type: 'range', min: 0.5, max: 3, step: 0.1, value: 1, description: 'Pattern scale' },
         { name: 'rotation', type: 'range', min: 0, max: 360, step: 1, value: 0, description: 'Pattern rotation' },
         { name: 'iterations', type: 'range', min: 1, max: 8, step: 1, value: 6, description: 'Iteration depth' },
-        { name: 'color1', type: 'color', value: category.defaultColors.color1, description: 'Background color' },
+        { name: 'color1', type: 'color', value: colorToHex(category.defaultColors.color1), description: 'Background color' },
         { name: 'color2', type: 'color', value: category.defaultColors.color2, description: 'Triangle color' }
       ],
       presets: [
@@ -712,7 +718,7 @@ export class GeometricPatternLibrary {
         { name: 'scale', type: 'range', min: 0.5, max: 3, step: 0.1, value: 1, description: 'Pattern scale' },
         { name: 'rotation', type: 'range', min: 0, max: 360, step: 1, value: 0, description: 'Pattern rotation' },
         { name: 'seedCount', type: 'range', min: 10, max: 200, step: 5, value: 50, description: 'Number of seeds' },
-        { name: 'color1', type: 'color', value: category.defaultColors.color1, description: 'Background color' },
+        { name: 'color1', type: 'color', value: colorToHex(category.defaultColors.color1), description: 'Background color' },
         { name: 'color2', type: 'color', value: category.defaultColors.color2, description: 'Cell color' }
       ],
       presets: [
@@ -802,7 +808,7 @@ export class GeometricPatternLibrary {
     
     for (const [patternId, definition] of this.patternDefinitions) {
       try {
-        const defaultParams = {};
+        const defaultParams: { [key: string]: any } = {};
         definition.parameters.forEach(param => {
           defaultParams[param.name] = param.value;
         });

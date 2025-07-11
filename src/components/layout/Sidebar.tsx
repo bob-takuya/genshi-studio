@@ -1,4 +1,3 @@
-import React from 'react'
 import { X, Layers, Palette, Code2, Grid3x3, Settings2 } from 'lucide-react'
 import { useAppStore } from '../../hooks/useAppStore'
 

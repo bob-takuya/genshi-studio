@@ -4,17 +4,24 @@
  */
 
 // Main pattern library
-export { GeometricPatternLibrary } from './GeometricPatternLibrary';
+import { GeometricPatternLibrary } from './GeometricPatternLibrary';
+export { GeometricPatternLibrary };
 
 // Individual pattern generators
-export { IslamicPatternGenerator, IslamicPatternType } from './IslamicPatternGenerator';
-export { MathematicalTilingGenerator, MathematicalTilingType } from './MathematicalTilingGenerator';
-export { CelticKnotGenerator, CelticPatternType } from './CelticKnotGenerator';
-export { FractalPatternGenerator, FractalPatternType } from './FractalPatternGenerator';
-export { OrganicPatternGenerator, OrganicPatternType } from './OrganicPatternGenerator';
+import { IslamicPatternGenerator, IslamicPatternType } from './IslamicPatternGenerator';
+import { MathematicalTilingGenerator, MathematicalTilingType } from './MathematicalTilingGenerator';
+import { CelticKnotGenerator, CelticPatternType } from './CelticKnotGenerator';
+export { IslamicPatternGenerator, IslamicPatternType };
+export { MathematicalTilingGenerator, MathematicalTilingType };
+export { CelticKnotGenerator, CelticPatternType };
+import { FractalPatternGenerator, FractalPatternType } from './FractalPatternGenerator';
+import { OrganicPatternGenerator, OrganicPatternType } from './OrganicPatternGenerator';
+export { FractalPatternGenerator, FractalPatternType };
+export { OrganicPatternGenerator, OrganicPatternType };
 
 // Existing generators (for backward compatibility)
-export { CulturalPatternGenerator, PatternType } from './CulturalPatternGenerator';
+import { CulturalPatternGenerator, PatternType } from './CulturalPatternGenerator';
+export { CulturalPatternGenerator, PatternType };
 export { AdvancedPatternGenerator } from './AdvancedPatternGenerator';
 
 // Types and interfaces

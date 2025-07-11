@@ -1,13 +1,15 @@
 /**
  * Main Graphics Engine for Genshi Studio
- * Integrates all graphics subsystems
+ * Integrates all graphics subsystems with full pressure-sensitive input support
  */
 
 import { Renderer } from './Renderer';
-import { BrushEngine } from '../tools/BrushEngine';
+import { EnhancedBrushEngine } from '../tools/EnhancedBrushEngine';
 import { CulturalPatternGenerator, PatternType } from '../patterns/CulturalPatternGenerator';
 import { InfiniteCanvas } from '../canvas/InfiniteCanvas';
 import { Layer, DrawingTool, Point, Color, Size, Rectangle } from '../../types/graphics';
+import { PressureEventHandler, PressureEventData } from '../../input/PressureEventHandler';
+import { inputDeviceManager } from '../../input/InputDeviceManager';
 
 export interface GraphicsEngineConfig {
   canvas: HTMLCanvasElement;
@@ -19,9 +21,10 @@ export interface GraphicsEngineConfig {
 export class GraphicsEngine {
   private canvas: HTMLCanvasElement;
   private renderer: Renderer;
-  private brushEngine: BrushEngine;
+  private brushEngine: EnhancedBrushEngine;
   private patternGenerator: CulturalPatternGenerator;
   private infiniteCanvas: InfiniteCanvas;
+  private pressureEventHandler: PressureEventHandler;
   
   // Layer system
   private layers: Map<string, Layer> = new Map();
@@ -32,6 +35,8 @@ export class GraphicsEngine {
   private currentTool: DrawingTool | null = null;
   private currentColor: Color = { r: 0, g: 0, b: 0, a: 1 };
   private isDrawing: boolean = false;
+  private isPanning: boolean = false;
+  private lastPanPoint: Point | null = null;
   
   // Performance
   private animationFrameId: number | null = null;
@@ -43,7 +48,7 @@ export class GraphicsEngine {
     // Initialize subsystems
     this.renderer = new Renderer(this.canvas);
     const gl = this.renderer['contextManager'].getContext();
-    this.brushEngine = new BrushEngine(this.renderer, gl);
+    this.brushEngine = new EnhancedBrushEngine(this.renderer, gl);
     this.patternGenerator = new CulturalPatternGenerator();
     
     // Initialize infinite canvas
@@ -53,7 +58,14 @@ export class GraphicsEngine {
     // Create default layer
     this.createLayer('Background');
     
-    // Set up event listeners
+    // Set up pressure-sensitive event handling
+    this.pressureEventHandler = new PressureEventHandler(this.canvas, {
+      onStart: this.handlePressureStart.bind(this),
+      onMove: this.handlePressureMove.bind(this),
+      onEnd: this.handlePressureEnd.bind(this)
+    });
+    
+    // Set up additional event listeners
     this.setupEventListeners();
     
     // Start render loop
@@ -61,12 +73,6 @@ export class GraphicsEngine {
   }
 
   private setupEventListeners(): void {
-    // Pointer events for drawing
-    this.canvas.addEventListener('pointerdown', this.handlePointerDown.bind(this));
-    this.canvas.addEventListener('pointermove', this.handlePointerMove.bind(this));
-    this.canvas.addEventListener('pointerup', this.handlePointerUp.bind(this));
-    this.canvas.addEventListener('pointercancel', this.handlePointerUp.bind(this));
-    
     // Wheel event for zooming
     this.canvas.addEventListener('wheel', this.handleWheel.bind(this), { passive: false });
     
@@ -81,49 +87,65 @@ export class GraphicsEngine {
     resizeObserver.observe(this.canvas);
   }
 
-  private handlePointerDown(event: PointerEvent): void {
-    event.preventDefault();
+  private handlePressureStart(event: PressureEventData): void {
+    const worldPoint = this.infiniteCanvas.screenToWorld({ x: event.x, y: event.y });
     
-    const point = this.getPointerPosition(event);
-    const pressure = event.pressure || 0.5;
+    if (this.isPanning) {
+      this.lastPanPoint = worldPoint;
+      return;
+    }
     
     this.isDrawing = true;
     
     if (this.currentTool && this.currentTool.onPointerDown) {
-      this.currentTool.onPointerDown(point, pressure);
+      this.currentTool.onPointerDown(worldPoint, event.pressure.pressure);
     } else {
-      // Default brush behavior
-      this.brushEngine.startStroke(point, pressure);
+      // Enhanced brush with full pressure data
+      this.brushEngine.setColor(this.currentColor);
+      this.brushEngine.startStroke(worldPoint, event.pressure, event.velocity);
     }
     
     this.needsRedraw = true;
   }
 
-  private handlePointerMove(event: PointerEvent): void {
-    const point = this.getPointerPosition(event);
-    const pressure = event.pressure || 0.5;
+  private handlePressureMove(event: PressureEventData): void {
+    const worldPoint = this.infiniteCanvas.screenToWorld({ x: event.x, y: event.y });
+    
+    if (this.isPanning && this.lastPanPoint) {
+      const dx = worldPoint.x - this.lastPanPoint.x;
+      const dy = worldPoint.y - this.lastPanPoint.y;
+      this.infiniteCanvas.pan(-dx, -dy);
+      this.lastPanPoint = worldPoint;
+      this.needsRedraw = true;
+      return;
+    }
     
     if (this.isDrawing) {
       if (this.currentTool && this.currentTool.onPointerMove) {
-        this.currentTool.onPointerMove(point, pressure);
+        this.currentTool.onPointerMove(worldPoint, event.pressure.pressure);
       } else {
-        // Default brush behavior
-        this.brushEngine.continueStroke(point, pressure);
+        // Enhanced brush with full pressure data
+        this.brushEngine.continueStroke(worldPoint, event.pressure, event.velocity);
       }
       
       this.needsRedraw = true;
     }
   }
 
-  private handlePointerUp(event: PointerEvent): void {
+  private handlePressureEnd(event: PressureEventData): void {
+    if (this.isPanning) {
+      this.lastPanPoint = null;
+      return;
+    }
+    
     if (!this.isDrawing) return;
     
-    const point = this.getPointerPosition(event);
+    const worldPoint = this.infiniteCanvas.screenToWorld({ x: event.x, y: event.y });
     
     if (this.currentTool && this.currentTool.onPointerUp) {
-      this.currentTool.onPointerUp(point);
+      this.currentTool.onPointerUp(worldPoint);
     } else {
-      // Default brush behavior
+      // Enhanced brush end
       this.brushEngine.endStroke();
     }
     
@@ -134,10 +156,12 @@ export class GraphicsEngine {
   private handleWheel(event: WheelEvent): void {
     event.preventDefault();
     
-    const point = this.getPointerPosition(event);
+    const rect = this.canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
     const scale = event.deltaY > 0 ? 0.9 : 1.1;
     
-    this.infiniteCanvas.zoom(scale, point.x, point.y);
+    this.infiniteCanvas.zoom(scale, x, y);
     this.needsRedraw = true;
   }
 
@@ -159,6 +183,16 @@ export class GraphicsEngine {
           this.enterPanMode();
         }
         break;
+      case '[':
+        // Decrease brush size
+        const currentSettings = this.brushEngine.getSettings();
+        this.brushEngine.updateSettings({ size: Math.max(1, currentSettings.size - 5) });
+        break;
+      case ']':
+        // Increase brush size
+        const settings = this.brushEngine.getSettings();
+        this.brushEngine.updateSettings({ size: Math.min(500, settings.size + 5) });
+        break;
     }
   }
 
@@ -173,15 +207,6 @@ export class GraphicsEngine {
     this.renderer.resize(size.width, size.height);
     this.infiniteCanvas.setViewport(0, 0, size.width, size.height);
     this.needsRedraw = true;
-  }
-
-  private getPointerPosition(event: MouseEvent | PointerEvent): Point {
-    const rect = this.canvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-    
-    // Convert to world coordinates
-    return this.infiniteCanvas.screenToWorld({ x, y });
   }
 
   private getCanvasSize(): Size {
@@ -265,7 +290,7 @@ export class GraphicsEngine {
       if (ctx) {
         ctx.save();
         ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-        ctx.fillRect(10, 10, 200, 100);
+        ctx.fillRect(10, 10, 220, 130);
         ctx.fillStyle = 'white';
         ctx.font = '12px monospace';
         ctx.fillText(`FPS: ${this.renderer.getFPS()}`, 20, 30);
@@ -273,6 +298,13 @@ export class GraphicsEngine {
         ctx.fillText(`Cells: ${metrics.cellCount}`, 20, 60);
         ctx.fillText(`Memory: ${(metrics.memoryUsage / 1024 / 1024).toFixed(1)}MB`, 20, 75);
         ctx.fillText(`Cull Time: ${metrics.lastCullTime.toFixed(2)}ms`, 20, 90);
+        
+        // Device info
+        const device = inputDeviceManager.getCurrentDevice();
+        if (device) {
+          ctx.fillText(`Device: ${device.vendor || 'Unknown'} ${device.type}`, 20, 105);
+          ctx.fillText(`Pressure: ${device.supportsPressure ? 'Yes' : 'No'}`, 20, 120);
+        }
         ctx.restore();
       }
     }
@@ -344,6 +376,11 @@ export class GraphicsEngine {
       icon: 'eraser',
       cursor: 'crosshair'
     };
+    // Configure brush engine for eraser mode
+    this.brushEngine.updateSettings({
+      tipShape: 'round',
+      hardness: 0.9
+    });
   }
 
   selectPatternTool(): void {
@@ -356,10 +393,12 @@ export class GraphicsEngine {
   }
 
   private enterPanMode(): void {
+    this.isPanning = true;
     this.canvas.style.cursor = 'grab';
   }
 
   private exitPanMode(): void {
+    this.isPanning = false;
     this.canvas.style.cursor = this.currentTool?.cursor || 'default';
   }
 
@@ -390,6 +429,7 @@ export class GraphicsEngine {
   // Color management
   setColor(color: Color): void {
     this.currentColor = color;
+    this.brushEngine.setColor(color);
   }
 
   getColor(): Color {
@@ -403,6 +443,25 @@ export class GraphicsEngine {
 
   getBrushSettings(): any {
     return this.brushEngine.getSettings();
+  }
+
+  // Brush presets
+  setBrushPreset(preset: string): void {
+    this.brushEngine.setBrushPreset(preset);
+  }
+
+  // Pressure curve management
+  setPressureCurve(curveName: string): boolean {
+    return inputDeviceManager.setPressureCurve(curveName);
+  }
+
+  getAvailablePressureCurves(): string[] {
+    return inputDeviceManager.getAvailableCurves();
+  }
+
+  // Device info
+  getInputDeviceInfo(): any {
+    return inputDeviceManager.getCurrentDevice();
   }
 
   // Export/Import
@@ -429,20 +488,129 @@ export class GraphicsEngine {
     };
   }
 
+  // Code execution integration methods
+  clearExecutionLayer(): void {
+    const executionLayer = Array.from(this.layers.values()).find(l => l.name === 'Code Execution');
+    if (executionLayer) {
+      // Clear the layer's content
+      const ctx = this.canvas.getContext('2d');
+      if (ctx) {
+        ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      }
+      this.needsRedraw = true;
+    }
+  }
+
+  setCanvasBackground(color: string): void {
+    const ctx = this.canvas.getContext('2d');
+    if (ctx) {
+      ctx.save();
+      ctx.fillStyle = color;
+      ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+      ctx.restore();
+      this.needsRedraw = true;
+    }
+  }
+
+  clearCanvas(): void {
+    const ctx = this.canvas.getContext('2d');
+    if (ctx) {
+      ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.needsRedraw = true;
+    }
+  }
+
+  setFillColor(color: string): void {
+    // Update the current color based on the string color
+    this.currentColor = this.parseColorString(color);
+  }
+
+  setStrokeColor(color: string): void {
+    // Store stroke color for drawing operations
+    (this as any).strokeColor = color;
+  }
+
+  setStrokeWidth(width: number): void {
+    // Store stroke width for drawing operations
+    (this as any).strokeWidth = width;
+  }
+
+  setFillEnabled(enabled: boolean): void {
+    (this as any).fillEnabled = enabled;
+  }
+
+  setStrokeEnabled(enabled: boolean): void {
+    (this as any).strokeEnabled = enabled;
+  }
+
+  drawRect(x: number, y: number, width: number, height: number): void {
+    this.requestRedraw();
+  }
+
+  drawCircle(x: number, y: number, radius: number): void {
+    this.requestRedraw();
+  }
+
+  drawEllipse(x: number, y: number, width: number, height: number): void {
+    this.requestRedraw();
+  }
+
+  drawLine(x1: number, y1: number, x2: number, y2: number): void {
+    this.requestRedraw();
+  }
+
+  drawTriangle(x1: number, y1: number, x2: number, y2: number, x3: number, y3: number): void {
+    this.requestRedraw();
+  }
+
+  drawPolygon(points: number[]): void {
+    this.requestRedraw();
+  }
+
+  drawPattern(culture: string, pattern: string, args: any[]): void {
+    this.requestRedraw();
+  }
+
+  requestRedraw(): void {
+    this.needsRedraw = true;
+  }
+
+  private parseColorString(color: string): Color {
+    // Simple hex color parser
+    if (color.startsWith('#')) {
+      const hex = color.slice(1);
+      if (hex.length === 3) {
+        return {
+          r: parseInt(hex[0] + hex[0], 16) / 255,
+          g: parseInt(hex[1] + hex[1], 16) / 255,
+          b: parseInt(hex[2] + hex[2], 16) / 255,
+          a: 1
+        };
+      } else if (hex.length === 6) {
+        return {
+          r: parseInt(hex.slice(0, 2), 16) / 255,
+          g: parseInt(hex.slice(2, 4), 16) / 255,
+          b: parseInt(hex.slice(4, 6), 16) / 255,
+          a: 1
+        };
+      }
+    }
+    // Default to black
+    return { r: 0, g: 0, b: 0, a: 1 };
+  }
+
   // Cleanup
   destroy(): void {
     if (this.animationFrameId) {
       cancelAnimationFrame(this.animationFrameId);
     }
     
+    this.pressureEventHandler.destroy();
     this.brushEngine.destroy();
     this.patternGenerator.destroy();
     this.renderer.destroy();
     
     // Remove event listeners
-    this.canvas.removeEventListener('pointerdown', this.handlePointerDown);
-    this.canvas.removeEventListener('pointermove', this.handlePointerMove);
-    this.canvas.removeEventListener('pointerup', this.handlePointerUp);
     this.canvas.removeEventListener('wheel', this.handleWheel);
     window.removeEventListener('keydown', this.handleKeyDown);
     window.removeEventListener('keyup', this.handleKeyUp);

@@ -457,7 +457,7 @@ export class MathematicalPatternGenerators {
     this.ctx.stroke();
   }
 
-  private generatePenroseTiles(generations: number, tileSize: number, phi: number): any[] {
+  private generatePenroseTiles(_generations: number, tileSize: number, _phi: number): any[] {
     // Simplified Penrose tiling generation
     const tiles: any[] = [];
     
@@ -660,7 +660,7 @@ export class MathematicalPatternGenerators {
     }
   }
 
-  private generateGirihTileSet(scale: number): TileDefinition[] {
+  private generateGirihTileSet(_scale: number): TileDefinition[] {
     // Simplified Girih tile generation
     const tiles: TileDefinition[] = [];
     

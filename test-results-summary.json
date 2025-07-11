@@ -1,0 +1,2608 @@
+{
+  "config": {
+    "configFile": "/Users/homeserver/ai-creative-team/projects/genshi-studio/playwright.config.ts",
+    "rootDir": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 5
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 5
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 5
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 5
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 5
+        },
+        "id": "mobile-chrome",
+        "name": "mobile-chrome",
+        "testDir": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 5
+        },
+        "id": "mobile-safari",
+        "name": "mobile-safari",
+        "testDir": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 5
+        },
+        "id": "tablet-safari",
+        "name": "tablet-safari",
+        "testDir": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 5
+        },
+        "id": "performance",
+        "name": "performance",
+        "testDir": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 5
+        },
+        "id": "accessibility",
+        "name": "accessibility",
+        "testDir": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.53.2",
+    "workers": 5,
+    "webServer": {
+      "command": "npm run dev",
+      "port": 3001,
+      "timeout": 120000,
+      "reuseExistingServer": true,
+      "stdout": "pipe",
+      "stderr": "pipe",
+      "env": {
+        "NODE_ENV": "test"
+      }
+    }
+  },
+  "suites": [
+    {
+      "title": "specs/01-app-loading.spec.ts",
+      "file": "specs/01-app-loading.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Application Loading and Initialization",
+          "file": "specs/01-app-loading.spec.ts",
+          "line": 8,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should load home page successfully",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 12814,
+                      "error": {
+                        "message": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected string: \u001b[32m\"http://localhost:3001/\"\u001b[39m\nReceived string: \u001b[31m\"http://localhost:3001/\u001b[7mgenshi-studio/\u001b[27m\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m    14 × locator resolved to <html lang=\"en\">…</html>\u001b[22m\n\u001b[2m       - unexpected value \"http://localhost:3001/genshi-studio/\"\u001b[22m\n",
+                        "stack": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected string: \u001b[32m\"http://localhost:3001/\"\u001b[39m\nReceived string: \u001b[31m\"http://localhost:3001/\u001b[7mgenshi-studio/\u001b[27m\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m    14 × locator resolved to <html lang=\"en\">…</html>\u001b[22m\n\u001b[2m       - unexpected value \"http://localhost:3001/genshi-studio/\"\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/01-app-loading.spec.ts:18:24",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/01-app-loading.spec.ts",
+                          "column": 24,
+                          "line": 18
+                        },
+                        "snippet": "  16 |     // Verify page loaded\n  17 |     await expect(page).toHaveTitle(/Genshi Studio/i);\n> 18 |     await expect(page).toHaveURL('/');\n     |                        ^\n  19 |     \n  20 |     // Check critical elements are visible\n  21 |     await expect(homePage.heroSection).toBeVisible();"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/01-app-loading.spec.ts",
+                            "column": 24,
+                            "line": 18
+                          },
+                          "message": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected string: \u001b[32m\"http://localhost:3001/\"\u001b[39m\nReceived string: \u001b[31m\"http://localhost:3001/\u001b[7mgenshi-studio/\u001b[27m\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m    14 × locator resolved to <html lang=\"en\">…</html>\u001b[22m\n\u001b[2m       - unexpected value \"http://localhost:3001/genshi-studio/\"\u001b[22m\n\n\n  16 |     // Verify page loaded\n  17 |     await expect(page).toHaveTitle(/Genshi Studio/i);\n> 18 |     await expect(page).toHaveURL('/');\n     |                        ^\n  19 |     \n  20 |     // Check critical elements are visible\n  21 |     await expect(homePage.heroSection).toBeVisible();\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/01-app-loading.spec.ts:18:24"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-11T14:06:55.949Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-01-app-loading-Appli-85994-load-home-page-successfully-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-01-app-loading-Appli-85994-load-home-page-successfully-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-01-app-loading-Appli-85994-load-home-page-successfully-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/01-app-loading.spec.ts",
+                        "column": 24,
+                        "line": 18
+                      }
+                    },
+                    {
+                      "workerIndex": 24,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 12180,
+                      "error": {
+                        "message": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected string: \u001b[32m\"http://localhost:3001/\"\u001b[39m\nReceived string: \u001b[31m\"http://localhost:3001/\u001b[7mgenshi-studio/\u001b[27m\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m    14 × locator resolved to <html lang=\"en\">…</html>\u001b[22m\n\u001b[2m       - unexpected value \"http://localhost:3001/genshi-studio/\"\u001b[22m\n",
+                        "stack": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected string: \u001b[32m\"http://localhost:3001/\"\u001b[39m\nReceived string: \u001b[31m\"http://localhost:3001/\u001b[7mgenshi-studio/\u001b[27m\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m    14 × locator resolved to <html lang=\"en\">…</html>\u001b[22m\n\u001b[2m       - unexpected value \"http://localhost:3001/genshi-studio/\"\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/01-app-loading.spec.ts:18:24",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/01-app-loading.spec.ts",
+                          "column": 24,
+                          "line": 18
+                        },
+                        "snippet": "  16 |     // Verify page loaded\n  17 |     await expect(page).toHaveTitle(/Genshi Studio/i);\n> 18 |     await expect(page).toHaveURL('/');\n     |                        ^\n  19 |     \n  20 |     // Check critical elements are visible\n  21 |     await expect(homePage.heroSection).toBeVisible();"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/01-app-loading.spec.ts",
+                            "column": 24,
+                            "line": 18
+                          },
+                          "message": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected string: \u001b[32m\"http://localhost:3001/\"\u001b[39m\nReceived string: \u001b[31m\"http://localhost:3001/\u001b[7mgenshi-studio/\u001b[27m\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m    14 × locator resolved to <html lang=\"en\">…</html>\u001b[22m\n\u001b[2m       - unexpected value \"http://localhost:3001/genshi-studio/\"\u001b[22m\n\n\n  16 |     // Verify page loaded\n  17 |     await expect(page).toHaveTitle(/Genshi Studio/i);\n> 18 |     await expect(page).toHaveURL('/');\n     |                        ^\n  19 |     \n  20 |     // Check critical elements are visible\n  21 |     await expect(homePage.heroSection).toBeVisible();\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/01-app-loading.spec.ts:18:24"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2025-07-11T14:07:09.825Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-01-app-loading-Appli-85994-load-home-page-successfully-chromium-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-01-app-loading-Appli-85994-load-home-page-successfully-chromium-retry1/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-01-app-loading-Appli-85994-load-home-page-successfully-chromium-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-01-app-loading-Appli-85994-load-home-page-successfully-chromium-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/01-app-loading.spec.ts",
+                        "column": 24,
+                        "line": 18
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "69eac5188d5a9d9ea9da-cbcd8d272c4c096d8802",
+              "file": "specs/01-app-loading.spec.ts",
+              "line": 10,
+              "column": 3
+            },
+            {
+              "title": "should load within performance targets",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 2458,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-11T14:06:55.943Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "69eac5188d5a9d9ea9da-eda5bd8853da8eda2488",
+              "file": "specs/01-app-loading.spec.ts",
+              "line": 37,
+              "column": 3
+            },
+            {
+              "title": "should handle progressive enhancement",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 12522,
+                      "error": {
+                        "message": "TimeoutError: locator.waitFor: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"hero-section\"]') to be visible\u001b[22m\n",
+                        "stack": "TimeoutError: locator.waitFor: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"hero-section\"]') to be visible\u001b[22m\n\n    at HomePage.waitForPageReady (/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/pages/HomePage.ts:40:28)\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/01-app-loading.spec.ts:61:20",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/pages/HomePage.ts",
+                          "column": 28,
+                          "line": 40
+                        },
+                        "snippet": "\u001b[90m   at \u001b[39mpages/HomePage.ts:40\n\n  38 |    */\n  39 |   async waitForPageReady() {\n> 40 |     await this.heroSection.waitFor({ state: 'visible' });\n     |                            ^\n  41 |     await this.navigationMenu.waitFor({ state: 'visible' });\n  42 |   }\n  43 |   "
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/pages/HomePage.ts",
+                            "column": 28,
+                            "line": 40
+                          },
+                          "message": "TimeoutError: locator.waitFor: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"hero-section\"]') to be visible\u001b[22m\n\n\n   at pages/HomePage.ts:40\n\n  38 |    */\n  39 |   async waitForPageReady() {\n> 40 |     await this.heroSection.waitFor({ state: 'visible' });\n     |                            ^\n  41 |     await this.navigationMenu.waitFor({ state: 'visible' });\n  42 |   }\n  43 |   \n    at HomePage.waitForPageReady (/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/pages/HomePage.ts:40:28)\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/01-app-loading.spec.ts:61:20"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-11T14:06:55.943Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-01-app-loading-Appli-5f828-dle-progressive-enhancement-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-01-app-loading-Appli-5f828-dle-progressive-enhancement-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-01-app-loading-Appli-5f828-dle-progressive-enhancement-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/pages/HomePage.ts",
+                        "column": 28,
+                        "line": 40
+                      }
+                    },
+                    {
+                      "workerIndex": 23,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 12052,
+                      "error": {
+                        "message": "TimeoutError: locator.waitFor: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"hero-section\"]') to be visible\u001b[22m\n",
+                        "stack": "TimeoutError: locator.waitFor: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"hero-section\"]') to be visible\u001b[22m\n\n    at HomePage.waitForPageReady (/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/pages/HomePage.ts:40:28)\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/01-app-loading.spec.ts:61:20",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/pages/HomePage.ts",
+                          "column": 28,
+                          "line": 40
+                        },
+                        "snippet": "\u001b[90m   at \u001b[39mpages/HomePage.ts:40\n\n  38 |    */\n  39 |   async waitForPageReady() {\n> 40 |     await this.heroSection.waitFor({ state: 'visible' });\n     |                            ^\n  41 |     await this.navigationMenu.waitFor({ state: 'visible' });\n  42 |   }\n  43 |   "
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/pages/HomePage.ts",
+                            "column": 28,
+                            "line": 40
+                          },
+                          "message": "TimeoutError: locator.waitFor: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"hero-section\"]') to be visible\u001b[22m\n\n\n   at pages/HomePage.ts:40\n\n  38 |    */\n  39 |   async waitForPageReady() {\n> 40 |     await this.heroSection.waitFor({ state: 'visible' });\n     |                            ^\n  41 |     await this.navigationMenu.waitFor({ state: 'visible' });\n  42 |   }\n  43 |   \n    at HomePage.waitForPageReady (/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/pages/HomePage.ts:40:28)\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/01-app-loading.spec.ts:61:20"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2025-07-11T14:07:09.570Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-01-app-loading-Appli-5f828-dle-progressive-enhancement-chromium-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-01-app-loading-Appli-5f828-dle-progressive-enhancement-chromium-retry1/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-01-app-loading-Appli-5f828-dle-progressive-enhancement-chromium-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-01-app-loading-Appli-5f828-dle-progressive-enhancement-chromium-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/pages/HomePage.ts",
+                        "column": 28,
+                        "line": 40
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "69eac5188d5a9d9ea9da-77299a767c9b4ad78d09",
+              "file": "specs/01-app-loading.spec.ts",
+              "line": 56,
+              "column": 3
+            },
+            {
+              "title": "should maintain state on page reload",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 2570,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-11T14:06:55.950Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "69eac5188d5a9d9ea9da-ca98c83c75d1f30cb5c3",
+              "file": "specs/01-app-loading.spec.ts",
+              "line": 80,
+              "column": 3
+            },
+            {
+              "title": "should handle network failures gracefully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 3169,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-11T14:06:55.942Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "69eac5188d5a9d9ea9da-5719df1b40712b238d51",
+              "file": "specs/01-app-loading.spec.ts",
+              "line": 103,
+              "column": 3
+            },
+            {
+              "title": "should load all static assets",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 1083,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-11T14:06:58.787Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "69eac5188d5a9d9ea9da-39ce84382f34583dd7e2",
+              "file": "specs/01-app-loading.spec.ts",
+              "line": 134,
+              "column": 3
+            },
+            {
+              "title": "should have proper meta tags and SEO",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "failed",
+                      "duration": 896,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"cultural design patterns\"\u001b[39m\nReceived string:    \u001b[31m\"WebGL-based graphics engine for cultural expression and digital art creation\"\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"cultural design patterns\"\u001b[39m\nReceived string:    \u001b[31m\"WebGL-based graphics engine for cultural expression and digital art creation\"\u001b[39m\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/01-app-loading.spec.ts:163:25",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/01-app-loading.spec.ts",
+                          "column": 25,
+                          "line": 163
+                        },
+                        "snippet": "  161 |     const description = await page.locator('meta[name=\"description\"]').getAttribute('content');\n  162 |     expect(description).toBeTruthy();\n> 163 |     expect(description).toContain('cultural design patterns');\n      |                         ^\n  164 |     \n  165 |     // Check Open Graph tags\n  166 |     const ogTitle = await page.locator('meta[property=\"og:title\"]').getAttribute('content');"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/01-app-loading.spec.ts",
+                            "column": 25,
+                            "line": 163
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"cultural design patterns\"\u001b[39m\nReceived string:    \u001b[31m\"WebGL-based graphics engine for cultural expression and digital art creation\"\u001b[39m\n\n  161 |     const description = await page.locator('meta[name=\"description\"]').getAttribute('content');\n  162 |     expect(description).toBeTruthy();\n> 163 |     expect(description).toContain('cultural design patterns');\n      |                         ^\n  164 |     \n  165 |     // Check Open Graph tags\n  166 |     const ogTitle = await page.locator('meta[property=\"og:title\"]').getAttribute('content');\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/01-app-loading.spec.ts:163:25"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-11T14:06:58.902Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-01-app-loading-Appli-07204-ve-proper-meta-tags-and-SEO-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-01-app-loading-Appli-07204-ve-proper-meta-tags-and-SEO-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-01-app-loading-Appli-07204-ve-proper-meta-tags-and-SEO-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/01-app-loading.spec.ts",
+                        "column": 25,
+                        "line": 163
+                      }
+                    },
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 3,
+                      "status": "failed",
+                      "duration": 1067,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"cultural design patterns\"\u001b[39m\nReceived string:    \u001b[31m\"WebGL-based graphics engine for cultural expression and digital art creation\"\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"cultural design patterns\"\u001b[39m\nReceived string:    \u001b[31m\"WebGL-based graphics engine for cultural expression and digital art creation\"\u001b[39m\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/01-app-loading.spec.ts:163:25",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/01-app-loading.spec.ts",
+                          "column": 25,
+                          "line": 163
+                        },
+                        "snippet": "  161 |     const description = await page.locator('meta[name=\"description\"]').getAttribute('content');\n  162 |     expect(description).toBeTruthy();\n> 163 |     expect(description).toContain('cultural design patterns');\n      |                         ^\n  164 |     \n  165 |     // Check Open Graph tags\n  166 |     const ogTitle = await page.locator('meta[property=\"og:title\"]').getAttribute('content');"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/01-app-loading.spec.ts",
+                            "column": 25,
+                            "line": 163
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"cultural design patterns\"\u001b[39m\nReceived string:    \u001b[31m\"WebGL-based graphics engine for cultural expression and digital art creation\"\u001b[39m\n\n  161 |     const description = await page.locator('meta[name=\"description\"]').getAttribute('content');\n  162 |     expect(description).toBeTruthy();\n> 163 |     expect(description).toContain('cultural design patterns');\n      |                         ^\n  164 |     \n  165 |     // Check Open Graph tags\n  166 |     const ogTitle = await page.locator('meta[property=\"og:title\"]').getAttribute('content');\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/01-app-loading.spec.ts:163:25"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2025-07-11T14:07:00.474Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-01-app-loading-Appli-07204-ve-proper-meta-tags-and-SEO-chromium-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-01-app-loading-Appli-07204-ve-proper-meta-tags-and-SEO-chromium-retry1/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-01-app-loading-Appli-07204-ve-proper-meta-tags-and-SEO-chromium-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-01-app-loading-Appli-07204-ve-proper-meta-tags-and-SEO-chromium-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/01-app-loading.spec.ts",
+                        "column": 25,
+                        "line": 163
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "69eac5188d5a9d9ea9da-b9a338f96b88128475c6",
+              "file": "specs/01-app-loading.spec.ts",
+              "line": 157,
+              "column": 3
+            },
+            {
+              "title": "should initialize service worker for PWA",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 753,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-11T14:06:59.495Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "69eac5188d5a9d9ea9da-a719a29d9e5ed570cfb5",
+              "file": "specs/01-app-loading.spec.ts",
+              "line": 178,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "specs/07-basic-functionality.spec.ts",
+      "file": "specs/07-basic-functionality.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Basic Genshi Studio Tests",
+          "file": "specs/07-basic-functionality.spec.ts",
+          "line": 7,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should load the parametric pattern editor page",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 184,
+                      "error": {
+                        "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts:10:16",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                          "column": 16,
+                          "line": 10
+                        },
+                        "snippet": "   8 |   test('should load the parametric pattern editor page', async ({ page }) => {\n   9 |     // Navigate to the parametric pattern editor\n> 10 |     await page.goto('http://localhost:5173/index-parametric.html');\n     |                ^\n  11 |     \n  12 |     // Wait for the page to load\n  13 |     await page.waitForLoadState('networkidle');"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                            "column": 16,
+                            "line": 10
+                          },
+                          "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n\n\n   8 |   test('should load the parametric pattern editor page', async ({ page }) => {\n   9 |     // Navigate to the parametric pattern editor\n> 10 |     await page.goto('http://localhost:5173/index-parametric.html');\n     |                ^\n  11 |     \n  12 |     // Wait for the page to load\n  13 |     await page.waitForLoadState('networkidle');\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts:10:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-11T14:06:59.881Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-3d8a9-ametric-pattern-editor-page-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-3d8a9-ametric-pattern-editor-page-chromium/video.webm"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                        "column": 16,
+                        "line": 10
+                      }
+                    },
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 300,
+                      "error": {
+                        "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts:10:16",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                          "column": 16,
+                          "line": 10
+                        },
+                        "snippet": "   8 |   test('should load the parametric pattern editor page', async ({ page }) => {\n   9 |     // Navigate to the parametric pattern editor\n> 10 |     await page.goto('http://localhost:5173/index-parametric.html');\n     |                ^\n  11 |     \n  12 |     // Wait for the page to load\n  13 |     await page.waitForLoadState('networkidle');"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                            "column": 16,
+                            "line": 10
+                          },
+                          "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n\n\n   8 |   test('should load the parametric pattern editor page', async ({ page }) => {\n   9 |     // Navigate to the parametric pattern editor\n> 10 |     await page.goto('http://localhost:5173/index-parametric.html');\n     |                ^\n  11 |     \n  12 |     // Wait for the page to load\n  13 |     await page.waitForLoadState('networkidle');\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts:10:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2025-07-11T14:07:00.668Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-3d8a9-ametric-pattern-editor-page-chromium-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-3d8a9-ametric-pattern-editor-page-chromium-retry1/video.webm"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-3d8a9-ametric-pattern-editor-page-chromium-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                        "column": 16,
+                        "line": 10
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "a2481941998c52fe4a89-509f9e7d07284d74a8e5",
+              "file": "specs/07-basic-functionality.spec.ts",
+              "line": 8,
+              "column": 3
+            },
+            {
+              "title": "should have all 8 pattern type buttons",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "failed",
+                      "duration": 179,
+                      "error": {
+                        "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts:24:16",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                          "column": 16,
+                          "line": 24
+                        },
+                        "snippet": "  22 |\n  23 |   test('should have all 8 pattern type buttons', async ({ page }) => {\n> 24 |     await page.goto('http://localhost:5173/index-parametric.html');\n     |                ^\n  25 |     await page.waitForLoadState('networkidle');\n  26 |     \n  27 |     // Pattern types to check"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                            "column": 16,
+                            "line": 24
+                          },
+                          "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n\n\n  22 |\n  23 |   test('should have all 8 pattern type buttons', async ({ page }) => {\n> 24 |     await page.goto('http://localhost:5173/index-parametric.html');\n     |                ^\n  25 |     await page.waitForLoadState('networkidle');\n  26 |     \n  27 |     // Pattern types to check\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts:24:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-11T14:07:00.258Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-04b16--all-8-pattern-type-buttons-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-04b16--all-8-pattern-type-buttons-chromium/video.webm"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                        "column": 16,
+                        "line": 24
+                      }
+                    },
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 4,
+                      "status": "failed",
+                      "duration": 250,
+                      "error": {
+                        "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts:24:16",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                          "column": 16,
+                          "line": 24
+                        },
+                        "snippet": "  22 |\n  23 |   test('should have all 8 pattern type buttons', async ({ page }) => {\n> 24 |     await page.goto('http://localhost:5173/index-parametric.html');\n     |                ^\n  25 |     await page.waitForLoadState('networkidle');\n  26 |     \n  27 |     // Pattern types to check"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                            "column": 16,
+                            "line": 24
+                          },
+                          "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n\n\n  22 |\n  23 |   test('should have all 8 pattern type buttons', async ({ page }) => {\n> 24 |     await page.goto('http://localhost:5173/index-parametric.html');\n     |                ^\n  25 |     await page.waitForLoadState('networkidle');\n  26 |     \n  27 |     // Pattern types to check\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts:24:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2025-07-11T14:07:01.191Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-04b16--all-8-pattern-type-buttons-chromium-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-04b16--all-8-pattern-type-buttons-chromium-retry1/video.webm"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-04b16--all-8-pattern-type-buttons-chromium-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                        "column": 16,
+                        "line": 24
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "a2481941998c52fe4a89-22f5bb4845029d6ad47d",
+              "file": "specs/07-basic-functionality.spec.ts",
+              "line": 23,
+              "column": 3
+            },
+            {
+              "title": "should have parameter controls",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 202,
+                      "error": {
+                        "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts:48:16",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                          "column": 16,
+                          "line": 48
+                        },
+                        "snippet": "  46 |\n  47 |   test('should have parameter controls', async ({ page }) => {\n> 48 |     await page.goto('http://localhost:5173/index-parametric.html');\n     |                ^\n  49 |     await page.waitForLoadState('networkidle');\n  50 |     \n  51 |     // Check for parameter sliders"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                            "column": 16,
+                            "line": 48
+                          },
+                          "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n\n\n  46 |\n  47 |   test('should have parameter controls', async ({ page }) => {\n> 48 |     await page.goto('http://localhost:5173/index-parametric.html');\n     |                ^\n  49 |     await page.waitForLoadState('networkidle');\n  50 |     \n  51 |     // Check for parameter sliders\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts:48:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-11T14:07:01.818Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-830f2-uld-have-parameter-controls-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-830f2-uld-have-parameter-controls-chromium/video.webm"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                        "column": 16,
+                        "line": 48
+                      }
+                    },
+                    {
+                      "workerIndex": 11,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 250,
+                      "error": {
+                        "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts:48:16",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                          "column": 16,
+                          "line": 48
+                        },
+                        "snippet": "  46 |\n  47 |   test('should have parameter controls', async ({ page }) => {\n> 48 |     await page.goto('http://localhost:5173/index-parametric.html');\n     |                ^\n  49 |     await page.waitForLoadState('networkidle');\n  50 |     \n  51 |     // Check for parameter sliders"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                            "column": 16,
+                            "line": 48
+                          },
+                          "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n\n\n  46 |\n  47 |   test('should have parameter controls', async ({ page }) => {\n> 48 |     await page.goto('http://localhost:5173/index-parametric.html');\n     |                ^\n  49 |     await page.waitForLoadState('networkidle');\n  50 |     \n  51 |     // Check for parameter sliders\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts:48:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2025-07-11T14:07:02.760Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-830f2-uld-have-parameter-controls-chromium-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-830f2-uld-have-parameter-controls-chromium-retry1/video.webm"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-830f2-uld-have-parameter-controls-chromium-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                        "column": 16,
+                        "line": 48
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "a2481941998c52fe4a89-6a56ad222b06d390638b",
+              "file": "specs/07-basic-functionality.spec.ts",
+              "line": 47,
+              "column": 3
+            },
+            {
+              "title": "should generate patterns when clicking pattern buttons",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 9,
+                      "parallelIndex": 4,
+                      "status": "failed",
+                      "duration": 216,
+                      "error": {
+                        "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts:62:16",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                          "column": 16,
+                          "line": 62
+                        },
+                        "snippet": "  60 |\n  61 |   test('should generate patterns when clicking pattern buttons', async ({ page }) => {\n> 62 |     await page.goto('http://localhost:5173/index-parametric.html');\n     |                ^\n  63 |     await page.waitForLoadState('networkidle');\n  64 |     \n  65 |     // Click on mandala pattern button"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                            "column": 16,
+                            "line": 62
+                          },
+                          "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n\n\n  60 |\n  61 |   test('should generate patterns when clicking pattern buttons', async ({ page }) => {\n> 62 |     await page.goto('http://localhost:5173/index-parametric.html');\n     |                ^\n  63 |     await page.waitForLoadState('networkidle');\n  64 |     \n  65 |     // Click on mandala pattern button\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts:62:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-11T14:07:02.148Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-72c28-en-clicking-pattern-buttons-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-72c28-en-clicking-pattern-buttons-chromium/video.webm"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                        "column": 16,
+                        "line": 62
+                      }
+                    },
+                    {
+                      "workerIndex": 12,
+                      "parallelIndex": 4,
+                      "status": "failed",
+                      "duration": 244,
+                      "error": {
+                        "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts:62:16",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                          "column": 16,
+                          "line": 62
+                        },
+                        "snippet": "  60 |\n  61 |   test('should generate patterns when clicking pattern buttons', async ({ page }) => {\n> 62 |     await page.goto('http://localhost:5173/index-parametric.html');\n     |                ^\n  63 |     await page.waitForLoadState('networkidle');\n  64 |     \n  65 |     // Click on mandala pattern button"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                            "column": 16,
+                            "line": 62
+                          },
+                          "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n\n\n  60 |\n  61 |   test('should generate patterns when clicking pattern buttons', async ({ page }) => {\n> 62 |     await page.goto('http://localhost:5173/index-parametric.html');\n     |                ^\n  63 |     await page.waitForLoadState('networkidle');\n  64 |     \n  65 |     // Click on mandala pattern button\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts:62:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2025-07-11T14:07:03.059Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-72c28-en-clicking-pattern-buttons-chromium-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-72c28-en-clicking-pattern-buttons-chromium-retry1/video.webm"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-72c28-en-clicking-pattern-buttons-chromium-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                        "column": 16,
+                        "line": 62
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "a2481941998c52fe4a89-51fc5c79e84d5519b98a",
+              "file": "specs/07-basic-functionality.spec.ts",
+              "line": 61,
+              "column": 3
+            },
+            {
+              "title": "should have export functionality",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "parallelIndex": 3,
+                      "status": "failed",
+                      "duration": 209,
+                      "error": {
+                        "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts:91:16",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                          "column": 16,
+                          "line": 91
+                        },
+                        "snippet": "  89 |\n  90 |   test('should have export functionality', async ({ page }) => {\n> 91 |     await page.goto('http://localhost:5173/index-parametric.html');\n     |                ^\n  92 |     await page.waitForLoadState('networkidle');\n  93 |     \n  94 |     // Check for export button"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                            "column": 16,
+                            "line": 91
+                          },
+                          "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n\n\n  89 |\n  90 |   test('should have export functionality', async ({ page }) => {\n> 91 |     await page.goto('http://localhost:5173/index-parametric.html');\n     |                ^\n  92 |     await page.waitForLoadState('networkidle');\n  93 |     \n  94 |     // Check for export button\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts:91:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-11T14:07:02.285Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-5f5fc-d-have-export-functionality-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-5f5fc-d-have-export-functionality-chromium/video.webm"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                        "column": 16,
+                        "line": 91
+                      }
+                    },
+                    {
+                      "workerIndex": 13,
+                      "parallelIndex": 3,
+                      "status": "failed",
+                      "duration": 237,
+                      "error": {
+                        "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts:91:16",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                          "column": 16,
+                          "line": 91
+                        },
+                        "snippet": "  89 |\n  90 |   test('should have export functionality', async ({ page }) => {\n> 91 |     await page.goto('http://localhost:5173/index-parametric.html');\n     |                ^\n  92 |     await page.waitForLoadState('networkidle');\n  93 |     \n  94 |     // Check for export button"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                            "column": 16,
+                            "line": 91
+                          },
+                          "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n\n\n  89 |\n  90 |   test('should have export functionality', async ({ page }) => {\n> 91 |     await page.goto('http://localhost:5173/index-parametric.html');\n     |                ^\n  92 |     await page.waitForLoadState('networkidle');\n  93 |     \n  94 |     // Check for export button\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts:91:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2025-07-11T14:07:03.200Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-5f5fc-d-have-export-functionality-chromium-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-5f5fc-d-have-export-functionality-chromium-retry1/video.webm"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-5f5fc-d-have-export-functionality-chromium-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                        "column": 16,
+                        "line": 91
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "a2481941998c52fe4a89-dd3ed49dd2af4fe67d42",
+              "file": "specs/07-basic-functionality.spec.ts",
+              "line": 90,
+              "column": 3
+            },
+            {
+              "title": "should be responsive on mobile",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 14,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 194,
+                      "error": {
+                        "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts:104:16",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                          "column": 16,
+                          "line": 104
+                        },
+                        "snippet": "  102 |     await page.setViewportSize({ width: 375, height: 667 });\n  103 |     \n> 104 |     await page.goto('http://localhost:5173/index-parametric.html');\n      |                ^\n  105 |     await page.waitForLoadState('networkidle');\n  106 |     \n  107 |     // Check canvas is still visible"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                            "column": 16,
+                            "line": 104
+                          },
+                          "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n\n\n  102 |     await page.setViewportSize({ width: 375, height: 667 });\n  103 |     \n> 104 |     await page.goto('http://localhost:5173/index-parametric.html');\n      |                ^\n  105 |     await page.waitForLoadState('networkidle');\n  106 |     \n  107 |     // Check canvas is still visible\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts:104:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-11T14:07:03.769Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-9fc68-uld-be-responsive-on-mobile-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-9fc68-uld-be-responsive-on-mobile-chromium/video.webm"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                        "column": 16,
+                        "line": 104
+                      }
+                    },
+                    {
+                      "workerIndex": 17,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 263,
+                      "error": {
+                        "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts:104:16",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                          "column": 16,
+                          "line": 104
+                        },
+                        "snippet": "  102 |     await page.setViewportSize({ width: 375, height: 667 });\n  103 |     \n> 104 |     await page.goto('http://localhost:5173/index-parametric.html');\n      |                ^\n  105 |     await page.waitForLoadState('networkidle');\n  106 |     \n  107 |     // Check canvas is still visible"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                            "column": 16,
+                            "line": 104
+                          },
+                          "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n\n\n  102 |     await page.setViewportSize({ width: 375, height: 667 });\n  103 |     \n> 104 |     await page.goto('http://localhost:5173/index-parametric.html');\n      |                ^\n  105 |     await page.waitForLoadState('networkidle');\n  106 |     \n  107 |     // Check canvas is still visible\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts:104:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2025-07-11T14:07:04.712Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-9fc68-uld-be-responsive-on-mobile-chromium-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-9fc68-uld-be-responsive-on-mobile-chromium-retry1/video.webm"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-9fc68-uld-be-responsive-on-mobile-chromium-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                        "column": 16,
+                        "line": 104
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "a2481941998c52fe4a89-cd4a7cfcfcb8d5fc55fc",
+              "file": "specs/07-basic-functionality.spec.ts",
+              "line": 100,
+              "column": 3
+            },
+            {
+              "title": "should update canvas when changing parameters",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 15,
+                      "parallelIndex": 4,
+                      "status": "failed",
+                      "duration": 213,
+                      "error": {
+                        "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts:118:16",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                          "column": 16,
+                          "line": 118
+                        },
+                        "snippet": "  116 |\n  117 |   test('should update canvas when changing parameters', async ({ page }) => {\n> 118 |     await page.goto('http://localhost:5173/index-parametric.html');\n      |                ^\n  119 |     await page.waitForLoadState('networkidle');\n  120 |     \n  121 |     // Generate a pattern first"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                            "column": 16,
+                            "line": 118
+                          },
+                          "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n\n\n  116 |\n  117 |   test('should update canvas when changing parameters', async ({ page }) => {\n> 118 |     await page.goto('http://localhost:5173/index-parametric.html');\n      |                ^\n  119 |     await page.waitForLoadState('networkidle');\n  120 |     \n  121 |     // Generate a pattern first\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts:118:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-11T14:07:04.037Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-4c1e2-as-when-changing-parameters-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-4c1e2-as-when-changing-parameters-chromium/video.webm"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                        "column": 16,
+                        "line": 118
+                      }
+                    },
+                    {
+                      "workerIndex": 18,
+                      "parallelIndex": 4,
+                      "status": "failed",
+                      "duration": 290,
+                      "error": {
+                        "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts:118:16",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                          "column": 16,
+                          "line": 118
+                        },
+                        "snippet": "  116 |\n  117 |   test('should update canvas when changing parameters', async ({ page }) => {\n> 118 |     await page.goto('http://localhost:5173/index-parametric.html');\n      |                ^\n  119 |     await page.waitForLoadState('networkidle');\n  120 |     \n  121 |     // Generate a pattern first"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                            "column": 16,
+                            "line": 118
+                          },
+                          "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n\n\n  116 |\n  117 |   test('should update canvas when changing parameters', async ({ page }) => {\n> 118 |     await page.goto('http://localhost:5173/index-parametric.html');\n      |                ^\n  119 |     await page.waitForLoadState('networkidle');\n  120 |     \n  121 |     // Generate a pattern first\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts:118:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2025-07-11T14:07:04.942Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-4c1e2-as-when-changing-parameters-chromium-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-4c1e2-as-when-changing-parameters-chromium-retry1/video.webm"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-4c1e2-as-when-changing-parameters-chromium-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                        "column": 16,
+                        "line": 118
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "a2481941998c52fe4a89-6fb335f133df8197295b",
+              "file": "specs/07-basic-functionality.spec.ts",
+              "line": 117,
+              "column": 3
+            },
+            {
+              "title": "should handle errors gracefully",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 16,
+                      "parallelIndex": 3,
+                      "status": "failed",
+                      "duration": 226,
+                      "error": {
+                        "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts:160:16",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                          "column": 16,
+                          "line": 160
+                        },
+                        "snippet": "  158 |     \n  159 |     // Navigate to page\n> 160 |     await page.goto('http://localhost:5173/index-parametric.html');\n      |                ^\n  161 |     await page.waitForLoadState('networkidle');\n  162 |     \n  163 |     // Try various pattern types to check for errors"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                            "column": 16,
+                            "line": 160
+                          },
+                          "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n\n\n  158 |     \n  159 |     // Navigate to page\n> 160 |     await page.goto('http://localhost:5173/index-parametric.html');\n      |                ^\n  161 |     await page.waitForLoadState('networkidle');\n  162 |     \n  163 |     // Try various pattern types to check for errors\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts:160:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-11T14:07:04.169Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-c871c-ld-handle-errors-gracefully-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-c871c-ld-handle-errors-gracefully-chromium/video.webm"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                        "column": 16,
+                        "line": 160
+                      }
+                    },
+                    {
+                      "workerIndex": 19,
+                      "parallelIndex": 3,
+                      "status": "failed",
+                      "duration": 258,
+                      "error": {
+                        "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts:160:16",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                          "column": 16,
+                          "line": 160
+                        },
+                        "snippet": "  158 |     \n  159 |     // Navigate to page\n> 160 |     await page.goto('http://localhost:5173/index-parametric.html');\n      |                ^\n  161 |     await page.waitForLoadState('networkidle');\n  162 |     \n  163 |     // Try various pattern types to check for errors"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                            "column": 16,
+                            "line": 160
+                          },
+                          "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/index-parametric.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/index-parametric.html\", waiting until \"load\"\u001b[22m\n\n\n  158 |     \n  159 |     // Navigate to page\n> 160 |     await page.goto('http://localhost:5173/index-parametric.html');\n      |                ^\n  161 |     await page.waitForLoadState('networkidle');\n  162 |     \n  163 |     // Try various pattern types to check for errors\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts:160:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2025-07-11T14:07:05.134Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-c871c-ld-handle-errors-gracefully-chromium-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-c871c-ld-handle-errors-gracefully-chromium-retry1/video.webm"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-07-basic-functionali-c871c-ld-handle-errors-gracefully-chromium-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/07-basic-functionality.spec.ts",
+                        "column": 16,
+                        "line": 160
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "a2481941998c52fe4a89-0657e156460588522bd3",
+              "file": "specs/07-basic-functionality.spec.ts",
+              "line": 150,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "specs/10-growth-studio.spec.ts",
+      "file": "specs/10-growth-studio.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Interactive Growth Studio",
+          "file": "specs/10-growth-studio.spec.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should display Growth button in toolbar",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 20,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 943,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-11T14:07:05.787Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "aeda55a2ff2f6b12b116-f872140688aefa44b60e",
+              "file": "specs/10-growth-studio.spec.ts",
+              "line": 11,
+              "column": 3
+            },
+            {
+              "title": "should switch to Growth mode when clicked",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 21,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 1112,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-11T14:07:05.992Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "aeda55a2ff2f6b12b116-0e52c419b9e54ac91620",
+              "file": "specs/10-growth-studio.spec.ts",
+              "line": 21,
+              "column": 3
+            },
+            {
+              "title": "should show controls overlay",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 22,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 1173,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-11T14:07:06.198Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "aeda55a2ff2f6b12b116-0fbc1f86e0dc43622389",
+              "file": "specs/10-growth-studio.spec.ts",
+              "line": 38,
+              "column": 3
+            },
+            {
+              "title": "should show settings panel when settings clicked",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 20,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 11579,
+                      "error": {
+                        "message": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('text=Growth Settings')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=Growth Settings')\u001b[22m\n",
+                        "stack": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('text=Growth Settings')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=Growth Settings')\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts:66:33",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts",
+                          "column": 33,
+                          "line": 66
+                        },
+                        "snippet": "  64 |     // Check if settings panel is visible\n  65 |     const settingsPanel = page.locator('text=Growth Settings');\n> 66 |     await expect(settingsPanel).toBeVisible();\n     |                                 ^\n  67 |     \n  68 |     // Check for pattern type dropdown\n  69 |     const patternTypeSelect = page.locator('select').first();"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts",
+                            "column": 33,
+                            "line": 66
+                          },
+                          "message": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('text=Growth Settings')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=Growth Settings')\u001b[22m\n\n\n  64 |     // Check if settings panel is visible\n  65 |     const settingsPanel = page.locator('text=Growth Settings');\n> 66 |     await expect(settingsPanel).toBeVisible();\n     |                                 ^\n  67 |     \n  68 |     // Check for pattern type dropdown\n  69 |     const patternTypeSelect = page.locator('select').first();\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts:66:33"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-11T14:07:06.904Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-10-growth-studio-Int-0857e-panel-when-settings-clicked-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-10-growth-studio-Int-0857e-panel-when-settings-clicked-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-10-growth-studio-Int-0857e-panel-when-settings-clicked-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts",
+                        "column": 33,
+                        "line": 66
+                      }
+                    },
+                    {
+                      "workerIndex": 25,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 12115,
+                      "error": {
+                        "message": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('text=Growth Settings')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=Growth Settings')\u001b[22m\n",
+                        "stack": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('text=Growth Settings')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=Growth Settings')\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts:66:33",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts",
+                          "column": 33,
+                          "line": 66
+                        },
+                        "snippet": "  64 |     // Check if settings panel is visible\n  65 |     const settingsPanel = page.locator('text=Growth Settings');\n> 66 |     await expect(settingsPanel).toBeVisible();\n     |                                 ^\n  67 |     \n  68 |     // Check for pattern type dropdown\n  69 |     const patternTypeSelect = page.locator('select').first();"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts",
+                            "column": 33,
+                            "line": 66
+                          },
+                          "message": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('text=Growth Settings')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=Growth Settings')\u001b[22m\n\n\n  64 |     // Check if settings panel is visible\n  65 |     const settingsPanel = page.locator('text=Growth Settings');\n> 66 |     await expect(settingsPanel).toBeVisible();\n     |                                 ^\n  67 |     \n  68 |     // Check for pattern type dropdown\n  69 |     const patternTypeSelect = page.locator('select').first();\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts:66:33"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2025-07-11T14:07:19.110Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-10-growth-studio-Int-0857e-panel-when-settings-clicked-chromium-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-10-growth-studio-Int-0857e-panel-when-settings-clicked-chromium-retry1/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-10-growth-studio-Int-0857e-panel-when-settings-clicked-chromium-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-10-growth-studio-Int-0857e-panel-when-settings-clicked-chromium-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts",
+                        "column": 33,
+                        "line": 66
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "aeda55a2ff2f6b12b116-16b2ffedc21c3d34d0cf",
+              "file": "specs/10-growth-studio.spec.ts",
+              "line": 55,
+              "column": 3
+            },
+            {
+              "title": "should interact with canvas on click",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 21,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 1089,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-11T14:07:07.304Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "aeda55a2ff2f6b12b116-422ac4fde302d50dc982",
+              "file": "specs/10-growth-studio.spec.ts",
+              "line": 77,
+              "column": 3
+            },
+            {
+              "title": "should reset growth when reset clicked",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 22,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 3562,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-11T14:07:07.576Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "aeda55a2ff2f6b12b116-807c9f7a7b2215adccf9",
+              "file": "specs/10-growth-studio.spec.ts",
+              "line": 92,
+              "column": 3
+            },
+            {
+              "title": "should pause/play animation",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 21,
+                      "parallelIndex": 4,
+                      "status": "failed",
+                      "duration": 11720,
+                      "error": {
+                        "message": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('button[title=\"Play\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('button[title=\"Play\"]')\u001b[22m\n",
+                        "stack": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('button[title=\"Play\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('button[title=\"Play\"]')\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts:124:30",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts",
+                          "column": 30,
+                          "line": 124
+                        },
+                        "snippet": "  122 |     // Now Play button should be visible\n  123 |     const playButton = page.locator('button[title=\"Play\"]');\n> 124 |     await expect(playButton).toBeVisible();\n      |                              ^\n  125 |     \n  126 |     // Click to play again with force\n  127 |     await playButton.click({ force: true });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts",
+                            "column": 30,
+                            "line": 124
+                          },
+                          "message": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('button[title=\"Play\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('button[title=\"Play\"]')\u001b[22m\n\n\n  122 |     // Now Play button should be visible\n  123 |     const playButton = page.locator('button[title=\"Play\"]');\n> 124 |     await expect(playButton).toBeVisible();\n      |                              ^\n  125 |     \n  126 |     // Click to play again with force\n  127 |     await playButton.click({ force: true });\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts:124:30"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-11T14:07:08.412Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-10-growth-studio-Int-f3dc6-should-pause-play-animation-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-10-growth-studio-Int-f3dc6-should-pause-play-animation-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-10-growth-studio-Int-f3dc6-should-pause-play-animation-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts",
+                        "column": 30,
+                        "line": 124
+                      }
+                    },
+                    {
+                      "workerIndex": 26,
+                      "parallelIndex": 4,
+                      "status": "failed",
+                      "duration": 12382,
+                      "error": {
+                        "message": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('button[title=\"Play\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('button[title=\"Play\"]')\u001b[22m\n",
+                        "stack": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('button[title=\"Play\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('button[title=\"Play\"]')\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts:124:30",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts",
+                          "column": 30,
+                          "line": 124
+                        },
+                        "snippet": "  122 |     // Now Play button should be visible\n  123 |     const playButton = page.locator('button[title=\"Play\"]');\n> 124 |     await expect(playButton).toBeVisible();\n      |                              ^\n  125 |     \n  126 |     // Click to play again with force\n  127 |     await playButton.click({ force: true });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts",
+                            "column": 30,
+                            "line": 124
+                          },
+                          "message": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('button[title=\"Play\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('button[title=\"Play\"]')\u001b[22m\n\n\n  122 |     // Now Play button should be visible\n  123 |     const playButton = page.locator('button[title=\"Play\"]');\n> 124 |     await expect(playButton).toBeVisible();\n      |                              ^\n  125 |     \n  126 |     // Click to play again with force\n  127 |     await playButton.click({ force: true });\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts:124:30"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2025-07-11T14:07:20.926Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-10-growth-studio-Int-f3dc6-should-pause-play-animation-chromium-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-10-growth-studio-Int-f3dc6-should-pause-play-animation-chromium-retry1/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-10-growth-studio-Int-f3dc6-should-pause-play-animation-chromium-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-10-growth-studio-Int-f3dc6-should-pause-play-animation-chromium-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts",
+                        "column": 30,
+                        "line": 124
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "aeda55a2ff2f6b12b116-033604843a77104cb2b3",
+              "file": "specs/10-growth-studio.spec.ts",
+              "line": 109,
+              "column": 3
+            },
+            {
+              "title": "should export image",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 22,
+                      "parallelIndex": 3,
+                      "status": "failed",
+                      "duration": 12708,
+                      "error": {
+                        "message": "TimeoutError: page.waitForEvent: Timeout 10000ms exceeded while waiting for event \"download\"\n=========================== logs ===========================\nwaiting for event \"download\"\n============================================================",
+                        "stack": "TimeoutError: page.waitForEvent: Timeout 10000ms exceeded while waiting for event \"download\"\n=========================== logs ===========================\nwaiting for event \"download\"\n============================================================\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts:143:34",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts",
+                          "column": 34,
+                          "line": 143
+                        },
+                        "snippet": "  141 |     \n  142 |     // Set up download promise before clicking\n> 143 |     const downloadPromise = page.waitForEvent('download');\n      |                                  ^\n  144 |     \n  145 |     // Click export with force\n  146 |     await page.locator('button[title=\"Export Image\"]').click({ force: true });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts",
+                            "column": 34,
+                            "line": 143
+                          },
+                          "message": "TimeoutError: page.waitForEvent: Timeout 10000ms exceeded while waiting for event \"download\"\n=========================== logs ===========================\nwaiting for event \"download\"\n============================================================\n\n  141 |     \n  142 |     // Set up download promise before clicking\n> 143 |     const downloadPromise = page.waitForEvent('download');\n      |                                  ^\n  144 |     \n  145 |     // Click export with force\n  146 |     await page.locator('button[title=\"Export Image\"]').click({ force: true });\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts:143:34"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-11T14:07:11.143Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-10-growth-studio-Int-3e9cc--Studio-should-export-image-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-10-growth-studio-Int-3e9cc--Studio-should-export-image-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-10-growth-studio-Int-3e9cc--Studio-should-export-image-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts",
+                        "column": 34,
+                        "line": 143
+                      }
+                    },
+                    {
+                      "workerIndex": 29,
+                      "parallelIndex": 3,
+                      "status": "failed",
+                      "duration": 13391,
+                      "error": {
+                        "message": "TimeoutError: page.waitForEvent: Timeout 10000ms exceeded while waiting for event \"download\"\n=========================== logs ===========================\nwaiting for event \"download\"\n============================================================",
+                        "stack": "TimeoutError: page.waitForEvent: Timeout 10000ms exceeded while waiting for event \"download\"\n=========================== logs ===========================\nwaiting for event \"download\"\n============================================================\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts:143:34",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts",
+                          "column": 34,
+                          "line": 143
+                        },
+                        "snippet": "  141 |     \n  142 |     // Set up download promise before clicking\n> 143 |     const downloadPromise = page.waitForEvent('download');\n      |                                  ^\n  144 |     \n  145 |     // Click export with force\n  146 |     await page.locator('button[title=\"Export Image\"]').click({ force: true });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts",
+                            "column": 34,
+                            "line": 143
+                          },
+                          "message": "TimeoutError: page.waitForEvent: Timeout 10000ms exceeded while waiting for event \"download\"\n=========================== logs ===========================\nwaiting for event \"download\"\n============================================================\n\n  141 |     \n  142 |     // Set up download promise before clicking\n> 143 |     const downloadPromise = page.waitForEvent('download');\n      |                                  ^\n  144 |     \n  145 |     // Click export with force\n  146 |     await page.locator('button[title=\"Export Image\"]').click({ force: true });\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts:143:34"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2025-07-11T14:07:24.922Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-10-growth-studio-Int-3e9cc--Studio-should-export-image-chromium-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-10-growth-studio-Int-3e9cc--Studio-should-export-image-chromium-retry1/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-10-growth-studio-Int-3e9cc--Studio-should-export-image-chromium-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-10-growth-studio-Int-3e9cc--Studio-should-export-image-chromium-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts",
+                        "column": 34,
+                        "line": 143
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "aeda55a2ff2f6b12b116-ee0e018cf93e69317a51",
+              "file": "specs/10-growth-studio.spec.ts",
+              "line": 133,
+              "column": 3
+            },
+            {
+              "title": "should switch between pattern types",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 27,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 12159,
+                      "error": {
+                        "message": "TimeoutError: locator.selectOption: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('select').first()\u001b[22m\n",
+                        "stack": "TimeoutError: locator.selectOption: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('select').first()\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts:170:25",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts",
+                          "column": 25,
+                          "line": 170
+                        },
+                        "snippet": "  168 |     // Change pattern type\n  169 |     const patternSelect = page.locator('select').first();\n> 170 |     await patternSelect.selectOption('diffusion-limited');\n      |                         ^\n  171 |     \n  172 |     // Check if the canvas is still rendering\n  173 |     const canvas = page.locator('canvas');"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts",
+                            "column": 25,
+                            "line": 170
+                          },
+                          "message": "TimeoutError: locator.selectOption: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('select').first()\u001b[22m\n\n\n  168 |     // Change pattern type\n  169 |     const patternSelect = page.locator('select').first();\n> 170 |     await patternSelect.selectOption('diffusion-limited');\n      |                         ^\n  171 |     \n  172 |     // Check if the canvas is still rendering\n  173 |     const canvas = page.locator('canvas');\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts:170:25"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-11T14:07:22.845Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-10-growth-studio-Int-fccd9-witch-between-pattern-types-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-10-growth-studio-Int-fccd9-witch-between-pattern-types-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-10-growth-studio-Int-fccd9-witch-between-pattern-types-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts",
+                        "column": 25,
+                        "line": 170
+                      }
+                    },
+                    {
+                      "workerIndex": 30,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 12612,
+                      "error": {
+                        "message": "TimeoutError: locator.selectOption: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('select').first()\u001b[22m\n",
+                        "stack": "TimeoutError: locator.selectOption: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('select').first()\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts:170:25",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts",
+                          "column": 25,
+                          "line": 170
+                        },
+                        "snippet": "  168 |     // Change pattern type\n  169 |     const patternSelect = page.locator('select').first();\n> 170 |     await patternSelect.selectOption('diffusion-limited');\n      |                         ^\n  171 |     \n  172 |     // Check if the canvas is still rendering\n  173 |     const canvas = page.locator('canvas');"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts",
+                            "column": 25,
+                            "line": 170
+                          },
+                          "message": "TimeoutError: locator.selectOption: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('select').first()\u001b[22m\n\n\n  168 |     // Change pattern type\n  169 |     const patternSelect = page.locator('select').first();\n> 170 |     await patternSelect.selectOption('diffusion-limited');\n      |                         ^\n  171 |     \n  172 |     // Check if the canvas is still rendering\n  173 |     const canvas = page.locator('canvas');\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts:170:25"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2025-07-11T14:07:35.848Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-10-growth-studio-Int-fccd9-witch-between-pattern-types-chromium-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-10-growth-studio-Int-fccd9-witch-between-pattern-types-chromium-retry1/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-10-growth-studio-Int-fccd9-witch-between-pattern-types-chromium-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-10-growth-studio-Int-fccd9-witch-between-pattern-types-chromium-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts",
+                        "column": 25,
+                        "line": 170
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "aeda55a2ff2f6b12b116-52222476425207d98915",
+              "file": "specs/10-growth-studio.spec.ts",
+              "line": 156,
+              "column": 3
+            },
+            {
+              "title": "should apply color palettes",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 28,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 12091,
+                      "error": {
+                        "message": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Matrix\")')\u001b[22m\n",
+                        "stack": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Matrix\")')\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts:194:53",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts",
+                          "column": 53,
+                          "line": 194
+                        },
+                        "snippet": "  192 |     \n  193 |     // Click on a color palette (e.g., Matrix)\n> 194 |     await page.locator('button:has-text(\"Matrix\")').click();\n      |                                                     ^\n  195 |     \n  196 |     // Check if colors are applied (canvas should still be visible)\n  197 |     const canvas = page.locator('canvas');"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts",
+                            "column": 53,
+                            "line": 194
+                          },
+                          "message": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Matrix\")')\u001b[22m\n\n\n  192 |     \n  193 |     // Click on a color palette (e.g., Matrix)\n> 194 |     await page.locator('button:has-text(\"Matrix\")').click();\n      |                                                     ^\n  195 |     \n  196 |     // Check if colors are applied (canvas should still be visible)\n  197 |     const canvas = page.locator('canvas');\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts:194:53"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-11T14:07:23.411Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-10-growth-studio-Int-7d5e3-should-apply-color-palettes-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-10-growth-studio-Int-7d5e3-should-apply-color-palettes-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-10-growth-studio-Int-7d5e3-should-apply-color-palettes-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts",
+                        "column": 53,
+                        "line": 194
+                      }
+                    },
+                    {
+                      "workerIndex": 31,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 12502,
+                      "error": {
+                        "message": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Matrix\")')\u001b[22m\n",
+                        "stack": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Matrix\")')\u001b[22m\n\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts:194:53",
+                        "location": {
+                          "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts",
+                          "column": 53,
+                          "line": 194
+                        },
+                        "snippet": "  192 |     \n  193 |     // Click on a color palette (e.g., Matrix)\n> 194 |     await page.locator('button:has-text(\"Matrix\")').click();\n      |                                                     ^\n  195 |     \n  196 |     // Check if colors are applied (canvas should still be visible)\n  197 |     const canvas = page.locator('canvas');"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts",
+                            "column": 53,
+                            "line": 194
+                          },
+                          "message": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Matrix\")')\u001b[22m\n\n\n  192 |     \n  193 |     // Click on a color palette (e.g., Matrix)\n> 194 |     await page.locator('button:has-text(\"Matrix\")').click();\n      |                                                     ^\n  195 |     \n  196 |     // Check if colors are applied (canvas should still be visible)\n  197 |     const canvas = page.locator('canvas');\n    at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts:194:53"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2025-07-11T14:07:36.621Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-10-growth-studio-Int-7d5e3-should-apply-color-palettes-chromium-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-10-growth-studio-Int-7d5e3-should-apply-color-palettes-chromium-retry1/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-10-growth-studio-Int-7d5e3-should-apply-color-palettes-chromium-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/results/specs-10-growth-studio-Int-7d5e3-should-apply-color-palettes-chromium-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/10-growth-studio.spec.ts",
+                        "column": 53,
+                        "line": 194
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "aeda55a2ff2f6b12b116-9f65e8fa0f7a26cede1c",
+              "file": "specs/10-growth-studio.spec.ts",
+              "line": 181,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-07-11T14:06:55.385Z",
+    "duration": 54187.995,
+    "expected": 10,
+    "skipped": 0,
+    "unexpected": 16,
+    "flaky": 0
+  }
+}

@@ -1,9 +1,9 @@
-import { Canvas, IText, FabricObject, Rect, Circle } from 'fabric'
+import { Canvas, IText, FabricObject, Rect, Circle, Triangle as FabricTriangle, Polygon, Path } from 'fabric'
 import { useAppStore } from '@/store/appStore'
 import {
   MousePointer,
   Square,
-  Circle,
+  Circle as CircleIcon,
   Triangle,
   Type,
   Pen,
@@ -31,7 +31,7 @@ export default function Toolbar({ canvas }: ToolbarProps) {
 
   const shapes = [
     { id: 'rect', icon: Square, name: 'Rectangle' },
-    { id: 'circle', icon: Circle, name: 'Circle' },
+    { id: 'circle', icon: CircleIcon, name: 'Circle' },
     { id: 'triangle', icon: Triangle, name: 'Triangle' },
     { id: 'star', icon: Star, name: 'Star' },
     { id: 'heart', icon: Heart, name: 'Heart' },
@@ -54,8 +54,10 @@ export default function Toolbar({ canvas }: ToolbarProps) {
 
       case 'draw':
         canvas.isDrawingMode = true
-        canvas.freeDrawingBrush.width = 2
-        canvas.freeDrawingBrush.color = '#000000'
+        if (canvas.freeDrawingBrush) {
+          canvas.freeDrawingBrush.width = 2
+          canvas.freeDrawingBrush.color = '#000000'
+        }
         break
 
       case 'text':
@@ -116,7 +118,7 @@ export default function Toolbar({ canvas }: ToolbarProps) {
         break
 
       case 'triangle':
-        shape = new fabric.Triangle({
+        shape = new FabricTriangle({
           left: centerX - 50,
           top: centerY - 50,
           width: 100,
@@ -140,14 +142,14 @@ export default function Toolbar({ canvas }: ToolbarProps) {
           })
         }
 
-        shape = new fabric.Polygon(starPoints, {
+        shape = new Polygon(starPoints, {
           fill: '#ef4444',
         })
         break
 
       case 'heart':
         const heartPath = 'M 272.70141,238.71731 C 206.46141,238.71731 152.70146,292.4773 152.70146,358.71731 C 152.70146,493.47282 288.63461,612.13682 381.28461,662.93682 L 381.28461,662.93682 C 474.03461,612.13682 609.96777,493.47282 609.96777,358.71731 C 609.96777,292.4773 556.20777,238.71731 489.96777,238.71731 C 446.36777,238.71731 407.17581,257.51981 381.28461,287.71731 C 355.39341,257.51981 316.20141,238.71731 272.70141,238.71731 z'
-        shape = new fabric.Path(heartPath, {
+        shape = new Path(heartPath, {
           left: centerX - 50,
           top: centerY - 50,
           fill: '#ec4899',
@@ -166,7 +168,7 @@ export default function Toolbar({ canvas }: ToolbarProps) {
             y: centerY + hexRadius * Math.sin(angle),
           })
         }
-        shape = new fabric.Polygon(hexPoints, {
+        shape = new Polygon(hexPoints, {
           fill: '#8b5cf6',
         })
         break

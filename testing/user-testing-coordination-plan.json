@@ -17,7 +17,7 @@
       "categories": {
         "digital_artists": {
           "count": 25,
-          "agent_ids": ["ARTIST_001" through "ARTIST_025"],
+          "agent_ids": ["ARTIST_001", "ARTIST_002", "ARTIST_003", "ARTIST_004", "ARTIST_005", "ARTIST_006", "ARTIST_007", "ARTIST_008", "ARTIST_009", "ARTIST_010", "ARTIST_011", "ARTIST_012", "ARTIST_013", "ARTIST_014", "ARTIST_015", "ARTIST_016", "ARTIST_017", "ARTIST_018", "ARTIST_019", "ARTIST_020", "ARTIST_021", "ARTIST_022", "ARTIST_023", "ARTIST_024", "ARTIST_025"],
           "focus_areas": [
             "Pattern creation and manipulation",
             "Creative workflow efficiency",
@@ -27,7 +27,7 @@
         },
         "web_developers": {
           "count": 20,
-          "agent_ids": ["DEVELOPER_001" through "DEVELOPER_020"],
+          "agent_ids": ["DEVELOPER_001", "DEVELOPER_002", "DEVELOPER_003", "DEVELOPER_004", "DEVELOPER_005", "DEVELOPER_006", "DEVELOPER_007", "DEVELOPER_008", "DEVELOPER_009", "DEVELOPER_010", "DEVELOPER_011", "DEVELOPER_012", "DEVELOPER_013", "DEVELOPER_014", "DEVELOPER_015", "DEVELOPER_016", "DEVELOPER_017", "DEVELOPER_018", "DEVELOPER_019", "DEVELOPER_020"],
           "focus_areas": [
             "Code-based pattern generation",
             "API functionality",
@@ -37,7 +37,7 @@
         },
         "educators": {
           "count": 15,
-          "agent_ids": ["EDUCATOR_001" through "EDUCATOR_015"],
+          "agent_ids": ["EDUCATOR_001", "EDUCATOR_002", "EDUCATOR_003", "EDUCATOR_004", "EDUCATOR_005", "EDUCATOR_006", "EDUCATOR_007", "EDUCATOR_008", "EDUCATOR_009", "EDUCATOR_010", "EDUCATOR_011", "EDUCATOR_012", "EDUCATOR_013", "EDUCATOR_014", "EDUCATOR_015"],
           "focus_areas": [
             "Educational resource availability",
             "Tutorial effectiveness",
@@ -47,7 +47,7 @@
         },
         "students": {
           "count": 20,
-          "agent_ids": ["STUDENT_001" through "STUDENT_020"],
+          "agent_ids": ["STUDENT_001", "STUDENT_002", "STUDENT_003", "STUDENT_004", "STUDENT_005", "STUDENT_006", "STUDENT_007", "STUDENT_008", "STUDENT_009", "STUDENT_010", "STUDENT_011", "STUDENT_012", "STUDENT_013", "STUDENT_014", "STUDENT_015", "STUDENT_016", "STUDENT_017", "STUDENT_018", "STUDENT_019", "STUDENT_020"],
           "focus_areas": [
             "Learning curve assessment",
             "Feature discoverability",
@@ -57,7 +57,7 @@
         },
         "ux_ui_designers": {
           "count": 10,
-          "agent_ids": ["DESIGNER_001" through "DESIGNER_010"],
+          "agent_ids": ["DESIGNER_001", "DESIGNER_002", "DESIGNER_003", "DESIGNER_004", "DESIGNER_005", "DESIGNER_006", "DESIGNER_007", "DESIGNER_008", "DESIGNER_009", "DESIGNER_010"],
           "focus_areas": [
             "Interface consistency",
             "Workflow optimization",
@@ -67,7 +67,7 @@
         },
         "cultural_researchers": {
           "count": 10,
-          "agent_ids": ["RESEARCHER_001" through "RESEARCHER_010"],
+          "agent_ids": ["RESEARCHER_001", "RESEARCHER_002", "RESEARCHER_003", "RESEARCHER_004", "RESEARCHER_005", "RESEARCHER_006", "RESEARCHER_007", "RESEARCHER_008", "RESEARCHER_009", "RESEARCHER_010"],
           "focus_areas": [
             "Cultural pattern accuracy",
             "Historical authenticity",

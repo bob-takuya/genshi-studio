@@ -3,7 +3,7 @@
  * Implements Penrose tilings, Truchet tiles, substitution tilings, and aperiodic patterns
  */
 
-import { Color, PatternGeneratorOptions, Point } from '../../types/graphics';
+import { PatternGeneratorOptions } from '../../types/graphics';
 
 export enum MathematicalTilingType {
   PenroseP1 = 'penrose-p1',
@@ -34,7 +34,7 @@ export class MathematicalTilingGenerator {
   private canvas: OffscreenCanvas;
   private ctx: OffscreenCanvasRenderingContext2D;
   private patternCache: Map<string, ImageData> = new Map();
-  private goldenRatio = (1 + Math.sqrt(5)) / 2;
+  private _goldenRatio = (1 + Math.sqrt(5)) / 2;
 
   constructor() {
     this.canvas = new OffscreenCanvas(1024, 1024);
@@ -531,7 +531,7 @@ export class MathematicalTilingGenerator {
   private generateLSystemTiling(width: number, height: number, generation: number): any[] {
     const tiles: any[] = [];
     let axiom = 'F';
-    let rules = { 'F': 'F+F-F-F+F' };
+    let rules: { [key: string]: string } = { 'F': 'F+F-F-F+F' };
     
     // Apply substitution rules
     for (let g = 0; g < generation; g++) {

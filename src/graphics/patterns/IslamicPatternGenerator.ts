@@ -3,7 +3,7 @@
  * Implements traditional Islamic geometric patterns including 8-fold and 12-fold stars, Girih tiling
  */
 
-import { Color, PatternGeneratorOptions, Point } from '../../types/graphics';
+import { Color, PatternGeneratorOptions } from '../../types/graphics';
 
 export enum IslamicPatternType {
   EightFoldStar = 'eight-fold-star',

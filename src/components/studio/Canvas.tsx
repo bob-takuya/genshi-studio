@@ -6,7 +6,7 @@ import { CanvasControls } from './CanvasControls'
 import { ExportDialog } from './ExportDialog'
 import { PatternLibrary } from './PatternLibrary'
 
-export const Canvas = React.forwardRef<any, {}>((props, ref) => {
+export const Canvas = React.forwardRef<any, {}>((_, ref) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const fabricRef = useRef<any>(null)
   const containerRef = useRef<HTMLDivElement>(null)
