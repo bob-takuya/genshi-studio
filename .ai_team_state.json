@@ -1,0 +1,149 @@
+{
+  "initialized": true,
+  "agents": {
+    "architect": {
+      "role": "architect",
+      "status": "active",
+      "capabilities": [
+        "system_design",
+        "architecture_review",
+        "technical_planning"
+      ],
+      "current_tasks": [
+        "task_1752254528_a95df8da"
+      ],
+      "performance_metrics": {
+        "tasks_completed": 0,
+        "average_completion_time": 0,
+        "success_rate": 100
+      },
+      "initialized_at": "2025-07-12T02:17:44.660380"
+    },
+    "developer": {
+      "role": "developer",
+      "status": "active",
+      "capabilities": [
+        "coding",
+        "debugging",
+        "code_review",
+        "testing"
+      ],
+      "current_tasks": [
+        "task_1752254450_86e387f1"
+      ],
+      "performance_metrics": {
+        "tasks_completed": 0,
+        "average_completion_time": 0,
+        "success_rate": 100
+      },
+      "initialized_at": "2025-07-12T02:17:44.660383"
+    },
+    "tester": {
+      "role": "tester",
+      "status": "active",
+      "capabilities": [
+        "test_design",
+        "test_execution",
+        "quality_assurance"
+      ],
+      "current_tasks": [
+        "task_1752254529_059dd2db"
+      ],
+      "performance_metrics": {
+        "tasks_completed": 0,
+        "average_completion_time": 0,
+        "success_rate": 100
+      },
+      "initialized_at": "2025-07-12T02:17:44.660385"
+    },
+    "reviewer": {
+      "role": "reviewer",
+      "status": "active",
+      "capabilities": [
+        "code_review",
+        "documentation_review",
+        "quality_gate"
+      ],
+      "current_tasks": [
+        "task_1752254530_a4c6dbf0"
+      ],
+      "performance_metrics": {
+        "tasks_completed": 0,
+        "average_completion_time": 0,
+        "success_rate": 100
+      },
+      "initialized_at": "2025-07-12T02:17:44.660386"
+    }
+  },
+  "tasks": {
+    "task_1752254450_86e387f1": {
+      "id": "task_1752254450_86e387f1",
+      "agent_role": "AgentRole.DEVELOPER",
+      "title": "Assess unified editing system implementation statu...",
+      "description": "Assess unified editing system implementation status and E2E test failures",
+      "priority": "medium",
+      "status": "pending",
+      "assigned_at": "2025-07-12 02:20:50.101117",
+      "due_date": null,
+      "dependencies": [],
+      "metadata": {
+        "created_by": "ai-team-assign",
+        "estimated_effort": "low",
+        "task_type": "development"
+      }
+    },
+    "task_1752254528_a95df8da": {
+      "id": "task_1752254528_a95df8da",
+      "agent_role": "AgentRole.ARCHITECT",
+      "title": "Design actual unified editing system architecture ...",
+      "description": "Design actual unified editing system architecture based on requirements analysis",
+      "priority": "medium",
+      "status": "pending",
+      "assigned_at": "2025-07-12 02:22:08.009424",
+      "due_date": null,
+      "dependencies": [],
+      "metadata": {
+        "created_by": "ai-team-assign",
+        "estimated_effort": "low",
+        "task_type": "design"
+      }
+    },
+    "task_1752254529_059dd2db": {
+      "id": "task_1752254529_059dd2db",
+      "agent_role": "AgentRole.TESTER",
+      "title": "Develop comprehensive test plan for unified editin...",
+      "description": "Develop comprehensive test plan for unified editing system validation",
+      "priority": "medium",
+      "status": "pending",
+      "assigned_at": "2025-07-12 02:22:09.521232",
+      "due_date": null,
+      "dependencies": [],
+      "metadata": {
+        "created_by": "ai-team-assign",
+        "estimated_effort": "high",
+        "task_type": "development"
+      }
+    },
+    "task_1752254530_a4c6dbf0": {
+      "id": "task_1752254530_a4c6dbf0",
+      "agent_role": "AgentRole.REVIEWER",
+      "title": "Conduct critical gap analysis between planned vs a...",
+      "description": "Conduct critical gap analysis between planned vs actual implementation",
+      "priority": "medium",
+      "status": "pending",
+      "assigned_at": "2025-07-12 02:22:10.590661",
+      "due_date": null,
+      "dependencies": [],
+      "metadata": {
+        "created_by": "ai-team-assign",
+        "estimated_effort": "low",
+        "task_type": "development"
+      }
+    }
+  },
+  "projects": {},
+  "metrics": {},
+  "last_updated": "2025-07-12T02:22:10.590767",
+  "project_name": "Genshi",
+  "created_at": "2025-07-12T02:17:44.660993"
+}
