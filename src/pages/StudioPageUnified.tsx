@@ -30,6 +30,8 @@ export function StudioPageUnified() {
   // System state
   const [systemInitialized, setSystemInitialized] = useState(false)
   const [systemMetrics, setSystemMetrics] = useState<SystemMetrics | null>(null)
+  const [initError, setInitError] = useState<string | null>(null)
+  const [fallbackMode, setFallbackMode] = useState(false)
   const [activeModes, setActiveModes] = useState<Set<CanvasMode>>(new Set([
     CanvasMode.DRAW,
     CanvasMode.PARAMETRIC,
@@ -72,6 +74,15 @@ export function StudioPageUnified() {
     updateCanvasSize()
 
     try {
+      // Log browser capabilities for debugging
+      console.log('🔧 Browser capabilities:', {
+        webgl: !!document.createElement('canvas').getContext('webgl'),
+        webgl2: !!document.createElement('canvas').getContext('webgl2'),
+        devicePixelRatio: window.devicePixelRatio,
+        userAgent: navigator.userAgent.substring(0, 100),
+        canvasSize: { width: canvas.width, height: canvas.height }
+      })
+
       // Create unified editing system configuration
       const config: UnifiedEditingConfig = {
         canvas,
@@ -175,9 +186,31 @@ export function StudioPageUnified() {
       }
     } catch (error) {
       console.error('❌ Failed to initialize Unified Editing System:', error)
+      const errorMessage = error instanceof Error ? error.message : 'Unknown initialization error'
+      
+      // Check if this is a WebGL error and suggest fallback
+      if (errorMessage.toLowerCase().includes('webgl')) {
+        setInitError('WebGL initialization failed. Your browser may not support hardware acceleration.')
+        setFallbackMode(true)
+      } else {
+        setInitError(`Graphics system initialization failed: ${errorMessage}`)
+      }
+      
       setSystemInitialized(false)
     }
   }, [canvasRef.current, containerRef.current])
+
+  // Add initialization timeout to prevent infinite loading
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (!systemInitialized && !initError) {
+        console.warn('⚠️ Initialization timeout - graphics system took too long to load')
+        setInitError('Initialization timeout - graphics system took too long to load. Please try refreshing the page.')
+      }
+    }, 15000) // 15 second timeout
+
+    return () => clearTimeout(timeoutId)
+  }, [systemInitialized, initError])
 
   // Handle mode toggle
   const handleModeToggle = useCallback((mode: CanvasMode) => {
@@ -218,13 +251,47 @@ export function StudioPageUnified() {
     console.log('📤 Export requested, canvas:', canvas)
   }, [setExportDialogOpen])
 
+  // Handle error state
+  if (initError) {
+    return (
+      <div className="flex flex-col h-full items-center justify-center bg-gray-900 text-white">
+        <div className="text-center max-w-md">
+          <div className="text-red-500 text-4xl mb-4">⚠️</div>
+          <h2 className="text-xl font-semibold mb-2">Graphics System Error</h2>
+          <p className="text-gray-400 mb-4">{initError}</p>
+          {fallbackMode && (
+            <p className="text-yellow-400 text-sm mb-4">
+              💡 Try using a different browser or enabling hardware acceleration in your browser settings.
+            </p>
+          )}
+          <div className="flex gap-2 justify-center">
+            <button 
+              onClick={() => window.location.reload()} 
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded transition-colors"
+            >
+              Retry
+            </button>
+            <button 
+              onClick={() => window.location.href = '/genshi-studio/'} 
+              className="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded transition-colors"
+            >
+              Go Home
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Handle loading state
   if (!systemInitialized) {
     return (
       <div className="flex flex-col h-full items-center justify-center bg-gray-900 text-white">
         <div className="text-center">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500 mb-4"></div>
           <h2 className="text-xl font-semibold mb-2">Initializing Unified Editing System</h2>
-          <p className="text-gray-400">Setting up multi-mode collaborative canvas...</p>
+          <p className="text-gray-400 mb-2">Setting up multi-mode collaborative canvas...</p>
+          <p className="text-gray-500 text-sm">This may take up to 15 seconds...</p>
         </div>
       </div>
     )
