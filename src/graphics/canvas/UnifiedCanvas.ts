@@ -861,6 +861,87 @@ export class UnifiedCanvas {
     this.needsRedraw = true;
   }
 
+  // Export methods for compatibility with ExportDialog
+  public toDataURL(options?: {
+    format?: string;
+    quality?: number;
+    multiplier?: number;
+    backgroundColor?: string;
+  }): string {
+    const opts = {
+      format: 'png',
+      quality: 1.0,
+      multiplier: 1.0,
+      backgroundColor: 'transparent',
+      ...options
+    };
+
+    // Create a temporary canvas for export
+    const exportCanvas = document.createElement('canvas');
+    const exportCtx = exportCanvas.getContext('2d')!;
+    
+    // Set dimensions considering multiplier
+    const width = this.mainCanvas.width;
+    const height = this.mainCanvas.height;
+    exportCanvas.width = width * opts.multiplier;
+    exportCanvas.height = height * opts.multiplier;
+    
+    // Scale context for multiplier
+    if (opts.multiplier !== 1) {
+      exportCtx.scale(opts.multiplier, opts.multiplier);
+    }
+    
+    // Add background if specified
+    if (opts.backgroundColor !== 'transparent') {
+      exportCtx.fillStyle = opts.backgroundColor;
+      exportCtx.fillRect(0, 0, width, height);
+    }
+    
+    // Render all active mode layers to export canvas
+    this.activeModes.forEach(mode => {
+      const overlay = this.overlays.get(mode);
+      const state = this.modeStates.get(mode);
+      if (overlay && state && state.visible) {
+        exportCtx.globalAlpha = state.opacity;
+        exportCtx.drawImage(overlay.canvas, 0, 0);
+      }
+    });
+    
+    // Reset alpha
+    exportCtx.globalAlpha = 1.0;
+    
+    return exportCanvas.toDataURL(`image/${opts.format}`, opts.quality);
+  }
+
+  public toSVG(options?: any): string {
+    console.warn('SVG export not yet implemented for UnifiedCanvas. Using PNG fallback.');
+    // For now, return a basic SVG with embedded PNG data
+    const dataURL = this.toDataURL(options);
+    const width = this.mainCanvas.width;
+    const height = this.mainCanvas.height;
+    
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <title>Genshi Studio Pattern</title>
+  <desc>Exported from Genshi Studio Unified Canvas</desc>
+  <image x="0" y="0" width="${width}" height="${height}" href="${dataURL}"/>
+</svg>`;
+  }
+
+  // Get the main canvas element for direct access
+  public getElement(): HTMLCanvasElement {
+    return this.mainCanvas;
+  }
+
+  // Get canvas dimensions
+  public get width(): number {
+    return this.mainCanvas.width;
+  }
+
+  public get height(): number {
+    return this.mainCanvas.height;
+  }
+
   public destroy(): void {
     // Stop render loop
     if (this.animationFrameId) {

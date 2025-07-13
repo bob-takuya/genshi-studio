@@ -3,13 +3,13 @@
  * All four modes (Draw, Parametric, Code, Growth) can edit the same artwork at once
  */
 
-import { Renderer } from '../src/graphics/engine/Renderer';
-import { EnhancedBrushEngine } from '../src/graphics/tools/EnhancedBrushEngine';
-import { ParametricPatternEngine } from '../src/graphics/patterns/ParametricPatternEngine';
-import { CodeExecutionEngine } from '../src/core/execution/CodeExecutionEngine';
-import { OrganicPatternGenerator } from '../src/graphics/patterns/OrganicPatternGenerator';
-import { WebGLContextManager } from '../src/graphics/engine/WebGLContext';
-import { Point, Color, Rectangle } from '../src/types/graphics';
+import { Renderer } from '../engine/Renderer';
+import { EnhancedBrushEngine } from '../tools/EnhancedBrushEngine';
+import { ParametricPatternEngine } from '../patterns/ParametricPatternEngine';
+import { CodeExecutionEngine } from '../../core/execution/CodeExecutionEngine';
+import { OrganicPatternGenerator } from '../patterns/OrganicPatternGenerator';
+import { WebGLContextManager } from '../engine/WebGLContext';
+import { Point, Color, Rectangle } from '../../types/graphics';
 
 export enum CanvasMode {
   DRAW = 'draw',
@@ -325,14 +325,17 @@ export class EnhancedUnifiedCanvas {
     // Bind drawing layer framebuffer
     this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, layer.framebuffer);
     
+    const pressureData = { pressure, tiltX: 0, tiltY: 0, twist: 0 };
+    const velocity = 0; // Calculate velocity from previous points if needed
+    
     switch (type) {
       case 'down':
-        this.brushEngine.startStroke(point, { pressure, tiltX: 0, tiltY: 0, twist: 0 });
+        this.brushEngine.startStroke(point, pressureData, velocity);
         this.state.activeInteractions.set(CanvasMode.DRAW, { drawing: true });
         break;
       case 'move':
         if (this.state.activeInteractions.get(CanvasMode.DRAW)?.drawing) {
-          this.brushEngine.continueStroke(point, { pressure, tiltX: 0, tiltY: 0, twist: 0 });
+          this.brushEngine.continueStroke(point, pressureData, velocity);
         }
         break;
       case 'up':

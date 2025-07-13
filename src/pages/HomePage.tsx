@@ -77,7 +77,7 @@ export function HomePage() {
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
             <Link
-              to="/"
+              to="/studio"
               className="inline-flex items-center gap-2 px-8 py-4 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-colors"
             >
               Open Studio

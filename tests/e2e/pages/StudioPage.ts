@@ -22,7 +22,7 @@ export class StudioPage extends BasePage {
   readonly shapesTool: Locator;
   readonly patternTool: Locator;
   readonly textTool: Locator;
-  readonly selectTool: Locator;
+  readonly selectToolButton: Locator;
   
   // Controls
   readonly undoButton: Locator;
@@ -59,7 +59,7 @@ export class StudioPage extends BasePage {
     this.shapesTool = page.locator('[data-testid="tool-shapes"]');
     this.patternTool = page.locator('[data-testid="tool-pattern"]');
     this.textTool = page.locator('[data-testid="tool-text"]');
-    this.selectTool = page.locator('[data-testid="tool-select"]');
+    this.selectToolButton = page.locator('[data-testid="tool-select"]');
     
     // Control buttons
     this.undoButton = page.locator('[data-testid="undo-button"]');
@@ -110,7 +110,7 @@ export class StudioPage extends BasePage {
       shapes: this.shapesTool,
       pattern: this.patternTool,
       text: this.textTool,
-      select: this.selectTool,
+      select: this.page.locator('[data-testid="tool-select"]'),
     };
     
     await tools[tool].click();

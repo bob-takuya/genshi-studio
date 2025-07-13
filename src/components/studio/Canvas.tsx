@@ -27,7 +27,8 @@ export const Canvas = React.forwardRef<any, {}>((_, ref) => {
     const canvas = new FabricCanvas(canvasRef.current, {
       backgroundColor: '#ffffff',
       selection: true,
-      preserveObjectStacking: true
+      preserveObjectStacking: true,
+      allowTouchScrolling: false // Disable default touch scrolling
     })
 
     fabricRef.current = canvas
@@ -59,7 +60,23 @@ export const Canvas = React.forwardRef<any, {}>((_, ref) => {
     canvas.on('selection:created', handleSelection)
     canvas.on('selection:cleared', handleSelectionCleared)
 
+    // Touch event listeners
+    canvas.on('touch:gesture', handleTouchGesture)
+    canvas.on('touch:drag', handleTouchDrag)
+
+    // Add touch event handlers to canvas element
+    if (canvasRef.current) {
+      canvasRef.current.addEventListener('touchstart', handleTouchStart, { passive: false })
+      canvasRef.current.addEventListener('touchmove', handleTouchMove, { passive: false })
+      canvasRef.current.addEventListener('touchend', handleTouchEnd, { passive: false })
+    }
+
     return () => {
+      if (canvasRef.current) {
+        canvasRef.current.removeEventListener('touchstart', handleTouchStart)
+        canvasRef.current.removeEventListener('touchmove', handleTouchMove)
+        canvasRef.current.removeEventListener('touchend', handleTouchEnd)
+      }
       canvas.dispose()
       fabricRef.current = null
     }
@@ -133,6 +150,139 @@ export const Canvas = React.forwardRef<any, {}>((_, ref) => {
 
   const handleSelectionCleared = useCallback(() => {
     console.log('Selection cleared')
+  }, [])
+
+  // Touch event handlers
+  const [touchData, setTouchData] = useState<{
+    lastTouches: TouchList | null;
+    lastDistance: number;
+    lastCenter: { x: number; y: number } | null;
+    isPinching: boolean;
+    isPanning: boolean;
+  }>({
+    lastTouches: null,
+    lastDistance: 0,
+    lastCenter: null,
+    isPinching: false,
+    isPanning: false
+  })
+
+  const handleTouchStart = useCallback((e: TouchEvent) => {
+    e.preventDefault()
+    const touches = e.touches
+    
+    if (touches.length === 1) {
+      // Single touch - potential drawing
+      setTouchData(prev => ({
+        ...prev,
+        lastTouches: touches,
+        isPanning: false,
+        isPinching: false
+      }))
+    } else if (touches.length === 2) {
+      // Two fingers - pinch to zoom or pan
+      const touch1 = touches[0]
+      const touch2 = touches[1]
+      const distance = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY)
+      const center = {
+        x: (touch1.clientX + touch2.clientX) / 2,
+        y: (touch1.clientY + touch2.clientY) / 2
+      }
+      
+      setTouchData(prev => ({
+        ...prev,
+        lastTouches: touches,
+        lastDistance: distance,
+        lastCenter: center,
+        isPinching: true,
+        isPanning: false
+      }))
+    }
+  }, [])
+
+  const handleTouchMove = useCallback((e: TouchEvent) => {
+    e.preventDefault()
+    const touches = e.touches
+    
+    if (!touchData.lastTouches) return
+    
+    if (touches.length === 2 && touchData.isPinching) {
+      // Handle pinch zoom
+      const touch1 = touches[0]
+      const touch2 = touches[1]
+      const distance = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY)
+      const center = {
+        x: (touch1.clientX + touch2.clientX) / 2,
+        y: (touch1.clientY + touch2.clientY) / 2
+      }
+      
+      if (touchData.lastDistance > 0) {
+        const scale = distance / touchData.lastDistance
+        const newZoom = Math.max(0.1, Math.min(5, zoom * scale))
+        setZoom(newZoom)
+        
+        if (fabricRef.current && touchData.lastCenter) {
+          const rect = canvasRef.current?.getBoundingClientRect()
+          if (rect) {
+            const point = new Point(center.x - rect.left, center.y - rect.top)
+            fabricRef.current.zoomToPoint(point, newZoom)
+          }
+        }
+      }
+      
+      setTouchData(prev => ({
+        ...prev,
+        lastDistance: distance,
+        lastCenter: center
+      }))
+    } else if (touches.length === 1) {
+      // Handle single touch drawing or panning
+      const touch = touches[0]
+      const lastTouch = touchData.lastTouches?.[0]
+      
+      if (lastTouch && fabricRef.current) {
+        const deltaX = touch.clientX - lastTouch.clientX
+        const deltaY = touch.clientY - lastTouch.clientY
+        
+        // If movement is significant, treat as pan
+        if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) {
+          if (!fabricRef.current.isDrawingMode) {
+            // Pan the canvas
+            const vpt = fabricRef.current.viewportTransform!
+            vpt[4] += deltaX
+            vpt[5] += deltaY
+            fabricRef.current.requestRenderAll()
+          }
+        }
+      }
+      
+      setTouchData(prev => ({
+        ...prev,
+        lastTouches: touches
+      }))
+    }
+  }, [touchData, zoom, setZoom])
+
+  const handleTouchEnd = useCallback((e: TouchEvent) => {
+    e.preventDefault()
+    
+    setTouchData({
+      lastTouches: null,
+      lastDistance: 0,
+      lastCenter: null,
+      isPinching: false,
+      isPanning: false
+    })
+  }, [])
+
+  const handleTouchGesture = useCallback((e: any) => {
+    // Handle Fabric.js touch gestures
+    e.e.preventDefault()
+  }, [])
+
+  const handleTouchDrag = useCallback((e: any) => {
+    // Handle Fabric.js touch drag
+    e.e.preventDefault()
   }, [])
 
   // Drawing tools
@@ -278,11 +428,17 @@ export const Canvas = React.forwardRef<any, {}>((_, ref) => {
 
 
   return (
-    <div ref={containerRef} className="relative w-full h-full bg-gray-50 flex" data-testid="main-canvas">
+    <div ref={containerRef} className="relative w-full h-full bg-gray-50 flex canvas-container-mobile md:canvas-container" data-testid="main-canvas">
       {/* Canvas container */}
       <div className="flex-1 relative">
         {/* Canvas element */}
-        <canvas ref={canvasRef} id="drawing-canvas" data-testid="drawing-canvas" />
+        <canvas 
+          ref={canvasRef} 
+          id="drawing-canvas" 
+          data-testid="drawing-canvas"
+          className="canvas-touch"
+          style={{ touchAction: 'none' }}
+        />
         
         {/* Canvas controls */}
         <CanvasControls

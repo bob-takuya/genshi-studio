@@ -14,6 +14,7 @@ import {
   RefreshCw
 } from 'lucide-react'
 import { EnhancedUnifiedCanvas, CanvasMode } from '../../graphics/canvas/EnhancedUnifiedCanvas'
+import { SimpleUnifiedCanvas } from './SimpleUnifiedCanvas'
 import { useAppStore } from '../../hooks/useAppStore'
 
 interface ModeConfig {
@@ -36,6 +37,7 @@ export const UnifiedCanvasStudio: React.FC<UnifiedCanvasStudioProps> = ({
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const unifiedCanvasRef = useRef<EnhancedUnifiedCanvas | null>(null)
+  const [webGLFailed, setWebGLFailed] = useState(false)
   
   const { activeColor } = useAppStore()
   
@@ -123,6 +125,8 @@ export const UnifiedCanvasStudio: React.FC<UnifiedCanvasStudioProps> = ({
       console.log('🎨 Enhanced Unified Canvas Studio initialized')
     } catch (error) {
       console.error('❌ Failed to initialize Enhanced Unified Canvas:', error)
+      console.log('⚡ Falling back to Canvas 2D implementation')
+      setWebGLFailed(true)
     }
 
     // Handle resize
@@ -292,6 +296,11 @@ export const UnifiedCanvasStudio: React.FC<UnifiedCanvasStudioProps> = ({
     }, 16) // 60fps
   }, [showDemo])
 
+  // If WebGL failed, use simple Canvas 2D implementation
+  if (webGLFailed) {
+    return <SimpleUnifiedCanvas className={className} />
+  }
+
   return (
     <div className={`h-full bg-gray-900 text-white relative overflow-hidden ${className}`}>
       {/* Mode Control Panel */}
@@ -452,12 +461,15 @@ export const UnifiedCanvasStudio: React.FC<UnifiedCanvasStudioProps> = ({
       <div 
         ref={containerRef}
         className="relative w-full h-full"
+        data-testid="main-canvas"
         style={{ 
           background: 'radial-gradient(circle at 50% 50%, #1a1a1a 0%, #000000 100%)'
         }}
       >
         <canvas
           ref={canvasRef}
+          id="drawing-canvas"
+          data-testid="drawing-canvas"
           className="absolute inset-0 w-full h-full"
           style={{ 
             imageRendering: 'crisp-edges',
