@@ -18,7 +18,8 @@ function App() {
       <div className="app min-h-screen bg-background text-foreground">
         <Routes>
           <Route path="/" element={<MainLayout />}>
-            <Route index element={<StudioPageUnified />} />
+            <Route index element={<HomePage />} />
+            <Route path="studio" element={<StudioPageUnified />} />
             <Route path="home" element={<HomePage />} />
             <Route path="gallery" element={<GalleryPage />} />
             <Route path="about" element={<AboutPage />} />

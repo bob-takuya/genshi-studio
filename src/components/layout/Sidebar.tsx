@@ -30,19 +30,20 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
       {/* Sidebar */}
       <aside
         className={`
-          fixed lg:static inset-y-0 left-0 z-50
-          w-64 bg-card border-r border-border
-          transform transition-transform duration-200 ease-in-out
-          ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+          fixed md:static inset-y-0 left-0 z-50
+          w-72 md:w-64 bg-card border-r border-border
+          transform transition-transform duration-300 ease-in-out
+          sidebar-mobile md:sidebar-desktop
+          ${isOpen ? 'translate-x-0 open' : '-translate-x-full md:translate-x-0'}
         `}
       >
         <div className="flex flex-col h-full">
           {/* Sidebar header */}
-          <div className="h-16 border-b border-border px-4 flex items-center justify-between">
-            <h2 className="font-semibold">Tools</h2>
+          <div className="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">
+            <h2 className="font-semibold text-base md:text-base">Tools</h2>
             <button
               onClick={onToggle}
-              className="lg:hidden p-2 hover:bg-accent rounded-md transition-colors"
+              className="md:hidden p-3 min-h-[44px] min-w-[44px] hover:bg-accent rounded-md transition-colors"
               aria-label="Close sidebar"
             >
               <X className="h-5 w-5" />
@@ -50,7 +51,7 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
           </div>
 
           {/* Tool panels */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-2">
+          <div className="flex-1 overflow-y-auto p-4 space-y-3 mobile-spacing">
             {tools.map((tool) => {
               const Icon = tool.icon
               const isActive = activeTool === tool.id
@@ -61,14 +62,15 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
                   onClick={() => setActiveTool(tool.id)}
                   className={`
                     w-full flex items-center gap-3 px-4 py-3 rounded-lg
-                    text-sm font-medium transition-colors
+                    text-sm md:text-sm font-medium transition-colors
+                    min-h-[48px] md:min-h-[44px]
                     ${isActive 
                       ? 'bg-primary text-primary-foreground' 
                       : 'hover:bg-accent text-foreground'
                     }
                   `}
                 >
-                  <Icon className="h-5 w-5" />
+                  <Icon className="h-5 w-5 md:h-5 md:w-5" />
                   <span>{tool.name}</span>
                 </button>
               )
@@ -120,14 +122,14 @@ function PalettePanel() {
   const { colors, setActiveColor } = useAppStore()
   
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 mobile-compact">
       <h3 className="text-sm font-semibold mb-2">Colors</h3>
-      <div className="grid grid-cols-5 gap-2">
+      <div className="grid grid-cols-4 md:grid-cols-5 gap-3 md:gap-2">
         {colors.map((color) => (
           <button
             key={color}
             onClick={() => setActiveColor(color)}
-            className="w-10 h-10 rounded border-2 border-border hover:scale-110 transition-transform"
+            className="w-12 h-12 md:w-10 md:h-10 min-h-[44px] md:min-h-[40px] min-w-[44px] md:min-w-[40px] rounded border-2 border-border hover:scale-110 transition-transform"
             style={{ backgroundColor: color }}
             aria-label={`Select color ${color}`}
           />
@@ -139,13 +141,13 @@ function PalettePanel() {
 
 function PatternsPanel() {
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 mobile-compact">
       <h3 className="text-sm font-semibold mb-2">Cultural Patterns</h3>
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-2">
         {['japanese', 'celtic', 'islamic', 'aztec'].map((pattern) => (
           <button
             key={pattern}
-            className="p-3 rounded border border-border hover:bg-accent capitalize text-sm"
+            className="p-3 md:p-3 min-h-[48px] md:min-h-[44px] rounded border border-border hover:bg-accent capitalize text-sm transition-colors"
           >
             {pattern}
           </button>

@@ -65,6 +65,7 @@ export const EnhancedCanvas: React.FC<EnhancedCanvasProps> = ({
     <div className="enhanced-canvas-container" style={{ position: 'relative', width, height }}>
       <canvas
         ref={canvasRef}
+        data-testid="main-canvas"
         width={width}
         height={height}
         style={{

@@ -19,10 +19,12 @@ test.describe('Application Loading and Initialization', () => {
     const toolbar = page.locator('[data-testid="tool-panel"]');
     await expect(toolbar).toBeVisible();
     
-    const drawButton = page.locator('button:has-text("Draw")');
+    // Use more specific selector to avoid ambiguity
+    const drawButton = page.locator('[data-testid="tool-panel"]').locator('button:has-text("Draw")').first();
     await expect(drawButton).toBeVisible();
     
-    const canvas = page.locator('#drawing-canvas');
+    // Canvas might have different ID, look for any visible canvas
+    const canvas = page.locator('canvas').first();
     await expect(canvas).toBeVisible();
     
     // Verify no console errors

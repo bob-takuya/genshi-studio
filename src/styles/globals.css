@@ -172,6 +172,125 @@ body {
   outline-offset: 2px;
 }
 
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  /* Touch-friendly button sizes */
+  .btn {
+    @apply px-4 py-3 text-base min-h-[44px] min-w-[44px];
+  }
+  
+  /* Mobile toolbar */
+  .toolbar-mobile {
+    @apply flex-wrap gap-1 p-2;
+  }
+  
+  .toolbar-mobile .tool-button {
+    @apply p-3 min-h-[44px] min-w-[44px] text-sm;
+  }
+  
+  /* Mobile canvas container */
+  .canvas-container-mobile {
+    @apply relative w-full h-full touch-none;
+  }
+  
+  /* Hide text labels on mobile for space */
+  .mobile-hide-text {
+    @apply hidden;
+  }
+  
+  /* Compact mode for mobile */
+  .mobile-compact {
+    @apply p-2 text-sm;
+  }
+  
+  /* Touch-friendly spacing */
+  .mobile-spacing {
+    @apply space-y-3;
+  }
+  
+  /* Mobile sidebar overlay */
+  .sidebar-overlay {
+    @apply fixed inset-0 bg-black/50 z-40;
+  }
+  
+  .sidebar-mobile {
+    @apply fixed left-0 top-0 h-full w-72 bg-surface border-r border-border z-50;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .sidebar-mobile.open {
+    transform: translateX(0);
+  }
+}
+
+/* Tablet responsive styles */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .toolbar-tablet {
+    @apply gap-2 p-3;
+  }
+  
+  .toolbar-tablet .tool-button {
+    @apply p-2.5 min-h-[40px] min-w-[40px];
+  }
+}
+
+/* Touch device styles */
+@media (hover: none) and (pointer: coarse) {
+  /* Touch-friendly interactive elements */
+  button, [role="button"] {
+    @apply min-h-[44px] min-w-[44px];
+  }
+  
+  /* Remove hover effects on touch devices */
+  .hover\:scale-105:hover {
+    transform: none;
+  }
+  
+  /* Touch feedback */
+  button:active, [role="button"]:active {
+    @apply scale-95;
+  }
+}
+
+/* Canvas touch styles */
+.canvas-touch {
+  touch-action: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Mobile-first responsive breakpoints */
+.mobile-only {
+  @apply block;
+}
+
+.tablet-up {
+  @apply hidden;
+}
+
+.desktop-up {
+  @apply hidden;
+}
+
+@media (min-width: 768px) {
+  .mobile-only {
+    @apply hidden;
+  }
+  
+  .tablet-up {
+    @apply block;
+  }
+}
+
+@media (min-width: 1024px) {
+  .desktop-up {
+    @apply block;
+  }
+}
+
 /* Print Styles */
 @media print {
   body {

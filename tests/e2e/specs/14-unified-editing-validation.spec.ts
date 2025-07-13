@@ -9,7 +9,7 @@ test.describe('Unified Editing System - Core Validation', () => {
   
   test.beforeEach(async ({ page }) => {
     // Navigate to studio page
-    await page.goto('http://localhost:3002/genshi-studio/studio');
+    await page.goto('/');
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(2000); // Allow for component initialization
   });

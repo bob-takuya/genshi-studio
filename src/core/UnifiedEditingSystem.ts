@@ -83,21 +83,31 @@ export class UnifiedEditingSystem {
   private eventListeners: Map<string, Function[]> = new Map();
 
   constructor(config: UnifiedEditingConfig) {
+    console.log('🔧 UnifiedEditingSystem constructor called with config:', config);
     this.performanceTarget = config.performanceTarget || { fps: 60, maxSyncLatency: 16 };
 
-    // Initialize engines
-    this.initializeEngines(config);
+    try {
+      // Initialize engines
+      console.log('🔧 Initializing engines...');
+      this.initializeEngines(config);
 
-    // Setup translation connections
-    this.setupTranslationPipeline();
+      // Setup translation connections
+      console.log('🔧 Setting up translation pipeline...');
+      this.setupTranslationPipeline();
 
-    // Setup synchronization handlers
-    this.setupSynchronizationHandlers();
+      // Setup synchronization handlers
+      console.log('🔧 Setting up synchronization handlers...');
+      this.setupSynchronizationHandlers();
 
-    // Setup canvas integration
-    this.setupCanvasIntegration();
+      // Setup canvas integration
+      console.log('🔧 Setting up canvas integration...');
+      this.setupCanvasIntegration();
 
-    console.log('🚀 Unified Editing System initialized');
+      console.log('🚀 Unified Editing System initialized');
+    } catch (error) {
+      console.error('❌ Error in UnifiedEditingSystem constructor:', error);
+      throw error;
+    }
   }
 
   private initializeEngines(config: UnifiedEditingConfig): void {
@@ -405,20 +415,32 @@ export class UnifiedEditingSystem {
   // Public API methods
 
   public start(): void {
-    if (this.isRunning) return;
+    console.log('🔧 UnifiedEditingSystem.start() called');
+    if (this.isRunning) {
+      console.log('⚠️ System already running');
+      return;
+    }
 
-    // Start synchronization engine
-    this.syncEngine.start();
+    try {
+      // Start synchronization engine
+      console.log('🔧 Starting sync engine...');
+      this.syncEngine.start();
 
-    // Register all active modes
-    this.activeModes.forEach(mode => {
-      const modeType = MODE_MAPPING[mode];
-      this.syncEngine.registerMode(modeType, this.getDefaultModeData(modeType));
-    });
+      // Register all active modes
+      console.log('🔧 Registering active modes:', Array.from(this.activeModes));
+      this.activeModes.forEach(mode => {
+        const modeType = MODE_MAPPING[mode];
+        this.syncEngine.registerMode(modeType, this.getDefaultModeData(modeType));
+      });
 
-    this.isRunning = true;
-    this.emit('system:started');
-    console.log('🚀 Unified Editing System started');
+      this.isRunning = true;
+      console.log('🔧 About to emit system:started event');
+      this.emit('system:started');
+      console.log('🚀 Unified Editing System started');
+    } catch (error) {
+      console.error('❌ Error starting UnifiedEditingSystem:', error);
+      throw error;
+    }
   }
 
   public stop(): void {
@@ -543,7 +565,9 @@ export class UnifiedEditingSystem {
   }
 
   public emit(event: string, data?: any): void {
+    console.log(`🔔 Emitting event: ${event}`, data);
     const listeners = this.eventListeners.get(event);
+    console.log(`🔔 Found ${listeners?.length || 0} listeners for event: ${event}`);
     if (listeners) {
       listeners.forEach(listener => {
         try {

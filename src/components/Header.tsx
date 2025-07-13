@@ -58,6 +58,7 @@ export default function Header() {
                   ? 'bg-primary text-white'
                   : 'hover:bg-background text-text-secondary hover:text-text-primary'
               }`}
+              data-testid={`nav-${item.label.toLowerCase()}`}
             >
               {item.label}
             </Link>
@@ -72,6 +73,7 @@ export default function Header() {
           onClick={toggleTheme}
           className="p-2 rounded-lg hover:bg-background transition-colors"
           aria-label="Toggle theme"
+          data-testid="theme-toggle"
         >
           {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
         </button>

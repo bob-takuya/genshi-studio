@@ -57,6 +57,7 @@ export const Canvas: React.FC<CanvasProps> = ({
     <div className="canvas-container" style={{ position: 'relative' }}>
       <canvas
         ref={canvasRef}
+        data-testid="main-canvas"
         width={width}
         height={height}
         style={{

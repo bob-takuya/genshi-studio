@@ -49,7 +49,13 @@ export function StudioPageUnified() {
 
   // Initialize unified editing system
   useEffect(() => {
-    if (!canvasRef.current || !containerRef.current || systemInitialized) return
+    console.log('StudioPageUnified useEffect running', {
+      canvasRef: canvasRef.current,
+      containerRef: containerRef.current,
+      systemInitialized
+    });
+    
+    if (!canvasRef.current || !containerRef.current || systemInitialized) return;
 
     const canvas = canvasRef.current
     const container = containerRef.current
@@ -208,9 +214,8 @@ export function StudioPageUnified() {
     if (!systemRef.current) return
 
     const canvas = systemRef.current.getCanvas()
-    // Export logic would go here
     setExportDialogOpen(true)
-    console.log('📤 Export requested')
+    console.log('📤 Export requested, canvas:', canvas)
   }, [setExportDialogOpen])
 
   if (!systemInitialized) {
@@ -288,12 +293,15 @@ export function StudioPageUnified() {
       <div className="flex-1 relative overflow-hidden">
         <div 
           className="relative w-full h-full"
+          data-testid="main-canvas"
           style={{ 
             background: 'radial-gradient(circle at 50% 50%, #1a1a1a 0%, #000000 100%)'
           }}
         >
           <canvas
             ref={canvasRef}
+            id="drawing-canvas"
+            data-testid="drawing-canvas"
             className="absolute inset-0 w-full h-full cursor-crosshair"
             style={{ 
               imageRendering: 'crisp-edges',
@@ -412,7 +420,7 @@ export function StudioPageUnified() {
       <ExportDialog 
         isOpen={exportDialogOpen} 
         onClose={() => setExportDialogOpen(false)}
-        canvas={canvasRef.current}
+        canvas={systemRef.current?.getCanvas() || null}
       />
       
       <PresetDialog 

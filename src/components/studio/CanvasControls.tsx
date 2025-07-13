@@ -78,6 +78,7 @@ export function CanvasControls({
                   : 'hover:bg-accent'
               }`}
               aria-label={tool.name}
+              data-testid={`tool-${tool.id}`}
             >
               <Icon className="h-5 w-5" />
               
@@ -96,6 +97,7 @@ export function CanvasControls({
           onClick={onClear}
           className="p-2.5 hover:bg-accent rounded-md transition-colors group"
           aria-label="Clear canvas"
+          data-testid="clear-canvas-button"
         >
           <Trash2 className="h-5 w-5" />
           
@@ -111,6 +113,7 @@ export function CanvasControls({
           onClick={onExport}
           className="p-2.5 hover:bg-accent rounded-md transition-colors group"
           aria-label="Export"
+          data-testid="export-button"
         >
           <Download className="h-5 w-5" />
           
@@ -124,6 +127,7 @@ export function CanvasControls({
           onClick={onGenerateTestPattern}
           className="p-2.5 hover:bg-accent rounded-md transition-colors group"
           aria-label="Generate Test Pattern"
+          data-testid="generate-test-pattern-button"
         >
           <Sparkles className="h-5 w-5" />
           
@@ -141,6 +145,7 @@ export function CanvasControls({
               : 'hover:bg-accent'
           }`}
           aria-label="Toggle Pattern Library"
+          data-testid="toggle-pattern-library-button"
         >
           <Palette className="h-5 w-5" />
           

@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { Canvas } from '../components/studio/Canvas'
 import { Toolbar } from '../components/studio/Toolbar'
+import { MobileToolbar } from '../components/studio/MobileToolbar'
 import { CodeEditor } from '../components/studio/CodeEditor'
 import { PatternSelector } from '../components/studio/PatternSelector'
 import { ParametricPatternEditor } from '../components/studio/ParametricPatternEditor'
@@ -29,11 +30,13 @@ export function StudioPage() {
 
   return (
     <div ref={containerRef} className="flex flex-col h-full">
-      {/* Toolbar */}
-      <Toolbar />
+      {/* Desktop Toolbar */}
+      <div className="hidden md:block">
+        <Toolbar />
+      </div>
       
-      {/* Main studio area */}
-      <div className="flex-1 relative overflow-hidden">
+      {/* Main studio area with mobile padding */}
+      <div className="flex-1 relative overflow-hidden pb-20 md:pb-0">
         {canvasMode === 'draw' ? (
           <>
             {/* Drawing canvas */}
@@ -53,6 +56,9 @@ export function StudioPage() {
           <InteractiveGrowthStudio />
         )}
       </div>
+      
+      {/* Mobile Toolbar */}
+      <MobileToolbar />
       
       {/* Dialogs */}
       <ExportDialog 

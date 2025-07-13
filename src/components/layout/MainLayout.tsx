@@ -9,6 +9,14 @@ export function MainLayout() {
 
   return (
     <div className="flex h-screen overflow-hidden">
+      {/* Mobile sidebar overlay */}
+      {sidebarOpen && (
+        <div 
+          className="sidebar-overlay md:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+      
       {/* Sidebar */}
       <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(!sidebarOpen)} />
       
@@ -18,12 +26,14 @@ export function MainLayout() {
         <Header />
         
         {/* Page content */}
-        <main className="flex-1 overflow-auto bg-background">
+        <main className="flex-1 overflow-auto bg-background touch-pan-y">
           <Outlet />
         </main>
         
-        {/* Status bar */}
-        <StatusBar />
+        {/* Status bar - hide on mobile to save space */}
+        <div className="hidden md:block">
+          <StatusBar />
+        </div>
       </div>
     </div>
   )

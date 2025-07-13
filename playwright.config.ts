@@ -47,8 +47,7 @@ export default defineConfig({
     // User agent for better debugging
     userAgent: 'Genshi-Studio-E2E-Tests/1.0',
     
-    // Permissions
-    permissions: ['clipboard-read', 'clipboard-write'],
+    // Permissions (removed for cross-browser compatibility)
     
     // Browser context options
     colorScheme: 'light',

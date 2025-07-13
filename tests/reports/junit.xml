@@ -1,141 +1,992 @@
-<testsuites id="" name="" tests="1" failures="1" skipped="0" errors="0" time="22.522111999999996">
-<testsuite name="specs/13-console-errors.spec.ts" timestamp="2025-07-12T05:26:14.635Z" hostname="chromium" tests="1" failures="1" skipped="0" time="21.395" errors="0">
-<testcase name="Console Error Check › should check for console errors on Studio page" classname="specs/13-console-errors.spec.ts" time="21.395">
-<failure message="13-console-errors.spec.ts:4:3 should check for console errors on Studio page" type="FAILURE">
-<![CDATA[  [chromium] › specs/13-console-errors.spec.ts:4:3 › Console Error Check › should check for console errors on Studio page 
+<testsuites id="" name="" tests="9" failures="8" skipped="0" errors="0" time="45.504948000000006">
+<testsuite name="mobile-responsiveness.spec.ts" timestamp="2025-07-13T16:21:58.107Z" hostname="chromium" tests="9" failures="8" skipped="0" time="170.882" errors="0">
+<testcase name="Mobile Responsiveness › should display mobile toolbar on mobile viewport" classname="mobile-responsiveness.spec.ts" time="21.575">
+<failure message="mobile-responsiveness.spec.ts:8:3 should display mobile toolbar on mobile viewport" type="FAILURE">
+<![CDATA[  [chromium] › mobile-responsiveness.spec.ts:8:3 › Mobile Responsiveness › should display mobile toolbar on mobile viewport 
 
-    TimeoutError: locator.click: Timeout 10000ms exceeded.
+    TimeoutError: page.click: Timeout 10000ms exceeded.
     Call log:
-      - waiting for getByRole('link', { name: 'Studio', exact: true })
+      - waiting for locator('[data-testid="app-logo"]')
+        - locator resolved to <a data-discover="true" href="/genshi-studio" data-testid="app-logo" class="flex items-center gap-2 font-bold text-lg">…</a>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        18 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
 
 
-      22 |     
-      23 |     // Navigate to Studio
-    > 24 |     await page.getByRole('link', { name: 'Studio', exact: true }).click();
-         |                                                                   ^
-      25 |     await page.waitForURL('**/studio', { timeout: 5000 });
-      26 |     
-      27 |     // Wait a bit for any async errors
-        at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/13-console-errors.spec.ts:24:67
+      11 |     
+      12 |     // Navigate to studio
+    > 13 |     await page.click('[data-testid="app-logo"]')
+         |                ^
+      14 |     await page.waitForSelector('[data-testid="main-canvas"]', { timeout: 10000 })
+      15 |     
+      16 |     // Mobile toolbar should be visible
+        at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/mobile-responsiveness.spec.ts:13:16
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    tests/results/specs-13-console-errors-Co-884d6-nsole-errors-on-Studio-page-chromium/test-failed-1.png
+    tests/results/mobile-responsiveness-Mobi-bfb01--toolbar-on-mobile-viewport-chromium/test-failed-1.png
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
     attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    tests/results/specs-13-console-errors-Co-884d6-nsole-errors-on-Studio-page-chromium/video.webm
+    tests/results/mobile-responsiveness-Mobi-bfb01--toolbar-on-mobile-viewport-chromium/video.webm
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-    Error Context: ../results/specs-13-console-errors-Co-884d6-nsole-errors-on-Studio-page-chromium/error-context.md
+    Error Context: ../results/mobile-responsiveness-Mobi-bfb01--toolbar-on-mobile-viewport-chromium/error-context.md
 
     Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
 
-    TimeoutError: locator.click: Timeout 10000ms exceeded.
+    TimeoutError: page.click: Timeout 10000ms exceeded.
     Call log:
-      - waiting for getByRole('link', { name: 'Studio', exact: true })
+      - waiting for locator('[data-testid="app-logo"]')
+        - locator resolved to <a data-discover="true" href="/genshi-studio" data-testid="app-logo" class="flex items-center gap-2 font-bold text-lg">…</a>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        19 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+         - retrying click action
+           - waiting 500ms
 
 
-      22 |     
-      23 |     // Navigate to Studio
-    > 24 |     await page.getByRole('link', { name: 'Studio', exact: true }).click();
-         |                                                                   ^
-      25 |     await page.waitForURL('**/studio', { timeout: 5000 });
-      26 |     
-      27 |     // Wait a bit for any async errors
-        at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/specs/13-console-errors.spec.ts:24:67
+      11 |     
+      12 |     // Navigate to studio
+    > 13 |     await page.click('[data-testid="app-logo"]')
+         |                ^
+      14 |     await page.waitForSelector('[data-testid="main-canvas"]', { timeout: 10000 })
+      15 |     
+      16 |     // Mobile toolbar should be visible
+        at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/mobile-responsiveness.spec.ts:13:16
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    tests/results/specs-13-console-errors-Co-884d6-nsole-errors-on-Studio-page-chromium-retry1/test-failed-1.png
+    tests/results/mobile-responsiveness-Mobi-bfb01--toolbar-on-mobile-viewport-chromium-retry1/test-failed-1.png
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
     attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    tests/results/specs-13-console-errors-Co-884d6-nsole-errors-on-Studio-page-chromium-retry1/video.webm
+    tests/results/mobile-responsiveness-Mobi-bfb01--toolbar-on-mobile-viewport-chromium-retry1/video.webm
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-    Error Context: ../results/specs-13-console-errors-Co-884d6-nsole-errors-on-Studio-page-chromium-retry1/error-context.md
+    Error Context: ../results/mobile-responsiveness-Mobi-bfb01--toolbar-on-mobile-viewport-chromium-retry1/error-context.md
 
     attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    tests/results/specs-13-console-errors-Co-884d6-nsole-errors-on-Studio-page-chromium-retry1/trace.zip
+    tests/results/mobile-responsiveness-Mobi-bfb01--toolbar-on-mobile-viewport-chromium-retry1/trace.zip
     Usage:
 
-        npx playwright show-trace tests/results/specs-13-console-errors-Co-884d6-nsole-errors-on-Studio-page-chromium-retry1/trace.zip
+        npx playwright show-trace tests/results/mobile-responsiveness-Mobi-bfb01--toolbar-on-mobile-viewport-chromium-retry1/trace.zip
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 ]]>
 </failure>
 <system-out>
-<![CDATA[Homepage console messages: [
-  [32m'debug: [vite] connecting...'[39m,
-  [32m'debug: [vite] connected.'[39m,
-  [32m'info: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold'[39m,
-  [32m'log: i18next: languageChanged en-US'[39m,
-  [32m'log: i18next: initialized {debug: true, initAsync: true, ns: Array(1), defaultNS: common, fallbackLng: Array(1)}'[39m,
-  [32m'log: 🚀 FastArchitectureService initialized with baseUrl: /archi-site/data'[39m,
-  [32m'log: 🔧 Environment debug info:'[39m,
-  [32m'log:   - import.meta.env.PROD: false'[39m,
-  [32m'log:   - BASE_PATH: /archi-site'[39m,
-  [32m'log:   - Database config URL: /archi-site/db/archimap.sqlite3.json'[39m,
-  [32m'log: React アプリケーションを初期化中... development'[39m,
-  [32m'log: DOM root element: JSHandle@node'[39m,
-  [32m'log: Using HashRouter for GitHub Pages compatibility'[39m,
-  [32m'log: React アプリケーションのレンダリングが成功しました'[39m
-]
-Homepage errors: []
+<![CDATA[
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-bfb01--toolbar-on-mobile-viewport-chromium/test-failed-1.png]]
 
-[[ATTACHMENT|../results/specs-13-console-errors-Co-884d6-nsole-errors-on-Studio-page-chromium/test-failed-1.png]]
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-bfb01--toolbar-on-mobile-viewport-chromium/video.webm]]
 
-[[ATTACHMENT|../results/specs-13-console-errors-Co-884d6-nsole-errors-on-Studio-page-chromium/video.webm]]
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-bfb01--toolbar-on-mobile-viewport-chromium/error-context.md]]
 
-[[ATTACHMENT|../results/specs-13-console-errors-Co-884d6-nsole-errors-on-Studio-page-chromium/error-context.md]]
-Homepage console messages: [
-  [32m'debug: [vite] connecting...'[39m,
-  [32m'debug: [vite] connected.'[39m,
-  [32m'info: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold'[39m,
-  [32m'log: i18next: languageChanged en-US'[39m,
-  [32m'log: i18next: initialized {debug: true, initAsync: true, ns: Array(1), defaultNS: common, fallbackLng: Array(1)}'[39m,
-  [32m'log: 🚀 FastArchitectureService initialized with baseUrl: /archi-site/data'[39m,
-  [32m'log: 🔧 Environment debug info:'[39m,
-  [32m'log:   - import.meta.env.PROD: false'[39m,
-  [32m'log:   - BASE_PATH: /archi-site'[39m,
-  [32m'log:   - Database config URL: /archi-site/db/archimap.sqlite3.json'[39m,
-  [32m'log: React アプリケーションを初期化中... development'[39m,
-  [32m'log: DOM root element: JSHandle@node'[39m,
-  [32m'log: Using HashRouter for GitHub Pages compatibility'[39m,
-  [32m'log: React アプリケーションのレンダリングが成功しました'[39m,
-  [32m'log: i18next::translator: missingKey en-US common navigation.analytics navigation.analytics'[39m,
-  [32m'log: i18next::translator: missingKey en-US common navigation.analytics navigation.analytics'[39m,
-  [32m'log: i18next::translator: missingKey en-US common navigation.analytics navigation.analytics'[39m,
-  [32m'log: i18next::translator: missingKey en-US common navigation.analytics navigation.analytics'[39m,
-  [32m'log: 最近の建築作品を取得中...'[39m,
-  [32m'log: 最近の建築作品を取得中...'[39m,
-  [32m'error: The above error occurred in the <App> component:\n'[39m +
-    [32m'\n'[39m +
-    [32m'    at App (http://localhost:3001/archi-site/src/App.tsx:370:45)\n'[39m +
-    [32m'\n'[39m +
-    [32m'Consider adding an error boundary to your tree to customize error handling behavior.\n'[39m +
-    [32m'Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.'[39m,
-  [32m'error: The above error occurred in the <App> component:\n'[39m +
-    [32m'\n'[39m +
-    [32m'    at App (http://localhost:3001/archi-site/src/App.tsx:370:45)\n'[39m +
-    [32m'\n'[39m +
-    [32m'Consider adding an error boundary to your tree to customize error handling behavior.\n'[39m +
-    [32m'Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.'[39m
-]
-Homepage errors: [
-  [32m'process is not defined'[39m,
-  [32m'process is not defined'[39m,
-  [32m'process is not defined'[39m,
-  [32m'process is not defined'[39m,
-  [32m'process is not defined'[39m
-]
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-bfb01--toolbar-on-mobile-viewport-chromium-retry1/test-failed-1.png]]
 
-[[ATTACHMENT|../results/specs-13-console-errors-Co-884d6-nsole-errors-on-Studio-page-chromium-retry1/test-failed-1.png]]
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-bfb01--toolbar-on-mobile-viewport-chromium-retry1/video.webm]]
 
-[[ATTACHMENT|../results/specs-13-console-errors-Co-884d6-nsole-errors-on-Studio-page-chromium-retry1/video.webm]]
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-bfb01--toolbar-on-mobile-viewport-chromium-retry1/error-context.md]]
 
-[[ATTACHMENT|../results/specs-13-console-errors-Co-884d6-nsole-errors-on-Studio-page-chromium-retry1/error-context.md]]
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-bfb01--toolbar-on-mobile-viewport-chromium-retry1/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Mobile Responsiveness › should display desktop toolbar on desktop viewport" classname="mobile-responsiveness.spec.ts" time="21.587">
+<failure message="mobile-responsiveness.spec.ts:25:3 should display desktop toolbar on desktop viewport" type="FAILURE">
+<![CDATA[  [chromium] › mobile-responsiveness.spec.ts:25:3 › Mobile Responsiveness › should display desktop toolbar on desktop viewport 
 
-[[ATTACHMENT|../results/specs-13-console-errors-Co-884d6-nsole-errors-on-Studio-page-chromium-retry1/trace.zip]]
+    TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="main-canvas"]') to be visible
+
+
+      29 |     // Navigate to studio
+      30 |     await page.click('[data-testid="app-logo"]')
+    > 31 |     await page.waitForSelector('[data-testid="main-canvas"]', { timeout: 10000 })
+         |                ^
+      32 |     
+      33 |     // Desktop toolbar should be visible
+      34 |     const desktopToolbar = page.locator('[data-testid="tool-panel"]')
+        at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/mobile-responsiveness.spec.ts:31:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/results/mobile-responsiveness-Mobi-f764e-toolbar-on-desktop-viewport-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    tests/results/mobile-responsiveness-Mobi-f764e-toolbar-on-desktop-viewport-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../results/mobile-responsiveness-Mobi-f764e-toolbar-on-desktop-viewport-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="main-canvas"]') to be visible
+
+
+      29 |     // Navigate to studio
+      30 |     await page.click('[data-testid="app-logo"]')
+    > 31 |     await page.waitForSelector('[data-testid="main-canvas"]', { timeout: 10000 })
+         |                ^
+      32 |     
+      33 |     // Desktop toolbar should be visible
+      34 |     const desktopToolbar = page.locator('[data-testid="tool-panel"]')
+        at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/mobile-responsiveness.spec.ts:31:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/results/mobile-responsiveness-Mobi-f764e-toolbar-on-desktop-viewport-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    tests/results/mobile-responsiveness-Mobi-f764e-toolbar-on-desktop-viewport-chromium-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../results/mobile-responsiveness-Mobi-f764e-toolbar-on-desktop-viewport-chromium-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/results/mobile-responsiveness-Mobi-f764e-toolbar-on-desktop-viewport-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/results/mobile-responsiveness-Mobi-f764e-toolbar-on-desktop-viewport-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-f764e-toolbar-on-desktop-viewport-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-f764e-toolbar-on-desktop-viewport-chromium/video.webm]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-f764e-toolbar-on-desktop-viewport-chromium/error-context.md]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-f764e-toolbar-on-desktop-viewport-chromium-retry1/test-failed-1.png]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-f764e-toolbar-on-desktop-viewport-chromium-retry1/video.webm]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-f764e-toolbar-on-desktop-viewport-chromium-retry1/error-context.md]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-f764e-toolbar-on-desktop-viewport-chromium-retry1/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Mobile Responsiveness › should have touch-friendly button sizes on mobile" classname="mobile-responsiveness.spec.ts" time="21.499">
+<failure message="mobile-responsiveness.spec.ts:38:3 should have touch-friendly button sizes on mobile" type="FAILURE">
+<![CDATA[  [chromium] › mobile-responsiveness.spec.ts:38:3 › Mobile Responsiveness › should have touch-friendly button sizes on mobile 
+
+    TimeoutError: page.click: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="app-logo"]')
+        - locator resolved to <a data-discover="true" href="/genshi-studio" data-testid="app-logo" class="flex items-center gap-2 font-bold text-lg">…</a>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        18 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+
+
+      41 |     
+      42 |     // Navigate to studio
+    > 43 |     await page.click('[data-testid="app-logo"]')
+         |                ^
+      44 |     await page.waitForSelector('[data-testid="main-canvas"]', { timeout: 10000 })
+      45 |     
+      46 |     // Check button sizes in mobile toolbar
+        at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/mobile-responsiveness.spec.ts:43:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/results/mobile-responsiveness-Mobi-d5e52-ndly-button-sizes-on-mobile-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    tests/results/mobile-responsiveness-Mobi-d5e52-ndly-button-sizes-on-mobile-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../results/mobile-responsiveness-Mobi-d5e52-ndly-button-sizes-on-mobile-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.click: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="app-logo"]')
+        - locator resolved to <a data-discover="true" href="/genshi-studio" data-testid="app-logo" class="flex items-center gap-2 font-bold text-lg">…</a>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        19 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+
+
+      41 |     
+      42 |     // Navigate to studio
+    > 43 |     await page.click('[data-testid="app-logo"]')
+         |                ^
+      44 |     await page.waitForSelector('[data-testid="main-canvas"]', { timeout: 10000 })
+      45 |     
+      46 |     // Check button sizes in mobile toolbar
+        at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/mobile-responsiveness.spec.ts:43:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/results/mobile-responsiveness-Mobi-d5e52-ndly-button-sizes-on-mobile-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    tests/results/mobile-responsiveness-Mobi-d5e52-ndly-button-sizes-on-mobile-chromium-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../results/mobile-responsiveness-Mobi-d5e52-ndly-button-sizes-on-mobile-chromium-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/results/mobile-responsiveness-Mobi-d5e52-ndly-button-sizes-on-mobile-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/results/mobile-responsiveness-Mobi-d5e52-ndly-button-sizes-on-mobile-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-d5e52-ndly-button-sizes-on-mobile-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-d5e52-ndly-button-sizes-on-mobile-chromium/video.webm]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-d5e52-ndly-button-sizes-on-mobile-chromium/error-context.md]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-d5e52-ndly-button-sizes-on-mobile-chromium-retry1/test-failed-1.png]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-d5e52-ndly-button-sizes-on-mobile-chromium-retry1/video.webm]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-d5e52-ndly-button-sizes-on-mobile-chromium-retry1/error-context.md]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-d5e52-ndly-button-sizes-on-mobile-chromium-retry1/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Mobile Responsiveness › should toggle mobile sidebar overlay" classname="mobile-responsiveness.spec.ts" time="21.287">
+<failure message="mobile-responsiveness.spec.ts:55:3 should toggle mobile sidebar overlay" type="FAILURE">
+<![CDATA[  [chromium] › mobile-responsiveness.spec.ts:55:3 › Mobile Responsiveness › should toggle mobile sidebar overlay 
+
+    TimeoutError: page.click: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="app-logo"]')
+        - locator resolved to <a data-discover="true" href="/genshi-studio" data-testid="app-logo" class="flex items-center gap-2 font-bold text-lg">…</a>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        18 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+
+
+      58 |     
+      59 |     // Navigate to studio
+    > 60 |     await page.click('[data-testid="app-logo"]')
+         |                ^
+      61 |     await page.waitForSelector('[data-testid="main-canvas"]', { timeout: 10000 })
+      62 |     
+      63 |     // Open sidebar
+        at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/mobile-responsiveness.spec.ts:60:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/results/mobile-responsiveness-Mobi-be25d-ggle-mobile-sidebar-overlay-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    tests/results/mobile-responsiveness-Mobi-be25d-ggle-mobile-sidebar-overlay-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../results/mobile-responsiveness-Mobi-be25d-ggle-mobile-sidebar-overlay-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.click: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="app-logo"]')
+        - locator resolved to <a data-discover="true" href="/genshi-studio" data-testid="app-logo" class="flex items-center gap-2 font-bold text-lg">…</a>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        19 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+
+
+      58 |     
+      59 |     // Navigate to studio
+    > 60 |     await page.click('[data-testid="app-logo"]')
+         |                ^
+      61 |     await page.waitForSelector('[data-testid="main-canvas"]', { timeout: 10000 })
+      62 |     
+      63 |     // Open sidebar
+        at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/mobile-responsiveness.spec.ts:60:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/results/mobile-responsiveness-Mobi-be25d-ggle-mobile-sidebar-overlay-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    tests/results/mobile-responsiveness-Mobi-be25d-ggle-mobile-sidebar-overlay-chromium-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../results/mobile-responsiveness-Mobi-be25d-ggle-mobile-sidebar-overlay-chromium-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/results/mobile-responsiveness-Mobi-be25d-ggle-mobile-sidebar-overlay-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/results/mobile-responsiveness-Mobi-be25d-ggle-mobile-sidebar-overlay-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-be25d-ggle-mobile-sidebar-overlay-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-be25d-ggle-mobile-sidebar-overlay-chromium/video.webm]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-be25d-ggle-mobile-sidebar-overlay-chromium/error-context.md]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-be25d-ggle-mobile-sidebar-overlay-chromium-retry1/test-failed-1.png]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-be25d-ggle-mobile-sidebar-overlay-chromium-retry1/video.webm]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-be25d-ggle-mobile-sidebar-overlay-chromium-retry1/error-context.md]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-be25d-ggle-mobile-sidebar-overlay-chromium-retry1/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Mobile Responsiveness › should have proper zoom controls on mobile" classname="mobile-responsiveness.spec.ts" time="21.718">
+<failure message="mobile-responsiveness.spec.ts:76:3 should have proper zoom controls on mobile" type="FAILURE">
+<![CDATA[  [chromium] › mobile-responsiveness.spec.ts:76:3 › Mobile Responsiveness › should have proper zoom controls on mobile 
+
+    TimeoutError: page.click: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="app-logo"]')
+        - locator resolved to <a data-discover="true" href="/genshi-studio" data-testid="app-logo" class="flex items-center gap-2 font-bold text-lg">…</a>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        19 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+
+
+      79 |     
+      80 |     // Navigate to studio
+    > 81 |     await page.click('[data-testid="app-logo"]')
+         |                ^
+      82 |     await page.waitForSelector('[data-testid="main-canvas"]', { timeout: 10000 })
+      83 |     
+      84 |     // Expand mobile toolbar
+        at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/mobile-responsiveness.spec.ts:81:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/results/mobile-responsiveness-Mobi-de20f-per-zoom-controls-on-mobile-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    tests/results/mobile-responsiveness-Mobi-de20f-per-zoom-controls-on-mobile-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../results/mobile-responsiveness-Mobi-de20f-per-zoom-controls-on-mobile-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.click: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="app-logo"]')
+        - locator resolved to <a data-discover="true" href="/genshi-studio" data-testid="app-logo" class="flex items-center gap-2 font-bold text-lg">…</a>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        19 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+
+
+      79 |     
+      80 |     // Navigate to studio
+    > 81 |     await page.click('[data-testid="app-logo"]')
+         |                ^
+      82 |     await page.waitForSelector('[data-testid="main-canvas"]', { timeout: 10000 })
+      83 |     
+      84 |     // Expand mobile toolbar
+        at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/mobile-responsiveness.spec.ts:81:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/results/mobile-responsiveness-Mobi-de20f-per-zoom-controls-on-mobile-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    tests/results/mobile-responsiveness-Mobi-de20f-per-zoom-controls-on-mobile-chromium-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../results/mobile-responsiveness-Mobi-de20f-per-zoom-controls-on-mobile-chromium-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/results/mobile-responsiveness-Mobi-de20f-per-zoom-controls-on-mobile-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/results/mobile-responsiveness-Mobi-de20f-per-zoom-controls-on-mobile-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-de20f-per-zoom-controls-on-mobile-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-de20f-per-zoom-controls-on-mobile-chromium/video.webm]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-de20f-per-zoom-controls-on-mobile-chromium/error-context.md]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-de20f-per-zoom-controls-on-mobile-chromium-retry1/test-failed-1.png]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-de20f-per-zoom-controls-on-mobile-chromium-retry1/video.webm]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-de20f-per-zoom-controls-on-mobile-chromium-retry1/error-context.md]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-de20f-per-zoom-controls-on-mobile-chromium-retry1/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Mobile Responsiveness › should handle canvas touch interactions" classname="mobile-responsiveness.spec.ts" time="20.838">
+<failure message="mobile-responsiveness.spec.ts:97:3 should handle canvas touch interactions" type="FAILURE">
+<![CDATA[  [chromium] › mobile-responsiveness.spec.ts:97:3 › Mobile Responsiveness › should handle canvas touch interactions 
+
+    TimeoutError: page.click: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="app-logo"]')
+        - locator resolved to <a data-discover="true" href="/genshi-studio" data-testid="app-logo" class="flex items-center gap-2 font-bold text-lg">…</a>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        18 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+
+
+      100 |     
+      101 |     // Navigate to studio
+    > 102 |     await page.click('[data-testid="app-logo"]')
+          |                ^
+      103 |     await page.waitForSelector('[data-testid="main-canvas"]', { timeout: 10000 })
+      104 |     
+      105 |     // Canvas should have touch-action: none
+        at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/mobile-responsiveness.spec.ts:102:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/results/mobile-responsiveness-Mobi-bced1-e-canvas-touch-interactions-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    tests/results/mobile-responsiveness-Mobi-bced1-e-canvas-touch-interactions-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../results/mobile-responsiveness-Mobi-bced1-e-canvas-touch-interactions-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.click: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="app-logo"]')
+        - locator resolved to <a data-discover="true" href="/genshi-studio" data-testid="app-logo" class="flex items-center gap-2 font-bold text-lg">…</a>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        18 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+
+
+      100 |     
+      101 |     // Navigate to studio
+    > 102 |     await page.click('[data-testid="app-logo"]')
+          |                ^
+      103 |     await page.waitForSelector('[data-testid="main-canvas"]', { timeout: 10000 })
+      104 |     
+      105 |     // Canvas should have touch-action: none
+        at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/mobile-responsiveness.spec.ts:102:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/results/mobile-responsiveness-Mobi-bced1-e-canvas-touch-interactions-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    tests/results/mobile-responsiveness-Mobi-bced1-e-canvas-touch-interactions-chromium-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../results/mobile-responsiveness-Mobi-bced1-e-canvas-touch-interactions-chromium-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/results/mobile-responsiveness-Mobi-bced1-e-canvas-touch-interactions-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/results/mobile-responsiveness-Mobi-bced1-e-canvas-touch-interactions-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-bced1-e-canvas-touch-interactions-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-bced1-e-canvas-touch-interactions-chromium/video.webm]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-bced1-e-canvas-touch-interactions-chromium/error-context.md]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-bced1-e-canvas-touch-interactions-chromium-retry1/test-failed-1.png]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-bced1-e-canvas-touch-interactions-chromium-retry1/video.webm]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-bced1-e-canvas-touch-interactions-chromium-retry1/error-context.md]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-bced1-e-canvas-touch-interactions-chromium-retry1/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Mobile Responsiveness › should hide desktop-only elements on mobile" classname="mobile-responsiveness.spec.ts" time="0.567">
+</testcase>
+<testcase name="Mobile Responsiveness › should adapt sidebar width for mobile" classname="mobile-responsiveness.spec.ts" time="20.867">
+<failure message="mobile-responsiveness.spec.ts:133:3 should adapt sidebar width for mobile" type="FAILURE">
+<![CDATA[  [chromium] › mobile-responsiveness.spec.ts:133:3 › Mobile Responsiveness › should adapt sidebar width for mobile 
+
+    TimeoutError: page.click: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="app-logo"]')
+        - locator resolved to <a data-discover="true" href="/genshi-studio" data-testid="app-logo" class="flex items-center gap-2 font-bold text-lg">…</a>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        19 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+
+
+      136 |     
+      137 |     // Navigate to studio
+    > 138 |     await page.click('[data-testid="app-logo"]')
+          |                ^
+      139 |     await page.waitForSelector('[data-testid="main-canvas"]', { timeout: 10000 })
+      140 |     
+      141 |     // Open sidebar
+        at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/mobile-responsiveness.spec.ts:138:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/results/mobile-responsiveness-Mobi-b7ba4-pt-sidebar-width-for-mobile-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    tests/results/mobile-responsiveness-Mobi-b7ba4-pt-sidebar-width-for-mobile-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../results/mobile-responsiveness-Mobi-b7ba4-pt-sidebar-width-for-mobile-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.click: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="app-logo"]')
+        - locator resolved to <a data-discover="true" href="/genshi-studio" data-testid="app-logo" class="flex items-center gap-2 font-bold text-lg">…</a>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        18 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+
+
+      136 |     
+      137 |     // Navigate to studio
+    > 138 |     await page.click('[data-testid="app-logo"]')
+          |                ^
+      139 |     await page.waitForSelector('[data-testid="main-canvas"]', { timeout: 10000 })
+      140 |     
+      141 |     // Open sidebar
+        at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/mobile-responsiveness.spec.ts:138:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/results/mobile-responsiveness-Mobi-b7ba4-pt-sidebar-width-for-mobile-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    tests/results/mobile-responsiveness-Mobi-b7ba4-pt-sidebar-width-for-mobile-chromium-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../results/mobile-responsiveness-Mobi-b7ba4-pt-sidebar-width-for-mobile-chromium-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/results/mobile-responsiveness-Mobi-b7ba4-pt-sidebar-width-for-mobile-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/results/mobile-responsiveness-Mobi-b7ba4-pt-sidebar-width-for-mobile-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-b7ba4-pt-sidebar-width-for-mobile-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-b7ba4-pt-sidebar-width-for-mobile-chromium/video.webm]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-b7ba4-pt-sidebar-width-for-mobile-chromium/error-context.md]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-b7ba4-pt-sidebar-width-for-mobile-chromium-retry1/test-failed-1.png]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-b7ba4-pt-sidebar-width-for-mobile-chromium-retry1/video.webm]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-b7ba4-pt-sidebar-width-for-mobile-chromium-retry1/error-context.md]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-b7ba4-pt-sidebar-width-for-mobile-chromium-retry1/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Mobile Responsiveness › should maintain functionality across breakpoints" classname="mobile-responsiveness.spec.ts" time="20.944">
+<failure message="mobile-responsiveness.spec.ts:151:3 should maintain functionality across breakpoints" type="FAILURE">
+<![CDATA[  [chromium] › mobile-responsiveness.spec.ts:151:3 › Mobile Responsiveness › should maintain functionality across breakpoints 
+
+    TimeoutError: page.click: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="app-logo"]')
+        - locator resolved to <a data-discover="true" href="/genshi-studio" data-testid="app-logo" class="flex items-center gap-2 font-bold text-lg">…</a>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        19 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+
+
+      152 |     // Start with mobile
+      153 |     await page.setViewportSize({ width: 375, height: 667 })
+    > 154 |     await page.click('[data-testid="app-logo"]')
+          |                ^
+      155 |     await page.waitForSelector('[data-testid="main-canvas"]', { timeout: 10000 })
+      156 |     
+      157 |     // Theme toggle should work on mobile
+        at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/mobile-responsiveness.spec.ts:154:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/results/mobile-responsiveness-Mobi-238cf-ionality-across-breakpoints-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    tests/results/mobile-responsiveness-Mobi-238cf-ionality-across-breakpoints-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../results/mobile-responsiveness-Mobi-238cf-ionality-across-breakpoints-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.click: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="app-logo"]')
+        - locator resolved to <a data-discover="true" href="/genshi-studio" data-testid="app-logo" class="flex items-center gap-2 font-bold text-lg">…</a>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        19 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div class="h-16 md:h-16 border-b border-border px-4 flex items-center justify-between">…</div> from <aside class="↵          fixed md:static inset-y-0 left-0 z-50↵          w-72 md:w-64 bg-card border-r border-border↵          transform transition-transform duration-300 ease-in-out↵          sidebar-mobile md:sidebar-desktop↵          translate-x-0 open↵        ">…</aside> subtree intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+
+
+      152 |     // Start with mobile
+      153 |     await page.setViewportSize({ width: 375, height: 667 })
+    > 154 |     await page.click('[data-testid="app-logo"]')
+          |                ^
+      155 |     await page.waitForSelector('[data-testid="main-canvas"]', { timeout: 10000 })
+      156 |     
+      157 |     // Theme toggle should work on mobile
+        at /Users/homeserver/ai-creative-team/projects/genshi-studio/tests/e2e/mobile-responsiveness.spec.ts:154:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/results/mobile-responsiveness-Mobi-238cf-ionality-across-breakpoints-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    tests/results/mobile-responsiveness-Mobi-238cf-ionality-across-breakpoints-chromium-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../results/mobile-responsiveness-Mobi-238cf-ionality-across-breakpoints-chromium-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/results/mobile-responsiveness-Mobi-238cf-ionality-across-breakpoints-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/results/mobile-responsiveness-Mobi-238cf-ionality-across-breakpoints-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-238cf-ionality-across-breakpoints-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-238cf-ionality-across-breakpoints-chromium/video.webm]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-238cf-ionality-across-breakpoints-chromium/error-context.md]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-238cf-ionality-across-breakpoints-chromium-retry1/test-failed-1.png]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-238cf-ionality-across-breakpoints-chromium-retry1/video.webm]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-238cf-ionality-across-breakpoints-chromium-retry1/error-context.md]]
+
+[[ATTACHMENT|../results/mobile-responsiveness-Mobi-238cf-ionality-across-breakpoints-chromium-retry1/trace.zip]]
 ]]>
 </system-out>
 </testcase>
