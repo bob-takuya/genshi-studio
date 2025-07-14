@@ -200,17 +200,102 @@ export function StudioPageUnified() {
     }
   }, [canvasRef.current, containerRef.current])
 
-  // Add initialization timeout to prevent infinite loading
+  // Add initialization timeout with fallback mode
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (!systemInitialized && !initError) {
-        console.warn('⚠️ Initialization timeout - graphics system took too long to load')
-        setInitError('Initialization timeout - graphics system took too long to load. Please try refreshing the page.')
+        console.warn('⚠️ Initialization timeout - switching to simplified mode')
+        // Instead of showing error, try fallback mode
+        setFallbackMode(true)
+        setSystemInitialized(true) // Allow simplified mode to render
       }
-    }, 15000) // 15 second timeout
+    }, 8000) // Reduced to 8 seconds for faster fallback
 
     return () => clearTimeout(timeoutId)
   }, [systemInitialized, initError])
+
+  // Simple fallback drawing functionality
+  useEffect(() => {
+    if (!fallbackMode || !canvasRef.current) return
+
+    const canvas = canvasRef.current
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    // Set up canvas
+    const updateCanvasSize = () => {
+      const rect = canvas.getBoundingClientRect()
+      canvas.width = rect.width * window.devicePixelRatio
+      canvas.height = rect.height * window.devicePixelRatio
+      ctx.scale(window.devicePixelRatio, window.devicePixelRatio)
+      canvas.style.width = `${rect.width}px`
+      canvas.style.height = `${rect.height}px`
+    }
+
+    updateCanvasSize()
+
+    let isDrawing = false
+    let lastX = 0
+    let lastY = 0
+
+    const startDrawing = (e: MouseEvent | TouchEvent) => {
+      isDrawing = true
+      const rect = canvas.getBoundingClientRect()
+      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX
+      const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY
+      lastX = clientX - rect.left
+      lastY = clientY - rect.top
+    }
+
+    const draw = (e: MouseEvent | TouchEvent) => {
+      if (!isDrawing) return
+      
+      const rect = canvas.getBoundingClientRect()
+      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX
+      const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY
+      const currentX = clientX - rect.left
+      const currentY = clientY - rect.top
+
+      ctx.beginPath()
+      ctx.moveTo(lastX, lastY)
+      ctx.lineTo(currentX, currentY)
+      ctx.strokeStyle = activeColor
+      ctx.lineWidth = 2
+      ctx.lineCap = 'round'
+      ctx.stroke()
+
+      lastX = currentX
+      lastY = currentY
+    }
+
+    const stopDrawing = () => {
+      isDrawing = false
+    }
+
+    // Mouse events
+    canvas.addEventListener('mousedown', startDrawing)
+    canvas.addEventListener('mousemove', draw)
+    canvas.addEventListener('mouseup', stopDrawing)
+    canvas.addEventListener('mouseout', stopDrawing)
+
+    // Touch events
+    canvas.addEventListener('touchstart', startDrawing)
+    canvas.addEventListener('touchmove', draw)
+    canvas.addEventListener('touchend', stopDrawing)
+
+    window.addEventListener('resize', updateCanvasSize)
+
+    return () => {
+      canvas.removeEventListener('mousedown', startDrawing)
+      canvas.removeEventListener('mousemove', draw)
+      canvas.removeEventListener('mouseup', stopDrawing)
+      canvas.removeEventListener('mouseout', stopDrawing)
+      canvas.removeEventListener('touchstart', startDrawing)
+      canvas.removeEventListener('touchmove', draw)
+      canvas.removeEventListener('touchend', stopDrawing)
+      window.removeEventListener('resize', updateCanvasSize)
+    }
+  }, [fallbackMode, activeColor])
 
   // Handle mode toggle
   const handleModeToggle = useCallback((mode: CanvasMode) => {
@@ -244,12 +329,21 @@ export function StudioPageUnified() {
 
   // Handle export
   const handleExport = useCallback(() => {
-    if (!systemRef.current) return
-
-    const canvas = systemRef.current.getCanvas()
+    let canvas: HTMLCanvasElement | undefined
+    
+    if (fallbackMode) {
+      // Use the simple canvas directly
+      canvas = canvasRef.current || undefined
+      console.log('📤 Export requested from fallback mode, canvas:', canvas)
+    } else {
+      // Use the unified system canvas
+      if (!systemRef.current) return
+      canvas = systemRef.current.getCanvas()?.getElement()
+      console.log('📤 Export requested from unified mode, canvas:', canvas)
+    }
+    
     setExportDialogOpen(true)
-    console.log('📤 Export requested, canvas:', canvas)
-  }, [setExportDialogOpen])
+  }, [setExportDialogOpen, fallbackMode])
 
   // Handle error state
   if (initError) {
@@ -293,6 +387,53 @@ export function StudioPageUnified() {
           <p className="text-gray-400 mb-2">Setting up multi-mode collaborative canvas...</p>
           <p className="text-gray-500 text-sm">This may take up to 15 seconds...</p>
         </div>
+      </div>
+    )
+  }
+
+  // Render simplified fallback mode
+  if (fallbackMode) {
+    return (
+      <div ref={containerRef} className="flex flex-col h-full bg-gray-900 text-white">
+        <div className="flex-shrink-0">
+          <Toolbar />
+          
+          {/* Simplified Mode Status Bar */}
+          <div className="bg-yellow-900 border-b border-yellow-700 px-4 py-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <span className="text-sm font-medium text-yellow-200">🚀 Simplified Drawing Mode</span>
+                <span className="text-xs text-yellow-300">Basic canvas functionality - full features loading failed</span>
+              </div>
+              <button 
+                onClick={() => window.location.reload()} 
+                className="px-3 py-1 bg-yellow-600 hover:bg-yellow-700 text-yellow-100 text-xs rounded transition-colors"
+              >
+                Try Full Mode
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Simplified Canvas Area */}
+        <div className="flex-1 relative">
+          <canvas
+            ref={canvasRef}
+            data-testid="main-canvas"
+            className="w-full h-full bg-white cursor-crosshair"
+            style={{ touchAction: 'none' }}
+          />
+          
+          {/* Simple drawing overlay */}
+          <div className="absolute top-4 left-4 bg-black bg-opacity-50 text-white p-2 rounded text-sm">
+            ✏️ Simple drawing mode active - Click and drag to draw
+          </div>
+        </div>
+
+        {/* Dialogs */}
+        {exportDialogOpen && <ExportDialog />}
+        {presetDialogOpen && <PresetDialog />}
+        {bookmarkDialogOpen && <BookmarkDialog />}
       </div>
     )
   }
