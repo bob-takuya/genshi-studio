@@ -6,25 +6,48 @@ import { Size } from '../../types/graphics';
 
 export class WebGLContextManager {
   private canvas: HTMLCanvasElement;
-  private gl: WebGL2RenderingContext;
+  private gl: WebGL2RenderingContext | null = null;
   private pixelRatio: number;
   private size: Size;
   private extensions: Map<string, any> = new Map();
+  private isInitialized: boolean = false;
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
     this.pixelRatio = window.devicePixelRatio || 1;
     this.size = { width: 0, height: 0 };
 
-    const gl = this.initializeContext();
-    if (!gl) {
-      throw new Error('WebGL 2.0 is not supported in this browser');
+    try {
+      const startTime = Date.now();
+      console.log('Initializing WebGL context...');
+      
+      const gl = this.initializeContext();
+      if (!gl) {
+        throw new Error('WebGL 2.0 context creation failed');
+      }
+      
+      this.gl = gl;
+      this.loadExtensions();
+      this.setupDefaults();
+      this.resize();
+      
+      this.isInitialized = true;
+      console.log(`WebGL initialized in ${Date.now() - startTime}ms`);
+    } catch (error) {
+      console.error('WebGL initialization error:', error);
+      
+      // Try WebGL 1 as fallback
+      const gl1 = this.canvas.getContext('webgl') || this.canvas.getContext('experimental-webgl');
+      if (gl1) {
+        console.warn('Falling back to WebGL 1.0');
+        this.gl = gl1 as any; // Type assertion for compatibility
+        this.setupDefaults();
+        this.resize();
+        this.isInitialized = true;
+      } else {
+        throw new Error(`WebGL is not supported: ${error.message}`);
+      }
     }
-    this.gl = gl;
-
-    this.loadExtensions();
-    this.setupDefaults();
-    this.resize();
   }
 
   private initializeContext(): WebGL2RenderingContext | null {
@@ -32,14 +55,33 @@ export class WebGLContextManager {
       alpha: true,
       antialias: false, // We'll implement our own AA
       depth: false,
-      stencil: true,
+      stencil: false, // Disable stencil to reduce memory usage
       preserveDrawingBuffer: false,
       premultipliedAlpha: true,
       desynchronized: true, // Better performance
-      powerPreference: 'high-performance'
+      powerPreference: 'high-performance',
+      failIfMajorPerformanceCaveat: false // Don't fail on software rendering
     };
 
-    return this.canvas.getContext('webgl2', contextOptions);
+    try {
+      // Try to get WebGL2 context with timeout protection
+      const gl = this.canvas.getContext('webgl2', contextOptions);
+      
+      if (gl) {
+        // Test if context is actually usable
+        const testProgram = gl.createProgram();
+        if (!testProgram) {
+          console.warn('WebGL2 context is not fully functional');
+          return null;
+        }
+        gl.deleteProgram(testProgram);
+      }
+      
+      return gl;
+    } catch (error) {
+      console.error('WebGL2 context creation error:', error);
+      return null;
+    }
   }
 
   private loadExtensions(): void {
@@ -63,28 +105,37 @@ export class WebGLContextManager {
 
   private setupDefaults(): void {
     const gl = this.gl;
+    if (!gl) return;
 
-    // Enable alpha blending by default
-    gl.enable(gl.BLEND);
-    gl.blendFuncSeparate(
-      gl.SRC_ALPHA,
-      gl.ONE_MINUS_SRC_ALPHA,
-      gl.ONE,
-      gl.ONE_MINUS_SRC_ALPHA
-    );
+    try {
+      // Enable alpha blending by default
+      gl.enable(gl.BLEND);
+      gl.blendFuncSeparate(
+        gl.SRC_ALPHA,
+        gl.ONE_MINUS_SRC_ALPHA,
+        gl.ONE,
+        gl.ONE_MINUS_SRC_ALPHA
+      );
 
-    // Set clear color to transparent
-    gl.clearColor(0, 0, 0, 0);
+      // Set clear color to transparent
+      gl.clearColor(0, 0, 0, 0);
 
-    // Disable depth testing for 2D graphics
-    gl.disable(gl.DEPTH_TEST);
+      // Disable depth testing for 2D graphics
+      gl.disable(gl.DEPTH_TEST);
 
-    // Enable scissor test for viewport clipping
-    gl.enable(gl.SCISSOR_TEST);
+      // Enable scissor test for viewport clipping
+      gl.enable(gl.SCISSOR_TEST);
 
-    // Set pixel unpack alignment for texture uploads
-    gl.pixelStorei(gl.UNPACK_ALIGNMENT, 1);
-    gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+      // Set pixel unpack alignment for texture uploads
+      gl.pixelStorei(gl.UNPACK_ALIGNMENT, 1);
+      
+      // Only set premultiply alpha if supported
+      if (gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL !== undefined) {
+        gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+      }
+    } catch (error) {
+      console.error('Error setting WebGL defaults:', error);
+    }
   }
 
   resize(width?: number, height?: number): void {
@@ -111,8 +162,16 @@ export class WebGLContextManager {
     this.gl.clear(this.gl.COLOR_BUFFER_BIT);
   }
 
-  getContext(): WebGL2RenderingContext {
+  getContext(): WebGL2RenderingContext | null {
     return this.gl;
+  }
+
+  isWebGL2(): boolean {
+    return this.gl !== null && 'texStorage2D' in this.gl;
+  }
+
+  isReady(): boolean {
+    return this.isInitialized && this.gl !== null;
   }
 
   getSize(): Size {

@@ -16,6 +16,32 @@ export {
   type PerformanceMetrics
 } from './SynchronizationEngine'
 
+// Enhanced sync engine with CRDT/OT support
+export {
+  SyncEngine,
+  enhancedSyncEngine,
+  type EnhancedSyncChange,
+  type WebSocketConfig
+} from './SyncEngine'
+
+// CRDT Manager
+export {
+  CRDTManager,
+  CRDTType,
+  type CRDTOperation,
+  type VectorClock,
+  type CRDTStats
+} from './CRDTManager'
+
+// Operational Transform
+export {
+  OperationalTransform,
+  OTOpType,
+  type OTOperation,
+  type TransformResult,
+  type OTStats
+} from './OperationalTransform'
+
 // Translation layers
 export { 
   TranslationLayers,
@@ -51,9 +77,18 @@ export {
 } from './WebGLOptimization'
 
 // Convenience function to initialize the entire sync system
-export async function initializeSyncEngine(): Promise<void> {
+export async function initializeSyncEngine(useEnhanced: boolean = true): Promise<void> {
   try {
     console.log('🚀 Initializing Genshi Studio Sync Engine...')
+    
+    if (useEnhanced) {
+      // Start the enhanced sync engine with CRDT/OT support
+      enhancedSyncEngine.start()
+      console.log('⚡ Enhanced sync engine started with CRDT/OT support')
+      console.log('🎯 <100ms latency target active')
+      console.log('🔗 CRDT conflict resolution enabled')
+      console.log('🔄 Operational Transform ready')
+    }
     
     // Initialize the integration layer (which starts the engine)
     await syncIntegration.initialize()
@@ -72,10 +107,21 @@ export async function initializeSyncEngine(): Promise<void> {
 
 // Convenience function to get sync engine status
 export function getSyncEngineStatus() {
+  const enhanced = enhancedSyncEngine.getEnhancedMetrics()
+  
   return {
     integration: syncIntegration.getStatus(),
     performance: syncIntegration.getPerformanceMetrics(),
-    conflicts: conflictResolver.getConflictStats()
+    conflicts: conflictResolver.getConflictStats(),
+    enhanced: {
+      latency: enhanced.syncLatency,
+      fps: enhanced.frameTime > 0 ? 1000 / enhanced.frameTime : 0,
+      crdt: enhanced.crdtStats,
+      ot: enhanced.otStats,
+      websocket: enhanced.wsStatus,
+      droppedFrames: enhanced.droppedFrames,
+      totalOperations: enhanced.totalOperations
+    }
   }
 }
 
@@ -83,9 +129,20 @@ export function getSyncEngineStatus() {
 export async function quickSync(
   sourceMode: ModeType,
   changeType: ChangeType,
-  data: any
+  data: any,
+  priority: SyncPriority = SyncPriority.USER_ACTION
 ): Promise<void> {
-  await syncIntegration.triggerChange(sourceMode, changeType, data)
+  // Use enhanced sync engine for better performance
+  const change: EnhancedSyncChange = {
+    id: `quick-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+    timestamp: Date.now(),
+    sourceMode,
+    changeType,
+    priority,
+    data
+  }
+  
+  await enhancedSyncEngine.applyChange(change)
 }
 
 // Export types for external use

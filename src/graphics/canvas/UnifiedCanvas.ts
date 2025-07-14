@@ -35,6 +35,8 @@ export interface UnifiedCanvasConfig {
   modes: {
     [key in CanvasMode]: ModeState;
   };
+  simplifiedInit?: boolean;  // Skip heavy initialization for faster startup
+  useWebGL?: boolean;  // Allow disabling WebGL for fallback
 }
 
 export interface ModeOverlay {
@@ -100,30 +102,96 @@ export class UnifiedCanvas {
 
   constructor(config: UnifiedCanvasConfig) {
     this.mainCanvas = config.canvas;
+    const startTime = Date.now();
     
-    // Initialize WebGL context
-    this.webglContext = new WebGLContextManager(this.mainCanvas);
+    try {
+      // Initialize with error handling and timing
+      this.initializeCore(config);
+      
+      console.log(`🎨 Unified Canvas System initialized in ${Date.now() - startTime}ms`);
+    } catch (error) {
+      console.error('Failed to initialize UnifiedCanvas:', error);
+      throw error;
+    }
+  }
+
+  private initializeCore(config: UnifiedCanvasConfig): void {
+    // Initialize WebGL context with fallback
+    if (config.useWebGL !== false) {
+      try {
+        this.webglContext = new WebGLContextManager(this.mainCanvas);
+      } catch (webglError) {
+        console.warn('WebGL initialization failed, using Canvas2D fallback:', webglError);
+        // Continue without WebGL
+      }
+    }
     
-    // Initialize renderer
+    // Initialize renderer (will use Canvas2D if WebGL failed)
     this.renderer = new Renderer(this.mainCanvas);
     
     // Initialize infinite canvas
     const size = this.getCanvasSize();
     this.infiniteCanvas = new InfiniteCanvas(size.width, size.height);
     
-    // Initialize mode engines
-    this.initializeModeEngines();
-    
-    // Setup multi-layer system
-    this.setupMultiLayerSystem(config.modes);
-    
-    // Setup interaction handling
-    this.setupInteractionHandlers();
+    if (config.simplifiedInit) {
+      // Minimal initialization for faster startup
+      this.initializeMinimalModeEngines();
+      this.setupMinimalLayerSystem(config.modes);
+      this.setupInteractionHandlers();
+      
+      // Defer heavy initialization
+      setTimeout(() => {
+        this.completeInitialization(config);
+      }, 100);
+    } else {
+      // Full initialization
+      this.initializeModeEngines();
+      this.setupMultiLayerSystem(config.modes);
+      this.setupInteractionHandlers();
+    }
     
     // Start render loop
     this.startRenderLoop();
+  }
+
+  private initializeMinimalModeEngines(): void {
+    // Only initialize the brush engine for draw mode initially
+    const gl = this.webglContext?.getContext();
+    this.brushEngine = new EnhancedBrushEngine(this.renderer, gl);
     
-    console.log('🎨 Unified Canvas System initialized with multi-mode support');
+    // Defer other engines
+    this.patternGenerator = null as any;
+    this.organicGenerator = null as any;
+    this.codeEngine = null as any;
+    this.graphicsBridge = null as any;
+  }
+
+  private completeInitialization(config: UnifiedCanvasConfig): void {
+    console.log('Completing deferred canvas initialization...');
+    
+    // Initialize remaining engines
+    if (!this.patternGenerator) {
+      this.patternGenerator = new CulturalPatternGenerator();
+    }
+    if (!this.organicGenerator) {
+      this.organicGenerator = new OrganicPatternGenerator();
+    }
+    if (!this.codeEngine) {
+      this.codeEngine = new CodeExecutionEngine();
+      this.graphicsBridge = new GraphicsBridge(this);
+      this.codeEngine.connectGraphicsEngine(this.graphicsBridge);
+    }
+    
+    // Create overlays for inactive modes
+    let index = 1;
+    Object.keys(config.modes).forEach(mode => {
+      const canvasMode = mode as CanvasMode;
+      if (!this.overlays.has(canvasMode) && config.modes[canvasMode].active) {
+        this.createModeOverlay(canvasMode, index++);
+      }
+    });
+    
+    console.log('✓ Canvas initialization completed');
   }
 
   private initializeModeEngines(): void {
@@ -188,6 +256,89 @@ export class UnifiedCanvas {
     }
   }
 
+  private setupMinimalLayerSystem(modes: {[key in CanvasMode]: ModeState}): void {
+    // Only set up the primary draw layer initially
+    const drawMode = CanvasMode.DRAW;
+    const modeState = modes[drawMode];
+    
+    // Store mode state
+    this.modeStates.set(drawMode, { ...modeState });
+    
+    if (modeState.active) {
+      this.activeModes.add(drawMode);
+    }
+    
+    // Create layer for draw mode only
+    const layerId = `${drawMode}_layer`;
+    const layer: Layer = {
+      id: layerId,
+      name: 'Draw Layer',
+      visible: modeState.visible,
+      opacity: modeState.opacity,
+      blendMode: this.getDefaultBlendMode(drawMode),
+      texture: null,
+      transform: {
+        translateX: 0,
+        translateY: 0,
+        scaleX: 1,
+        scaleY: 1,
+        rotation: 0
+      }
+    };
+    
+    this.layers.set(layerId, layer);
+    this.modeLayers.set(drawMode, layerId);
+    
+    // Create minimal overlay without WebGL for draw mode
+    this.createMinimalOverlay(drawMode);
+    
+    // Store other mode states for later
+    Object.keys(modes).forEach(mode => {
+      const canvasMode = mode as CanvasMode;
+      if (canvasMode !== drawMode) {
+        this.modeStates.set(canvasMode, { ...modes[canvasMode] });
+      }
+    });
+    
+    // Set primary mode
+    this.primaryMode = drawMode;
+  }
+
+  private createMinimalOverlay(mode: CanvasMode): void {
+    // Create a minimal overlay without WebGL
+    const overlayCanvas = document.createElement('canvas');
+    
+    overlayCanvas.width = this.mainCanvas.width;
+    overlayCanvas.height = this.mainCanvas.height;
+    overlayCanvas.style.position = 'absolute';
+    overlayCanvas.style.top = '0';
+    overlayCanvas.style.left = '0';
+    overlayCanvas.style.width = '100%';
+    overlayCanvas.style.height = '100%';
+    overlayCanvas.style.zIndex = '1000';
+    overlayCanvas.style.pointerEvents = 'none';
+    
+    // Always use Canvas2D for minimal mode
+    const context = overlayCanvas.getContext('2d');
+    
+    if (!context) {
+      console.error(`Failed to create 2D context for ${mode} mode`);
+      return;
+    }
+    
+    const overlay: ModeOverlay = {
+      mode,
+      canvas: overlayCanvas,
+      context,
+      zIndex: 1000,
+      interactionEnabled: this.modeStates.get(mode)?.active || false
+    };
+    
+    this.overlays.set(mode, overlay);
+    
+    // Don't append to DOM yet to save initialization time
+  }
+
   private createModeOverlay(mode: CanvasMode, zIndex: number): void {
     // Create overlay canvas for mode-specific interactions
     const overlayCanvas = document.createElement('canvas');
@@ -203,18 +354,30 @@ export class UnifiedCanvas {
     overlayCanvas.style.zIndex = (1000 + zIndex).toString();
     overlayCanvas.style.pointerEvents = 'none'; // Enable selectively
     
-    // Get appropriate context
-    let context: CanvasRenderingContext2D | WebGLRenderingContext;
-    if (mode === CanvasMode.DRAW || mode === CanvasMode.GROWTH) {
-      // Use WebGL for performance-critical modes
-      context = overlayCanvas.getContext('webgl') || overlayCanvas.getContext('experimental-webgl') as WebGLRenderingContext;
-    } else {
-      // Use Canvas 2D for parametric and code modes
-      context = overlayCanvas.getContext('2d') as CanvasRenderingContext2D;
+    // Get appropriate context with error handling
+    let context: CanvasRenderingContext2D | WebGLRenderingContext | null = null;
+    
+    if (this.webglContext && (mode === CanvasMode.DRAW || mode === CanvasMode.GROWTH)) {
+      // Try WebGL for performance-critical modes
+      try {
+        context = overlayCanvas.getContext('webgl', {
+          alpha: true,
+          antialias: false,
+          failIfMajorPerformanceCaveat: true
+        }) || overlayCanvas.getContext('experimental-webgl');
+      } catch (e) {
+        console.warn(`WebGL failed for ${mode} overlay, falling back to 2D`);
+      }
+    }
+    
+    // Fallback to Canvas2D
+    if (!context) {
+      context = overlayCanvas.getContext('2d');
     }
     
     if (!context) {
-      throw new Error(`Failed to create context for ${mode} mode overlay`);
+      console.error(`Failed to create any context for ${mode} mode overlay`);
+      return; // Don't throw, just skip this overlay
     }
     
     const overlay: ModeOverlay = {

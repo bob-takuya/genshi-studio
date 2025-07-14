@@ -49,6 +49,9 @@ interface AppState {
   // Color State
   colors: string[]
   activeColor: string
+  setColors: (colors: string[]) => void
+  addColor: (color: string) => void
+  removeColor: (color: string) => void
   
   // Project State
   currentProject: Project | null
@@ -178,6 +181,13 @@ export const useAppStore = create<AppState>()(
       setZoom: (zoom) => set({ zoom: Math.max(0.1, Math.min(5, zoom)) }),
       setCanvasMode: (canvasMode) => set({ canvasMode }),
       setActiveColor: (activeColor) => set({ activeColor }),
+      setColors: (colors) => set({ colors }),
+      addColor: (color) => set((state) => ({
+        colors: state.colors.includes(color) ? state.colors : [...state.colors, color]
+      })),
+      removeColor: (color) => set((state) => ({
+        colors: state.colors.filter(c => c !== color)
+      })),
       
       addLayer: (layer) => set((state) => ({
         layers: [...state.layers, layer],

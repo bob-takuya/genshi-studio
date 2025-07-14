@@ -104,9 +104,18 @@ export function StudioPageUnified() {
       systemRef.current = system
 
       // Setup event listeners
+      system.on('system:initialized', () => {
+        console.log('✅ System core initialized')
+      })
+      
       system.on('system:started', () => {
         console.log('✅ Unified Editing System started successfully')
         setSystemInitialized(true)
+      })
+      
+      system.on('system:error', (event: any) => {
+        console.error('❌ System error:', event.error)
+        setInitError(event.error)
       })
 
       system.on('entity:changed', (event: any) => {
@@ -141,17 +150,33 @@ export function StudioPageUnified() {
         console.warn('⚠️ Performance warning:', event.type, 'current:', event.current, 'target:', event.target)
       })
 
-      // Configure initial mode states
-      activeModes.forEach(mode => {
-        system.setModeActive(mode, true)
-        const opacity = modeOpacities.get(mode) || 1.0
-        system.setModeOpacity(mode, opacity)
-      })
-
-      system.setPrimaryMode(primaryMode)
-
-      // Start the system
-      system.start()
+      // Start the system asynchronously
+      const startSystem = async () => {
+        try {
+          // Only configure draw mode initially for faster startup
+          system.setModeActive(CanvasMode.DRAW, true)
+          system.setPrimaryMode(CanvasMode.DRAW)
+          
+          // Start the system
+          await system.start()
+          
+          // Configure other modes after startup
+          setTimeout(() => {
+            activeModes.forEach(mode => {
+              if (mode !== CanvasMode.DRAW) {
+                system.setModeActive(mode, true)
+                const opacity = modeOpacities.get(mode) || 1.0
+                system.setModeOpacity(mode, opacity)
+              }
+            })
+          }, 500)
+        } catch (error) {
+          console.error('Failed to start system:', error)
+          throw error
+        }
+      }
+      
+      startSystem()
 
       // Handle resize
       const handleResize = () => {
@@ -209,7 +234,7 @@ export function StudioPageUnified() {
         setFallbackMode(true)
         setSystemInitialized(true) // Allow simplified mode to render
       }
-    }, 8000) // Reduced to 8 seconds for faster fallback
+    }, 5000) // Reduced to 5 seconds for faster fallback
 
     return () => clearTimeout(timeoutId)
   }, [systemInitialized, initError])
@@ -352,7 +377,9 @@ export function StudioPageUnified() {
         <div className="text-center max-w-md">
           <div className="text-red-500 text-4xl mb-4">⚠️</div>
           <h2 className="text-xl font-semibold mb-2">Graphics System Error</h2>
-          <p className="text-gray-400 mb-4">{initError}</p>
+          <p className="text-gray-400 mb-4">
+            {initError || 'Initialization timeout'}
+          </p>
           {fallbackMode && (
             <p className="text-yellow-400 text-sm mb-4">
               💡 Try using a different browser or enabling hardware acceleration in your browser settings.
@@ -385,7 +412,7 @@ export function StudioPageUnified() {
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500 mb-4"></div>
           <h2 className="text-xl font-semibold mb-2">Initializing Unified Editing System</h2>
           <p className="text-gray-400 mb-2">Setting up multi-mode collaborative canvas...</p>
-          <p className="text-gray-500 text-sm">This may take up to 15 seconds...</p>
+          <p className="text-gray-500 text-sm">This should take 3-5 seconds...</p>
         </div>
       </div>
     )
