@@ -16,6 +16,9 @@ import { ParametricPatternEngine } from '../graphics/patterns/ParametricPatternE
 import { CodeExecutionEngine } from './execution/CodeExecutionEngine';
 import { CanvasEntity, CreativeMode, EntityType, TranslationResult } from '../unified/UnifiedDataModel';
 
+// Performance monitoring for debugging (remove in production)
+const DEBUG_PERFORMANCE = process.env.NODE_ENV === 'development';
+
 // Map between different mode type enums
 const MODE_MAPPING = {
   [CanvasMode.DRAW]: ModeType.DRAW,
@@ -78,69 +81,128 @@ export class UnifiedEditingSystem {
   private activeModes: Set<CanvasMode> = new Set();
   private isRunning: boolean = false;
   private performanceTarget: { fps: number; maxSyncLatency: number };
+  private initializationStartTime: number;
+  private isInitialized: boolean = false;
 
   // Event listeners
   private eventListeners: Map<string, Function[]> = new Map();
 
   constructor(config: UnifiedEditingConfig) {
     console.log('🔧 UnifiedEditingSystem constructor called with config:', config);
+    this.initializationStartTime = Date.now();
     this.performanceTarget = config.performanceTarget || { fps: 60, maxSyncLatency: 16 };
 
+    // Defer heavy initialization to avoid blocking
+    this.deferredInitialize(config);
+  }
+
+  private async deferredInitialize(config: UnifiedEditingConfig): Promise<void> {
     try {
-      // Initialize engines
-      console.log('🔧 Initializing engines...');
-      this.initializeEngines(config);
+      console.log('🔧 Starting deferred initialization...');
+      
+      // Initialize in phases with timing
+      const phases = [
+        { name: 'engines', fn: () => this.initializeEngines(config) },
+        { name: 'translation', fn: () => this.setupTranslationPipeline() },
+        { name: 'synchronization', fn: () => this.setupSynchronizationHandlers() },
+        { name: 'canvas', fn: () => this.setupCanvasIntegration() }
+      ];
 
-      // Setup translation connections
-      console.log('🔧 Setting up translation pipeline...');
-      this.setupTranslationPipeline();
+      for (const phase of phases) {
+        const phaseStart = Date.now();
+        console.log(`🔧 Initializing ${phase.name}...`);
+        
+        // Use setTimeout to yield to browser between phases
+        await new Promise(resolve => setTimeout(resolve, 0));
+        
+        try {
+          await phase.fn();
+          console.log(`✅ ${phase.name} initialized in ${Date.now() - phaseStart}ms`);
+        } catch (error) {
+          console.error(`❌ Failed to initialize ${phase.name}:`, error);
+          throw new Error(`${phase.name} initialization failed: ${error.message}`);
+        }
+      }
 
-      // Setup synchronization handlers
-      console.log('🔧 Setting up synchronization handlers...');
-      this.setupSynchronizationHandlers();
-
-      // Setup canvas integration
-      console.log('🔧 Setting up canvas integration...');
-      this.setupCanvasIntegration();
-
-      console.log('🚀 Unified Editing System initialized');
+      const totalTime = Date.now() - this.initializationStartTime;
+      console.log(`🚀 Unified Editing System initialized in ${totalTime}ms`);
+      
+      this.isInitialized = true;
+      this.emit('system:initialized');
     } catch (error) {
-      console.error('❌ Error in UnifiedEditingSystem constructor:', error);
+      console.error('❌ Error in UnifiedEditingSystem initialization:', error);
+      this.emit('system:error', { error: error.message });
       throw error;
     }
   }
 
-  private initializeEngines(config: UnifiedEditingConfig): void {
-    // Initialize parametric engine
-    this.parametricEngine = new ParametricPatternEngine();
+  private async initializeEngines(config: UnifiedEditingConfig): Promise<void> {
+    const startTime = Date.now();
+    
+    try {
+      // Initialize lightweight engines first
+      this.parametricEngine = new ParametricPatternEngine();
+      this.codeEngine = new CodeExecutionEngine();
+      this.translationEngine = new BidirectionalTranslationEngine(
+        this.parametricEngine,
+        this.codeEngine
+      );
+      
+      console.log(`✓ Lightweight engines initialized in ${Date.now() - startTime}ms`);
 
-    // Initialize code execution engine
-    this.codeEngine = new CodeExecutionEngine();
+      // Initialize unified canvas with error handling
+      const canvasStart = Date.now();
+      const canvasConfig = {
+        canvas: config.canvas,
+        width: config.width,
+        height: config.height,
+        pixelRatio: config.pixelRatio || 1,
+        modes: {
+          [CanvasMode.DRAW]: { active: true, opacity: 1.0, locked: false, visible: true },
+          [CanvasMode.PARAMETRIC]: { active: false, opacity: 0.8, locked: false, visible: true },
+          [CanvasMode.CODE]: { active: false, opacity: 0.9, locked: false, visible: true },
+          [CanvasMode.GROWTH]: { active: false, opacity: 0.7, locked: false, visible: true }
+        },
+        // Add simplified mode flag to reduce initial overhead
+        simplifiedInit: true
+      };
 
-    // Initialize translation engine
-    this.translationEngine = new BidirectionalTranslationEngine(
-      this.parametricEngine,
-      this.codeEngine
-    );
+      try {
+        this.unifiedCanvas = new UnifiedCanvas(canvasConfig);
+        console.log(`✓ Canvas initialized in ${Date.now() - canvasStart}ms`);
+      } catch (canvasError) {
+        console.error('Canvas initialization failed:', canvasError);
+        // Try fallback canvas initialization
+        this.initializeFallbackCanvas(config);
+      }
 
-    // Initialize unified canvas
-    const canvasConfig = {
-      canvas: config.canvas,
-      width: config.width,
-      height: config.height,
-      pixelRatio: config.pixelRatio,
+      // Use existing sync engine instance
+      this.syncEngine = syncEngine;
+      
+    } catch (error) {
+      console.error('Engine initialization failed:', error);
+      throw error;
+    }
+  }
+
+  private initializeFallbackCanvas(config: UnifiedEditingConfig): void {
+    console.warn('⚠️ Attempting fallback canvas initialization...');
+    
+    // Create a simplified canvas without WebGL dependencies
+    const fallbackConfig = {
+      ...config,
+      useWebGL: false,
       modes: {
         [CanvasMode.DRAW]: { active: true, opacity: 1.0, locked: false, visible: true },
-        [CanvasMode.PARAMETRIC]: { active: true, opacity: 0.8, locked: false, visible: true },
-        [CanvasMode.CODE]: { active: true, opacity: 0.9, locked: false, visible: true },
-        [CanvasMode.GROWTH]: { active: true, opacity: 0.7, locked: false, visible: true }
+        [CanvasMode.PARAMETRIC]: { active: false, opacity: 0.8, locked: false, visible: false },
+        [CanvasMode.CODE]: { active: false, opacity: 0.9, locked: false, visible: false },
+        [CanvasMode.GROWTH]: { active: false, opacity: 0.7, locked: false, visible: false }
       }
     };
-
-    this.unifiedCanvas = new UnifiedCanvas(canvasConfig);
-
-    // Use existing sync engine instance
-    this.syncEngine = syncEngine;
+    
+    // This would create a Canvas2D-only version
+    // For now, we'll throw to trigger the fallback mode in StudioPageUnified
+    throw new Error('WebGL initialization failed - fallback to simplified mode');
   }
 
   private setupTranslationPipeline(): void {
@@ -414,31 +476,65 @@ export class UnifiedEditingSystem {
 
   // Public API methods
 
-  public start(): void {
+  public async start(): Promise<void> {
     console.log('🔧 UnifiedEditingSystem.start() called');
+    
+    // Wait for initialization to complete
+    if (!this.isInitialized) {
+      console.log('⏳ Waiting for initialization to complete...');
+      const maxWait = 5000; // 5 seconds max
+      const startWait = Date.now();
+      
+      while (!this.isInitialized && (Date.now() - startWait) < maxWait) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+      
+      if (!this.isInitialized) {
+        throw new Error('System initialization timeout');
+      }
+    }
+    
     if (this.isRunning) {
       console.log('⚠️ System already running');
       return;
     }
 
     try {
+      const startTime = Date.now();
+      
       // Start synchronization engine
       console.log('🔧 Starting sync engine...');
       this.syncEngine.start();
 
-      // Register all active modes
-      console.log('🔧 Registering active modes:', Array.from(this.activeModes));
-      this.activeModes.forEach(mode => {
-        const modeType = MODE_MAPPING[mode];
-        this.syncEngine.registerMode(modeType, this.getDefaultModeData(modeType));
-      });
+      // Register only the initially active mode to speed up startup
+      console.log('🔧 Registering initial mode...');
+      if (this.activeModes.size === 0) {
+        this.activeModes.add(CanvasMode.DRAW);
+      }
+      
+      // Register first mode synchronously
+      const firstMode = Array.from(this.activeModes)[0];
+      const modeType = MODE_MAPPING[firstMode];
+      this.syncEngine.registerMode(modeType, this.getDefaultModeData(modeType));
 
       this.isRunning = true;
       console.log('🔧 About to emit system:started event');
       this.emit('system:started');
-      console.log('🚀 Unified Editing System started');
+      console.log(`🚀 Unified Editing System started in ${Date.now() - startTime}ms`);
+      
+      // Register other modes asynchronously
+      if (this.activeModes.size > 1) {
+        setTimeout(() => {
+          Array.from(this.activeModes).slice(1).forEach(mode => {
+            const modeType = MODE_MAPPING[mode];
+            this.syncEngine.registerMode(modeType, this.getDefaultModeData(modeType));
+          });
+          console.log('✓ Additional modes registered');
+        }, 100);
+      }
     } catch (error) {
       console.error('❌ Error starting UnifiedEditingSystem:', error);
+      this.isRunning = false;
       throw error;
     }
   }
@@ -552,6 +648,19 @@ export class UnifiedEditingSystem {
       this.eventListeners.set(event, []);
     }
     this.eventListeners.get(event)!.push(listener);
+  }
+
+  // Check if system is ready
+  public isReady(): boolean {
+    return this.isInitialized && this.isRunning;
+  }
+
+  // Get initialization status
+  public getInitializationStatus(): { initialized: boolean; running: boolean; error?: string } {
+    return {
+      initialized: this.isInitialized,
+      running: this.isRunning
+    };
   }
 
   public off(event: string, listener: Function): void {
