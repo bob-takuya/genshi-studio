@@ -1,20 +1,24 @@
 /**
  * WebGL 2.0 Context Manager for Genshi Studio
+ * With Canvas2D fallback for maximum compatibility
  */
 
 import { Size } from '../../types/graphics';
+import { Canvas2DFallbackManager } from './Canvas2DFallback';
 
 export class WebGLContextManager {
   private canvas: HTMLCanvasElement;
   private gl: WebGL2RenderingContext | null = null;
+  private fallbackManager: Canvas2DFallbackManager | null = null;
   private pixelRatio: number;
   private size: Size;
   private extensions: Map<string, any> = new Map();
   private isInitialized: boolean = false;
+  private isUsingFallback: boolean = false;
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
-    this.pixelRatio = window.devicePixelRatio || 1;
+    this.pixelRatio = Math.min(window.devicePixelRatio || 1, 2); // Cap at 2x for performance
     this.size = { width: 0, height: 0 };
 
     try {
@@ -33,10 +37,10 @@ export class WebGLContextManager {
       
       this.isInitialized = true;
       console.log(`WebGL initialized in ${Date.now() - startTime}ms`);
-    } catch (error) {
-      console.error('WebGL initialization error:', error);
+    } catch (webglError) {
+      console.warn('WebGL initialization error:', webglError);
       
-      // Try WebGL 1 as fallback
+      // Try WebGL 1 as intermediate fallback
       const gl1 = this.canvas.getContext('webgl') || this.canvas.getContext('experimental-webgl');
       if (gl1) {
         console.warn('Falling back to WebGL 1.0');
@@ -45,7 +49,18 @@ export class WebGLContextManager {
         this.resize();
         this.isInitialized = true;
       } else {
-        throw new Error(`WebGL is not supported: ${error.message}`);
+        console.warn('WebGL completely unavailable, using Canvas2D fallback');
+        
+        // Ultimate fallback to Canvas2D
+        try {
+          this.fallbackManager = new Canvas2DFallbackManager(this.canvas);
+          this.isUsingFallback = true;
+          this.isInitialized = true;
+          console.log('Canvas2D fallback initialized successfully');
+        } catch (fallbackError) {
+          console.error('Canvas2D fallback also failed:', fallbackError);
+          throw new Error(`Both WebGL and Canvas2D failed: WebGL - ${webglError.message}, Canvas2D - ${fallbackError.message}`);
+        }
       }
     }
   }
@@ -153,25 +168,45 @@ export class WebGLContextManager {
     this.canvas.width = realWidth;
     this.canvas.height = realHeight;
 
-    this.gl.viewport(0, 0, realWidth, realHeight);
-    this.gl.scissor(0, 0, realWidth, realHeight);
+    if (this.isUsingFallback && this.fallbackManager) {
+      this.fallbackManager.resize(width, height);
+    } else if (this.gl) {
+      this.gl.viewport(0, 0, realWidth, realHeight);
+      this.gl.scissor(0, 0, realWidth, realHeight);
+    }
   }
 
   clear(r = 0, g = 0, b = 0, a = 0): void {
-    this.gl.clearColor(r, g, b, a);
-    this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+    if (this.isUsingFallback && this.fallbackManager) {
+      this.fallbackManager.clear(r, g, b, a);
+    } else if (this.gl) {
+      this.gl.clearColor(r, g, b, a);
+      this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+    }
   }
 
   getContext(): WebGL2RenderingContext | null {
     return this.gl;
   }
 
+  getFallbackManager(): Canvas2DFallbackManager | null {
+    return this.fallbackManager;
+  }
+
   isWebGL2(): boolean {
     return this.gl !== null && 'texStorage2D' in this.gl;
   }
 
+  isWebGL1(): boolean {
+    return this.gl !== null && !this.isWebGL2();
+  }
+
+  isCanvas2D(): boolean {
+    return this.isUsingFallback && this.fallbackManager !== null;
+  }
+
   isReady(): boolean {
-    return this.isInitialized && this.gl !== null;
+    return this.isInitialized && (this.gl !== null || this.fallbackManager !== null);
   }
 
   getSize(): Size {
@@ -203,18 +238,27 @@ export class WebGLContextManager {
   }
 
   destroy(): void {
-    // Clean up WebGL resources
-    this.gl.useProgram(null);
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, null);
-    this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, null);
-    this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null);
-    this.gl.bindRenderbuffer(this.gl.RENDERBUFFER, null);
-    this.gl.bindTexture(this.gl.TEXTURE_2D, null);
-    
-    // Lose context to free GPU resources
-    const loseContext = this.gl.getExtension('WEBGL_lose_context');
-    if (loseContext) {
-      loseContext.loseContext();
+    if (this.isUsingFallback && this.fallbackManager) {
+      // Clean up Canvas2D fallback resources
+      this.fallbackManager.destroy();
+      this.fallbackManager = null;
+    } else if (this.gl) {
+      // Clean up WebGL resources
+      this.gl.useProgram(null);
+      this.gl.bindBuffer(this.gl.ARRAY_BUFFER, null);
+      this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, null);
+      this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null);
+      this.gl.bindRenderbuffer(this.gl.RENDERBUFFER, null);
+      this.gl.bindTexture(this.gl.TEXTURE_2D, null);
+      
+      // Lose context to free GPU resources
+      const loseContext = this.gl.getExtension('WEBGL_lose_context');
+      if (loseContext) {
+        loseContext.loseContext();
+      }
     }
+    
+    this.isInitialized = false;
+    this.isUsingFallback = false;
   }
 }
