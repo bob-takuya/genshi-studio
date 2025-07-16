@@ -116,6 +116,9 @@ export class UnifiedCanvas {
   }
 
   private initializeCore(config: UnifiedCanvasConfig): void {
+    // Apply enhanced device pixel ratio handling
+    this.applyDevicePixelRatio(config);
+    
     // Initialize WebGL context with fallback
     if (config.useWebGL !== false) {
       try {
@@ -152,6 +155,51 @@ export class UnifiedCanvas {
     
     // Start render loop
     this.startRenderLoop();
+  }
+
+  private applyDevicePixelRatio(config: UnifiedCanvasConfig): void {
+    // Get the base device pixel ratio
+    const basePixelRatio = window.devicePixelRatio || 1;
+    
+    // Adaptive pixel ratio based on device capabilities
+    let adaptivePixelRatio = basePixelRatio;
+    
+    // Cap pixel ratio for performance on high-DPI displays
+    if (basePixelRatio > 2) {
+      adaptivePixelRatio = 2; // Max 2x for performance
+    }
+    
+    // Reduce pixel ratio on mobile devices to save battery
+    if (this.isMobileDevice()) {
+      adaptivePixelRatio = Math.min(adaptivePixelRatio, 1.5);
+    }
+    
+    // Use config override if provided
+    const finalPixelRatio = config.pixelRatio || adaptivePixelRatio;
+    
+    // Apply to canvas with proper scaling
+    const rect = this.mainCanvas.getBoundingClientRect();
+    const width = config.width || rect.width;
+    const height = config.height || rect.height;
+    
+    // Set canvas internal dimensions
+    this.mainCanvas.width = Math.floor(width * finalPixelRatio);
+    this.mainCanvas.height = Math.floor(height * finalPixelRatio);
+    
+    // Set canvas display dimensions
+    this.mainCanvas.style.width = `${width}px`;
+    this.mainCanvas.style.height = `${height}px`;
+    
+    // Apply high-quality rendering settings
+    this.mainCanvas.style.imageRendering = 'crisp-edges';
+    this.mainCanvas.style.imageRendering = 'pixelated'; // Fallback for older browsers
+    
+    console.log(`📱 Device pixel ratio applied: ${finalPixelRatio} (base: ${basePixelRatio}, canvas: ${this.mainCanvas.width}x${this.mainCanvas.height})`);
+  }
+
+  private isMobileDevice(): boolean {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+           (window.innerWidth <= 768 && window.innerHeight <= 1024);
   }
 
   private initializeMinimalModeEngines(): void {
@@ -1008,20 +1056,41 @@ export class UnifiedCanvas {
   }
 
   public resize(width: number, height: number): void {
-    this.mainCanvas.width = width;
-    this.mainCanvas.height = height;
+    // Apply device pixel ratio to dimensions
+    const pixelRatio = this.webglContext?.getPixelRatio() || window.devicePixelRatio || 1;
+    const scaledWidth = Math.floor(width * pixelRatio);
+    const scaledHeight = Math.floor(height * pixelRatio);
     
-    // Resize overlays
+    // Update main canvas
+    this.mainCanvas.width = scaledWidth;
+    this.mainCanvas.height = scaledHeight;
+    this.mainCanvas.style.width = `${width}px`;
+    this.mainCanvas.style.height = `${height}px`;
+    
+    // Resize overlays with proper scaling
     this.overlays.forEach(overlay => {
-      overlay.canvas.width = width;
-      overlay.canvas.height = height;
+      overlay.canvas.width = scaledWidth;
+      overlay.canvas.height = scaledHeight;
+      overlay.canvas.style.width = `${width}px`;
+      overlay.canvas.style.height = `${height}px`;
+      
+      // Apply pixel ratio scaling to 2D contexts
+      if (overlay.context instanceof CanvasRenderingContext2D) {
+        overlay.context.scale(pixelRatio, pixelRatio);
+      }
     });
     
     // Update renderer and infinite canvas
-    this.renderer.resize(width, height);
-    this.infiniteCanvas.setViewport(0, 0, width, height);
+    this.renderer.resize(scaledWidth, scaledHeight);
+    this.infiniteCanvas.setViewport(0, 0, width, height); // Use display dimensions
+    
+    // Update WebGL context if available
+    if (this.webglContext) {
+      this.webglContext.resize(width, height);
+    }
     
     this.needsRedraw = true;
+    console.log(`📏 Canvas resized to ${width}x${height} (scaled: ${scaledWidth}x${scaledHeight})`);
   }
 
   // Export methods for compatibility with ExportDialog

@@ -188,21 +188,55 @@ export class UnifiedEditingSystem {
   private initializeFallbackCanvas(config: UnifiedEditingConfig): void {
     console.warn('⚠️ Attempting fallback canvas initialization...');
     
-    // Create a simplified canvas without WebGL dependencies
-    const fallbackConfig = {
-      ...config,
-      useWebGL: false,
-      modes: {
-        [CanvasMode.DRAW]: { active: true, opacity: 1.0, locked: false, visible: true },
-        [CanvasMode.PARAMETRIC]: { active: false, opacity: 0.8, locked: false, visible: false },
-        [CanvasMode.CODE]: { active: false, opacity: 0.9, locked: false, visible: false },
-        [CanvasMode.GROWTH]: { active: false, opacity: 0.7, locked: false, visible: false }
-      }
-    };
+    try {
+      // Create a simplified canvas without WebGL dependencies
+      const fallbackConfig = {
+        ...config,
+        useWebGL: false,
+        simplifiedInit: true,
+        modes: {
+          [CanvasMode.DRAW]: { active: true, opacity: 1.0, locked: false, visible: true },
+          [CanvasMode.PARAMETRIC]: { active: false, opacity: 0.8, locked: false, visible: false },
+          [CanvasMode.CODE]: { active: false, opacity: 0.9, locked: false, visible: false },
+          [CanvasMode.GROWTH]: { active: false, opacity: 0.7, locked: false, visible: false }
+        }
+      };
+      
+      // Create a minimal unified canvas that only supports drawing
+      this.unifiedCanvas = new UnifiedCanvas(fallbackConfig);
+      console.log('✓ Fallback canvas initialized successfully');
+    } catch (error) {
+      console.error('Fallback canvas initialization failed:', error);
+      throw new Error('WebGL initialization failed - fallback to simplified mode');
+    }
+  }
+
+  private async startDegradedMode(): Promise<void> {
+    console.log('🔧 Starting degraded mode...');
     
-    // This would create a Canvas2D-only version
-    // For now, we'll throw to trigger the fallback mode in StudioPageUnified
-    throw new Error('WebGL initialization failed - fallback to simplified mode');
+    try {
+      // Mark system as running in degraded mode
+      this.isRunning = true;
+      this.isInitialized = true;
+      
+      // Only enable basic drawing mode
+      this.activeModes.clear();
+      this.activeModes.add(CanvasMode.DRAW);
+      
+      // Create minimal sync engine registration
+      if (this.syncEngine) {
+        this.syncEngine.start();
+        this.syncEngine.registerMode(MODE_MAPPING[CanvasMode.DRAW], this.getDefaultModeData(MODE_MAPPING[CanvasMode.DRAW]));
+      }
+      
+      console.log('✓ Degraded mode started successfully');
+      this.emit('system:started');
+      this.emit('system:degraded', { message: 'Running in degraded mode - limited functionality' });
+      
+    } catch (error) {
+      console.error('❌ Degraded mode startup failed:', error);
+      throw new Error(`Degraded mode startup failed: ${error.message}`);
+    }
   }
 
   private setupTranslationPipeline(): void {
@@ -482,7 +516,7 @@ export class UnifiedEditingSystem {
     // Wait for initialization to complete
     if (!this.isInitialized) {
       console.log('⏳ Waiting for initialization to complete...');
-      const maxWait = 5000; // 5 seconds max
+      const maxWait = 15000; // 15 seconds max (increased from 5)
       const startWait = Date.now();
       
       while (!this.isInitialized && (Date.now() - startWait) < maxWait) {
@@ -490,7 +524,8 @@ export class UnifiedEditingSystem {
       }
       
       if (!this.isInitialized) {
-        throw new Error('System initialization timeout');
+        console.warn('System initialization timeout - attempting degraded mode startup');
+        return this.startDegradedMode();
       }
     }
     
