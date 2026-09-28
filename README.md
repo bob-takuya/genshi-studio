@@ -10,7 +10,7 @@ An experimental browser-based tool for drawing and generating patterns (includin
 
 The owner has further local work that was never pushed. This repository only reflects the state on GitHub as of 2025-07-16.
 
-✅ **Works (as far as the code and deploy history show)**
+**Works (as far as the code and deploy history show)**
 - Vite + React app, deployed to GitHub Pages by GitHub Actions (last successful deployment 2025-07-16)
 - Home / Gallery / About pages
 - `/studio`: a unified canvas with Draw / Parametric / Code / Growth modes. If the WebGL-based system fails to initialise, it falls back to a simplified 2D drawing mode
@@ -18,7 +18,7 @@ The owner has further local work that was never pushed. This repository only ref
 - Export from the studio dialog to PNG, SVG and JSON
 - Brush size and opacity respond to pointer pressure (`PointerEvent.pressure`), with a separate `/pressure-test` page for trying it out
 
-🚧 **Partial / not wired into the live UI**
+**Partial / not wired into the live UI**
 - Monaco-based code editor, parametric pattern editor and "Interactive Growth Studio" components exist, but they are only used by `StudioPage.tsx`, which is not routed. The live `/studio` route uses `StudioPageUnified.tsx`
 - `VectorExportService.ts` contains PDF (jsPDF + svg2pdf) and EPS export code, but the export dialog only offers PNG/SVG/JSON
 - Pen tilt and twist are hard-coded to 0 in the main canvas. Only pressure is read
@@ -26,12 +26,12 @@ The owner has further local work that was never pushed. This repository only ref
 - Pattern selector: applying a pattern with the current parameters is marked `TODO` (`PatternSelector.tsx`)
 - PWA: a manifest and service worker are included, but offline behaviour was never verified
 
-📝 **Not implemented**
+**Not implemented**
 - Real-time collaboration, pattern sharing, mobile app (these appeared in an earlier roadmap)
 - No performance benchmarks exist. Earlier claims such as "40% faster rendering" are not supported by any measurement in this repository
 
-⚠️ **Known issues**
-- The last recorded Playwright run in the repo (`test-results-summary.json`, 2025-07-11) had 10 passing and 16 failing tests
+**Known issues**
+- The last recorded Playwright run (2025-07-11) had 10 passing and 16 failing tests
 - Earlier agent reports in the repo describe white screens, initialisation timeouts and mobile layout problems. Later commits tried to fix these, but the fixes were not re-verified
 - The repository root has many agent-generated reports, logs and scripts (`*_SUMMARY.md`, `*_REPORT.md`, `developer_*.py`, `*.json`). They record the agents' process and claims. They are **not** verified documentation
 - Links in the old README to `CONTRIBUTING.md` and to a hosted `/docs/` page pointed to files that do not exist

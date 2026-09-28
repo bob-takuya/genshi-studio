@@ -38,4 +38,8 @@ Thumbs.db
 
 # Temporary files
 temp/
-tmp/
+tmp/playwright-report/
+tests/reports/
+tests/results/
+test-results/
+test-results*.json
